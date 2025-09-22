@@ -4,6 +4,10 @@
 - Description: Data containing information on child patients during early acute, late acute, and convalescent (recovery) stages of Zika virus infection. Also notes whether patients have been prior infected with Dengue, another flavivirus.
 ### Scientific Question
 Is there a difference in immune system expression in Zika-infected children between those who have never been exposed to Dengue virus and those who have?
+### Packages
+Refer to Bioconductor documents:
+https://www.bioconductor.org/packages/release/bioc/html/GEOquery.html
+
 
 ---
 
