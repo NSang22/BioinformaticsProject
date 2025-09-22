@@ -64,3 +64,101 @@ readr::write_tsv(expression_df, file.path(
   "SRP192714_Symbols.tsv"
 ))
 ```
+
+# Section 1c
+```{r}
+
+```
+
+# Section 2a
+
+```{r}
+
+```
+
+# Section 2b
+```{r}
+
+```
+
+# Section 2c
+```{r}
+
+```
+
+# Section 2d i
+```{r}
+
+```
+
+# Section 2d ii
+```{r}
+
+```
+
+# Section 2e
+
+# Section 2f
+```{r}
+
+```
+
+# Section 3a-b
+```{r}
+
+```
+
+# Section 3c
+```{r}
+
+```
+
+# Section 3d
+```{r}
+
+```
+
+# Section 3e
+```{r}
+
+```
+
+# Section 4a
+```{r}
+
+```
+
+# Section 4c
+```{r}
+
+```
+
+# Section 5: William Le
+```{r}
+
+```
+
+# Section 5: Nikhil Sangamkar
+```{r}
+
+```
+
+# Section 5: Taylor Tillander
+```{r}
+
+```
+
+# Section 5: Ibrahim Zbib
+```{r}
+
+```
+
+# Section 6
+```{r}
+
+```
+
+# Section 7
+```{r}
+
+```
