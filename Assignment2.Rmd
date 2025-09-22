@@ -1,6 +1,6 @@
-print("Running ConvertEnsemblToSymbol.R")
-
-# # Uncomment the below to download package dependencies
+# Package Downloads
+```{r}
+# Uncomment the below to download package dependencies
 # if (!require("BiocManager", quietly = TRUE))
 #   install.packages("BiocManager", repos = "https://cloud.r-project.org")
 # BiocManager::install(version = "3.21")
@@ -18,6 +18,11 @@ print("Running ConvertEnsemblToSymbol.R")
 # # We will need this so we can use the pipe: %>%
 # library(magrittr)
 
+```
+
+# Section 1a
+
+```{r}
 # Define the file path to the data directory
 data_dir <- file.path("data", "SRP192714")
 
@@ -28,6 +33,11 @@ data_file <- file.path(data_dir, "SRP192714.tsv")
 expression_df <- readr::read_tsv(data_file) %>%
   tibble::column_to_rownames("Gene")
 
+```
+
+# Section 1b
+
+```{r}
 # Bring back the "Gene" column in preparation for mapping
 expression_df <- expression_df %>%
   tibble::rownames_to_column("Gene")
@@ -53,3 +63,4 @@ readr::write_tsv(expression_df, file.path(
   data_dir,
   "SRP192714_Symbols.tsv"
 ))
+```
