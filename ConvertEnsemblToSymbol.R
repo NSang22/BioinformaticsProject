@@ -1,0 +1,55 @@
+print("Running ConvertEnsemblToSymbol.R")
+
+# # Uncomment the below to download package dependencies
+# if (!require("BiocManager", quietly = TRUE))
+#   install.packages("BiocManager", repos = "https://cloud.r-project.org")
+# BiocManager::install(version = "3.21")
+# install.packages("tidyverse", repos = "https://cloud.r-project.org")
+# install.packages("devtools", repos = "https://cloud.r-project.org")
+# install.packages("GenomeInfoDb", repos = "https://cloud.r-project.org")
+# # Install the Homo Sapiens package
+# if (!("org.Hs.eg.db" %in% installed.packages())) {
+#   BiocManager::install("org.Hs.eg.db", update = FALSE)
+# }
+
+# # Attach the library
+# library(org.Hs.eg.db)
+
+# # We will need this so we can use the pipe: %>%
+# library(magrittr)
+
+# Define the file path to the data directory
+data_dir <- file.path("data", "SRP192714")
+
+# Declare the file path to the gene expression matrix file
+data_file <- file.path(data_dir, "SRP192714.tsv")
+
+# Read in data TSV file
+expression_df <- readr::read_tsv(data_file) %>%
+  tibble::column_to_rownames("Gene")
+
+# Bring back the "Gene" column in preparation for mapping
+expression_df <- expression_df %>%
+  tibble::rownames_to_column("Gene")
+
+# Map Ensembl IDs to their first mapped Symbol
+gene_symbols <- mapIds(
+  org.Hs.eg.db,
+  keys = expression_df$Gene,
+  keytype = "ENSEMBL",
+  column = "SYMBOL",
+  multiVals = "first"
+)
+
+# Add the mapped symbols as a new column
+expression_df$Symbol <- gene_symbols[expression_df$Gene]
+
+# Reorder columns to have Gene, Symbol, then the rest
+expression_df <- expression_df %>%
+  dplyr::select(Gene, Symbol, dplyr::everything(), -Gene)
+
+# Write mapped data frame to output file
+readr::write_tsv(expression_df, file.path(
+  data_dir,
+  "SRP192714_Symbols.tsv"
+))

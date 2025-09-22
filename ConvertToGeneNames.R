@@ -1,12 +1,23 @@
+# This script is not used any more
+
 print("Running ConvertToGeneNames.R")
 
 # uncomment the below to download package dependencies
-#if (!require("BiocManager", quietly = TRUE))
-#  install.packages("BiocManager", repos = "https://cloud.r-project.org")
-#BiocManager::install(version = "3.21")
-#install.packages("tidyverse", repos = "https://cloud.r-project.org")
-#install.packages("devtools", repos = "https://cloud.r-project.org")
-#install.packages("GenomeInfoDb", repos = "https://cloud.r-project.org")
+# if (!require("BiocManager", quietly = TRUE))
+#   install.packages("BiocManager", repos = "https://cloud.r-project.org")
+# BiocManager::install(version = "3.21")
+# install.packages("tidyverse", repos = "https://cloud.r-project.org")
+# install.packages("devtools", repos = "https://cloud.r-project.org")
+# install.packages("GenomeInfoDb", repos = "https://cloud.r-project.org")
+# Install the Homo Sapiens package
+# if (!("org.Hs.eg.db" %in% installed.packages())) {
+#   # Install this package if it isn't installed yet
+#   BiocManager::install("org.Hs.eg.db", update = FALSE)
+# }
+# # Attach the library
+# library(org.Hs.eg.db)
+# # We will need this so we can use the pipe: %>%
+# library(magrittr)
 
 # Create the data folder if it doesn't exist
 if (!dir.exists("data")) {
@@ -40,17 +51,7 @@ data_file <- file.path(data_dir, "SRP192714.tsv")
 # inside the directory saved as `data_dir`
 metadata_file <- file.path(data_dir, "metadata_SRP192714.tsv")
 
-# Install the Homo Sapiens package
-if (!("org.Hs.eg.db" %in% installed.packages())) {
-  # Install this package if it isn't installed yet
-  BiocManager::install("org.Hs.eg.db", update = FALSE)
-}
 
-# Attach the library
-library(org.Hs.eg.db)
-
-# We will need this so we can use the pipe: %>%
-library(magrittr)
 
 # Read in metadata TSV file
 metadata <- readr::read_tsv(metadata_file)
@@ -146,4 +147,3 @@ readr::write_tsv(final_mapped_df, file.path(
   results_dir,
   "SRP192714_Symbols.tsv"
 ))
-
