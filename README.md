@@ -10,6 +10,8 @@ Is there a difference in immune system expression in Zika-infected children betw
 ### Packages
 Refer to Bioconductor documents:
 https://www.bioconductor.org/packages/release/bioc/html/GEOquery.html
+Refer to GEOquery documents:
+https://www.bioconductor.org/packages/release/bioc/vignettes/GEOquery/inst/doc/GEOquery.html
 
 #### Downloading Dataset
 Go to https://www.refine.bio/dataset/e868fa17-ca3a-4c69-b1e9-0403e4f47047 and download the .zip file, extracting its contents to /data (If this link does not work, go to the dataset page and request a download link from there)
