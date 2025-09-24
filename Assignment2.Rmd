@@ -56,6 +56,21 @@ data_file <- file.path(data_dir, "SRP192714.tsv")
 expression_df <- readr::read_tsv(data_file) %>%
   tibble::column_to_rownames("Gene")
 
+# Load refine.bio metadata
+refinebio_meta <- readr::read_tsv(file.path(data_dir, "metadata_SRP192714.tsv"))
+rownames(refinebio_meta) <- refinebio_meta$refinebio_accession_code
+
+# Load GEO metadata (CSV)
+geo_meta <- readr::read_csv("data/GSE129882_PhenoData.transcript.csv")
+
+
+# Merge on 'refinebio_title' (refine.bio) and 'Sample' (GEO), keep 'refinebio_title' as column name
+if ("Sample" %in% colnames(geo_meta) && "refinebio_title" %in% colnames(refinebio_meta)) {
+  merged_meta <- dplyr::left_join(refinebio_meta, geo_meta, by = c("refinebio_title" = "Sample"))
+} else {
+  merged_meta <- refinebio_meta
+}
+
 ```
 
 # Section 1b
@@ -136,30 +151,15 @@ library(DESeq2)
 # Use numeric columns from expression_df as count matrix
 cts <- expression_df %>% dplyr::select(where(is.numeric)) %>% as.matrix()
 
-
-# Load refine.bio metadata
-refinebio_meta <- readr::read_tsv(file.path(data_dir, "metadata_SRP192714.tsv"))
-rownames(refinebio_meta) <- refinebio_meta$refinebio_accession_code
-
-# Load GEO metadata (CSV)
-geo_meta <- readr::read_csv("data/GSE129882_PhenoData.transcript.csv")
-
-# Try to merge on sample columns
-# Check for a column in geo_meta that matches refinebio_accession_code or another sample identifier
-# For demonstration, let's assume geo_meta has a column 'Sample' that matches refinebio_accession_code
-if ("Sample" %in% colnames(geo_meta)) {
-  merged_meta <- dplyr::left_join(refinebio_meta, geo_meta, by = c("refinebio_accession_code" = "Sample"))
-} else {
-  # If not, just keep refinebio_meta as coldata
-  merged_meta <- refinebio_meta
-}
-
 # Update coldata for DESeq2
 coldata <- merged_meta
 rownames(coldata) <- coldata$refinebio_accession_code
 
 # Subset cts columns to match coldata rownames
 cts <- cts[, rownames(coldata)]
+
+# Round count matrix to integers for DESeq2
+cts <- round(cts)
 
 # Check dimensions
 stopifnot(ncol(cts) == nrow(coldata))
