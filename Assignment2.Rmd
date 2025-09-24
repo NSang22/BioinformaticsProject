@@ -1,11 +1,14 @@
 # Package Downloads
-```{r}
+```{r echo=FALSE}
 if (!require("BiocManager", quietly = TRUE))
   install.packages("BiocManager", repos = "https://cloud.r-project.org")
 BiocManager::install(version = "3.21")
-install.packages("tidyverse", repos = "https://cloud.r-project.org")
+if (!requireNamespace("DESeq2", quietly = TRUE)) {
+  BiocManager::install("DESeq2")
+}
 install.packages("devtools", repos = "https://cloud.r-project.org")
 install.packages("GenomeInfoDb", repos = "https://cloud.r-project.org")
+install.packages("tidyverse", repos = "https://cloud.r-project.org")
 # Install the Homo Sapiens package
 if (!("org.Hs.eg.db" %in% installed.packages())) {
   BiocManager::install("org.Hs.eg.db", update = FALSE)
@@ -87,7 +90,6 @@ readr::write_tsv(expression_df, file.path(
 
 # Section 1c
 ```{r}
-# Section 1c: Expression matrix summary and variation
 
 # Get matrix size
 matrix_dim <- dim(expression_df)
@@ -124,10 +126,34 @@ ggsave(plot_path, plot=plot_obj, width=6, height=4, dpi=300)
 plot_obj
 ```
 
+The dataset contains 43,363 genes measured across 1,022 samples. The summary statistics show that most genes have low median expression (median ≈ 0.26 on log2 scale), with a long tail of higher expression values (max ≈ 7.6). From our research, this is typical for transcriptome data, where a small number of genes are highly expressed while the majority have low expression. The density plot visualizes this distribution, showing a peak at lower expression values and a gradual decline towards higher values. Log transformation helps to reduce the impact of extreme values and makes the distribution more interpretable.
+
 # Section 2a
 
 ```{r}
+library(DESeq2)
 
+# Use numeric columns from expression_df as count matrix
+cts <- expression_df %>% dplyr::select(where(is.numeric)) %>% as.matrix()
+
+# Load metadata
+coldata <- readr::read_tsv(file.path(data_dir, "metadata_SRP192714.tsv"))
+rownames(coldata) <- coldata$refinebio_accession_code
+
+# Subset cts columns to match coldata rownames
+cts <- cts[, rownames(coldata)]
+
+# Check dimensions
+stopifnot(ncol(cts) == nrow(coldata))
+
+# Replace 'group' with your actual group/condition column name, e.g. 'disease'
+dds <- DESeqDataSetFromMatrix(countData = cts,
+                              colData = coldata,
+                              design = ~ disease) # <-- change 'disease' to your column
+
+dds <- DESeq(dds)
+vsd <- vst(dds, blind=FALSE)
+plotPCA(vsd, intgroup="disease") # <-- change 'disease' to your column
 ```
 
 # Section 2b

@@ -1,3 +1,4 @@
 data/
 *.tsv
 .Rproj.user
+.Rhistory
