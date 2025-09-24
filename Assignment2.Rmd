@@ -158,8 +158,187 @@ plot_obj
 ```
 
 # Section 3a-b
-```{r}
+```{r section3ab, echo = FALSE}
 
+# # Attach the DESeq2 library
+# library(DESeq2)
+
+# # Attach the ggplot2 library for plotting
+# library(ggplot2)
+
+# # We will need this so we can use the pipe: %>%
+# library(magrittr)
+
+# set.seed(12345)
+
+# metadata <- readr::read_tsv("C:/Users/Nsang/BioinformaticsProject/data/SRP192714/metadata_SRP192714.tsv")
+# # Read in data TSV file
+# expression_df <- readr::read_tsv("C:/Users/Nsang/BioinformaticsProject/data/SRP192714/SRP192714.tsv") %>%
+#   tibble::column_to_rownames("Gene")
+
+# # Make the data in the order of the metadata
+# expression_df <- expression_df %>%
+#   dplyr::select(metadata$refinebio_accession_code)
+
+# # Check if this is in the same order
+# all.equal(colnames(expression_df), metadata$refinebio_accession_code)
+
+# metadata <- metadata %>%
+#   # Let's get the RPL10 mutation status from this variable
+#   dplyr::mutate(mutation_status = dplyr::case_when(
+#     stringr::str_detect(refinebio_title, "R98S") ~ "R98S",
+#     stringr::str_detect(refinebio_title, "WT") ~ "reference"
+#   ))
+
+# # Print out a preview of `mutation_status`
+# str(metadata$mutation_status)
+
+# # Make mutation_status a factor and set the levels appropriately
+# metadata <- metadata %>%
+#   dplyr::mutate(
+#     # Here we define the values our factor variable can have and their order.
+#     mutation_status = factor(mutation_status, levels = c("reference", "R98S"))
+#   )
+
+# # Define a minimum counts cutoff and filter the data to include
+# # only rows (genes) that have total counts above the cutoff
+# filtered_expression_df <- expression_df %>%
+#   dplyr::filter(rowSums(.) >= 10)
+
+# # round all expression counts
+# gene_matrix <- round(filtered_expression_df)
+
+# ddset <- DESeqDataSetFromMatrix(
+#   # Here we supply non-normalized count data
+#   countData = gene_matrix,
+#   # Supply the `colData` with our metadata data frame
+#   colData = metadata,
+#   # Supply our experimental variable to `design`
+#   design = ~mutation_status
+# )
+
+# deseq_object <- DESeq(ddset)
+# deseq_results <- results(deseq_object)
+
+# deseq_results <- lfcShrink(
+#   deseq_object, # The original DESeq2 object after running DESeq()
+#   coef = 2, # The log fold change coefficient used in DESeq(); the default is 2.
+#   res = deseq_results # The original DESeq2 results table
+# )
+
+# # this is of class DESeqResults -- we want a data frame
+# deseq_df <- deseq_results %>%
+#   # make into data.frame
+#   as.data.frame() %>%
+#   # the gene names are row names -- let's make them a column for easy display
+#   tibble::rownames_to_column("Gene") %>%
+#   # add a column for significance threshold results
+#   dplyr::mutate(threshold = padj < 0.05) %>%
+#   # sort by statistic -- the highest values will be genes with
+#   # higher expression in RPL10 mutated samples
+#   dplyr::arrange(dplyr::desc(log2FoldChange))
+
+#   plotCounts(ddset, gene = "ENSMUSG00000026623", intgroup = "mutation_status")
+# readr::write_tsv(
+#   deseq_df,
+#   file.path(
+#     results_dir,
+#     "SRP123625_diff_expr_results.tsv" # Replace with a relevant output file name
+#   )
+# )
+# # We'll assign this as `volcano_plot`
+# volcano_plot <- EnhancedVolcano::EnhancedVolcano(
+#   deseq_df,
+#   lab = deseq_df$Gene,
+#   x = "log2FoldChange",
+#   y = "padj",
+#   pCutoff = 0.01 # Loosen the cutoff since we supplied corrected p-values
+# )
+# volcano_plot
+# ggsave(
+#   plot = volcano_plot,
+#   file.path(plots_dir, "SRP123625_volcano_plot.png")
+# ) # Replace with a plot name relevant to your data
+# Load required packages
+library(readr); library(dplyr); library(stringr); library(magrittr)
+library(tibble); library(DESeq2); library(apeglm); library(EnhancedVolcano)
+library(ggplot2)
+
+# Paths (use project-relative paths)
+metadata_path <- "data/SRP192714/metadata_SRP192714.tsv"
+expr_path     <- "data/SRP192714/SRP192714.tsv"
+
+# Read metadata and expression
+metadata <- readr::read_tsv(metadata_path)
+
+expression_df <- readr::read_tsv(expr_path) %>%
+  tibble::column_to_rownames(var = "Gene")   # ensure 'Gene' is the column name
+
+# Reorder expression columns to match the metadata samples (use all_of for safety)
+# Make sure metadata$refinebio_accession_code contains the sample column names exactly.
+expression_df <- expression_df %>% dplyr::select(all_of(metadata$refinebio_accession_code))
+
+# Verify alignment
+stopifnot(all.equal(colnames(expression_df), metadata$refinebio_accession_code))
+
+# Create mutation_status from title (adjust regex to your data)
+metadata <- metadata %>%
+  dplyr::mutate(mutation_status = dplyr::case_when(
+    stringr::str_detect(refinebio_title, "R98S") ~ "R98S",
+    stringr::str_detect(refinebio_title, "WT") ~ "reference",
+    TRUE ~ NA_character_
+  ))
+
+# Make sure mutation_status is a factor with desired levels
+metadata$mutation_status <- factor(metadata$mutation_status, levels = c("reference", "R98S"))
+
+# Filter low-count genes (sum across samples)
+filtered_expression_df <- expression_df[rowSums(expression_df) >= 10, , drop = FALSE]
+
+# Convert to integer matrix (DESeq2 expects counts)
+gene_matrix <- round(as.matrix(filtered_expression_df))
+
+# Ensure rownames are genes and column order matches metadata rows order
+# (metadata rows must be in the same order as columns; if not, reorder metadata:)
+metadata <- metadata[match(colnames(gene_matrix), metadata$refinebio_accession_code), ]
+
+# Construct DESeq2 object
+dds <- DESeqDataSetFromMatrix(countData = gene_matrix,
+                              colData = metadata,
+                              design = ~ mutation_status)
+
+dds <- DESeq(dds)
+
+res <- results(dds)                 # raw results
+res_shrunk <- lfcShrink(dds, coef = 2, type = "apeglm", res = res)  # requires apeglm
+
+# Convert to tidy data.frame
+deseq_df <- as.data.frame(res_shrunk) %>%
+  tibble::rownames_to_column("Gene") %>%
+  dplyr::mutate(threshold = ifelse(is.na(padj), FALSE, padj < 0.05)) %>%
+  dplyr::arrange(dplyr::desc(log2FoldChange))
+
+# Example count plot for a single gene
+plotCounts(dds, gene = "ENSMUSG00000026623", intgroup = "mutation_status")  # adjust gene name
+
+# Save results (ensure results_dir exists)
+results_dir <- "results"
+if (!dir.exists(results_dir)) dir.create(results_dir)
+readr::write_tsv(deseq_df, file.path(results_dir, "SRP192714_diff_expr_results.tsv"))
+
+# Volcano plot
+volcano_plot <- EnhancedVolcano::EnhancedVolcano(
+  deseq_df,
+  lab = deseq_df$Gene,
+  x = "log2FoldChange",
+  y = "padj",
+  pCutoff = 0.01
+)
+
+# Save volcano
+plots_dir <- "plots"
+if (!dir.exists(plots_dir)) dir.create(plots_dir)
+ggsave(plot = volcano_plot, filename = file.path(plots_dir, "SRP192714_volcano_plot.png"), width = 8, height = 6)
 ```
 
 # Section 3c
