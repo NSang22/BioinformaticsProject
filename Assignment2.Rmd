@@ -63,13 +63,23 @@ rownames(refinebio_meta) <- refinebio_meta$refinebio_accession_code
 # Load GEO metadata (CSV)
 geo_meta <- readr::read_csv("data/GSE129882_PhenoData.transcript.csv")
 
-
 # Merge on 'refinebio_title' (refine.bio) and 'Sample' (GEO), keep 'refinebio_title' as column name
 if ("Sample" %in% colnames(geo_meta) && "refinebio_title" %in% colnames(refinebio_meta)) {
   merged_meta <- dplyr::left_join(refinebio_meta, geo_meta, by = c("refinebio_title" = "Sample"))
 } else {
   merged_meta <- refinebio_meta
 }
+
+# Create trimmed and full versions of expression and metadata
+sample_names <- colnames(expression_df)[colnames(expression_df) != "Gene" & colnames(expression_df) != "Symbol"]
+trimmed_samples <- sample_names[1:50]
+expression_df_trimmed <- expression_df %>% dplyr::select(all_of(trimmed_samples))
+merged_meta_trimmed <- merged_meta %>% dplyr::filter(refinebio_accession_code %in% trimmed_samples)
+expression_df_full <- expression_df %>% dplyr::select(all_of(sample_names))
+merged_meta_full <- merged_meta
+
+# Set this variable to TRUE to use trimmed data, FALSE for full data
+use_trimmed <- TRUE
 
 ```
 
@@ -143,46 +153,87 @@ plot_obj
 
 The dataset contains 43,363 genes measured across 1,022 samples. The summary statistics show that most genes have low median expression (median ≈ 0.26 on log2 scale), with a long tail of higher expression values (max ≈ 7.6). From our research, this is typical for transcriptome data, where a small number of genes are highly expressed while the majority have low expression. The density plot visualizes this distribution, showing a peak at lower expression values and a gradual decline towards higher values. Log transformation helps to reduce the impact of extreme values and makes the distribution more interpretable.
 
-# Section 2a
+# Section 2a-c
 
 ```{r}
 library(DESeq2)
 
-# Use numeric columns from expression_df as count matrix
-cts <- expression_df %>% dplyr::select(where(is.numeric)) %>% as.matrix()
+# --- FULL DATA VERSION (commented out) ---
+# # Use numeric columns from expression_df as count matrix
+# cts <- expression_df %>% dplyr::select(where(is.numeric)) %>% as.matrix()
+# 
+# # Update coldata for DESeq2
+# coldata <- merged_meta
+# rownames(coldata) <- coldata$refinebio_accession_code
+# 
+# # Subset cts columns to match coldata rownames
+# cts <- cts[, rownames(coldata)]
+# 
+# # Round count matrix to integers for DESeq2
+# cts <- round(cts)
+# 
+# # Check dimensions
+# stopifnot(ncol(cts) == nrow(coldata))
+# 
+# # Choose a grouping column for DESeq2 (update as needed)
+# # For example, use 'refinebio_title' or a column from GEO metadata
+# dds <- DESeqDataSetFromMatrix(countData = cts,
+#                               colData = coldata,
+#                               design = ~ refinebio_title)
+# 
+# dds <- DESeq(dds)
+# vsd <- vst(dds, blind=FALSE)
+# plotPCA(vsd, intgroup="refinebio_title")
 
-# Update coldata for DESeq2
-coldata <- merged_meta
-rownames(coldata) <- coldata$refinebio_accession_code
-
-# Subset cts columns to match coldata rownames
-cts <- cts[, rownames(coldata)]
-
-# Round count matrix to integers for DESeq2
+## --- ANALYSIS SECTION: works for trimmed or full data ---
+# Choose which dataset to use
+if (use_trimmed) {
+  expr_mat <- expression_df_trimmed
+  meta <- merged_meta_trimmed
+  plot_title <- "PCA of First 100 Samples (colored by Exposure)"
+  plot_file <- "trimmed_pca_exposure.png"
+} else {
+  expr_mat <- expression_df_full
+  meta <- merged_meta_full
+  plot_title <- "PCA of All Samples (colored by Exposure)"
+  plot_file <- "full_pca_exposure.png"
+}
+# Convert to numeric matrix
+cts <- as.matrix(sapply(expr_mat, as.numeric))
+# Subset metadata to match columns
+meta <- meta %>% dplyr::filter(refinebio_accession_code %in% colnames(expr_mat))
+rownames(meta) <- meta$refinebio_accession_code
+# Ensure columns and rows match
+cts <- cts[, rownames(meta)]
+# Remove negative values (set to zero)
+cts[cts < 0] <- 0
 cts <- round(cts)
-
-# Check dimensions
-stopifnot(ncol(cts) == nrow(coldata))
-
-# Choose a grouping column for DESeq2 (update as needed)
-# For example, use 'refinebio_title' or a column from GEO metadata
+stopifnot(ncol(cts) == nrow(meta))
+# Run DESeq2
 dds <- DESeqDataSetFromMatrix(countData = cts,
-                              colData = coldata,
+                              colData = meta,
                               design = ~ refinebio_title)
-
 dds <- DESeq(dds)
 vsd <- vst(dds, blind=FALSE)
-plotPCA(vsd, intgroup="refinebio_title")
-```
-
-# Section 2b
-```{r}
-
-```
-
-# Section 2c
-```{r}
-
+# Extract PCA data for custom plot
+pca_data <- plotPCA(vsd, intgroup = c("Exposure"), returnData = TRUE)
+# Add sample names for merging
+pca_data$Sample <- rownames(pca_data)
+# Merge Exposure info from metadata
+pca_data <- dplyr::left_join(pca_data, meta %>% dplyr::select(refinebio_accession_code, Exposure), by = c("Sample" = "refinebio_accession_code"))
+# If Exposure column is missing, use meta$Exposure directly
+if (!"Exposure" %in% colnames(pca_data) || all(is.na(pca_data$Exposure))) {
+  pca_data$Exposure <- meta$Exposure[match(pca_data$Sample, meta$refinebio_accession_code)]
+}
+# Plot with ggplot2, color by Exposure
+pca_plot <- ggplot(pca_data, aes(x = PC1, y = PC2, color = Exposure)) +
+  geom_point(size = 3, alpha = 0.8) +
+  labs(title = plot_title, x = "PC1", y = "PC2") +
+  theme_minimal()
+# Save PCA plot to plots directory
+ggsave(filename = file.path(plots_dir, plot_file), plot = pca_plot, width = 6, height = 4, dpi = 300)
+# Print plot in notebook
+pca_plot
 ```
 
 # Section 2d i

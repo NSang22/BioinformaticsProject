@@ -16,6 +16,12 @@ https://www.bioconductor.org/packages/release/bioc/vignettes/GEOquery/inst/doc/G
 #### Downloading Dataset
 Go to https://www.refine.bio/dataset/e868fa17-ca3a-4c69-b1e9-0403e4f47047 and download the .zip file, extracting its contents to /data (If this link does not work, go to the dataset page and request a download link from there)
 
+### Downloading additional metadata set (for identifying zika vs naive samples):
+
+Download here and place csv file under data: https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE129882&format=file&file=GSE129882%5FPhenoData%2Etranscript%2Ecsv%2Egz
+
 ### Data Manipulations
 #### Assignment 2 can be completed by running Assignment2.Rmd
+
+Set the use_trimmed flag variable to true to use a trimmed version of the dataset for development.
 
