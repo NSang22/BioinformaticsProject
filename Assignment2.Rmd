@@ -1,5 +1,5 @@
 # Package Downloads
-```{r echo=FALSE}
+```{r message=FALSE}
 if (!require("BiocManager", quietly = TRUE))
   install.packages("BiocManager", repos = "https://cloud.r-project.org")
 BiocManager::install(version = "3.21")
@@ -203,24 +203,26 @@ plotPCA(vsd, intgroup="refinebio_title")
 ```
 
 # Section 3a-b
-```{r section3ab, echo = FALSE}
+```{r attach library, echo = FALSE}
+# Attach the DESeq2 library
+library(DESeq2)
 
-# # Attach the DESeq2 library
-# library(DESeq2)
+# Attach the ggplot2 library for plotting
+library(ggplot2)
 
-# # Attach the ggplot2 library for plotting
-# library(ggplot2)
+# We will need this so we can use the pipe: %>%
+library(magrittr)
 
-# # We will need this so we can use the pipe: %>%
-# library(magrittr)
+set.seed(12345)
+```
 
-# set.seed(12345)
+```{r Read-in Metadata}
+metadata_file <- file.path(data_dir, "metadata_SRP192714.tsv")
+metadata <- readr::read_tsv("data/SRP192714/metadata_SRP192714.tsv")
+```
 
-# metadata <- readr::read_tsv("C:/Users/Nsang/BioinformaticsProject/data/SRP192714/metadata_SRP192714.tsv")
-# # Read in data TSV file
-# expression_df <- readr::read_tsv("C:/Users/Nsang/BioinformaticsProject/data/SRP192714/SRP192714.tsv") %>%
-#   tibble::column_to_rownames("Gene")
 
+```{r Whatever the fuck this is}
 # # Make the data in the order of the metadata
 # expression_df <- expression_df %>%
 #   dplyr::select(metadata$refinebio_accession_code)
@@ -385,6 +387,7 @@ plots_dir <- "plots"
 if (!dir.exists(plots_dir)) dir.create(plots_dir)
 ggsave(plot = volcano_plot, filename = file.path(plots_dir, "SRP192714_volcano_plot.png"), width = 8, height = 6)
 ```
+
 
 # Section 3c
 ```{r}
