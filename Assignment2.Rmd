@@ -383,6 +383,15 @@ p_umap
 ```
 
 # Section 2e
+Similarities
+	•	All three methods (PCA, t-SNE, UMAP) reduce the high-dimensional gene expression data into 2D, letting us see patterns between samples.
+	•	In each, samples tend to group by Exposure status (or whichever grouping variable you’re using).
+	•	Outliers and variability across samples are visible in all three.
+
+Differences
+	•	PCA: Captures global variance structure, shows the main linear directions of variability. Often looks more “spread out” but may miss subtle clusters.
+	•	t-SNE: Focuses on local structure, separates clusters more strongly. However, distances between clusters aren’t always meaningful (clusters may look far but be closer in high-D space).
+	•	UMAP: Balances global and local structure, sometimes keeps a more interpretable overall shape while still revealing clusters.
 
 # Section 2f
 
@@ -410,7 +419,7 @@ metadata_file <- file.path(data_dir, "metadata_SRP192714.tsv")
 metadata <- readr::read_tsv("data/SRP192714/metadata_SRP192714.tsv")
 ```
 
-```{r Whatever the fuck this is}
+```{r W}
 # # Make the data in the order of the metadata
 # expression_df <- expression_df %>%
 #   dplyr::select(metadata$refinebio_accession_code)
