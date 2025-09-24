@@ -136,8 +136,26 @@ library(DESeq2)
 # Use numeric columns from expression_df as count matrix
 cts <- expression_df %>% dplyr::select(where(is.numeric)) %>% as.matrix()
 
-# Load metadata
-coldata <- readr::read_tsv(file.path(data_dir, "metadata_SRP192714.tsv"))
+
+# Load refine.bio metadata
+refinebio_meta <- readr::read_tsv(file.path(data_dir, "metadata_SRP192714.tsv"))
+rownames(refinebio_meta) <- refinebio_meta$refinebio_accession_code
+
+# Load GEO metadata (CSV)
+geo_meta <- readr::read_csv("data/GSE129882_PhenoData.transcript.csv")
+
+# Try to merge on sample columns
+# Check for a column in geo_meta that matches refinebio_accession_code or another sample identifier
+# For demonstration, let's assume geo_meta has a column 'Sample' that matches refinebio_accession_code
+if ("Sample" %in% colnames(geo_meta)) {
+  merged_meta <- dplyr::left_join(refinebio_meta, geo_meta, by = c("refinebio_accession_code" = "Sample"))
+} else {
+  # If not, just keep refinebio_meta as coldata
+  merged_meta <- refinebio_meta
+}
+
+# Update coldata for DESeq2
+coldata <- merged_meta
 rownames(coldata) <- coldata$refinebio_accession_code
 
 # Subset cts columns to match coldata rownames
@@ -146,14 +164,15 @@ cts <- cts[, rownames(coldata)]
 # Check dimensions
 stopifnot(ncol(cts) == nrow(coldata))
 
-# Replace 'group' with your actual group/condition column name, e.g. 'disease'
+# Choose a grouping column for DESeq2 (update as needed)
+# For example, use 'refinebio_title' or a column from GEO metadata
 dds <- DESeqDataSetFromMatrix(countData = cts,
                               colData = coldata,
-                              design = ~ disease) # <-- change 'disease' to your column
+                              design = ~ refinebio_title)
 
 dds <- DESeq(dds)
 vsd <- vst(dds, blind=FALSE)
-plotPCA(vsd, intgroup="disease") # <-- change 'disease' to your column
+plotPCA(vsd, intgroup="refinebio_title")
 ```
 
 # Section 2b
