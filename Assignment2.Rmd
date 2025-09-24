@@ -190,7 +190,7 @@ library(DESeq2)
 if (use_trimmed) {
   expr_mat <- expression_df_trimmed
   meta <- merged_meta_trimmed
-  plot_title <- "PCA of First 100 Samples (colored by Exposure)"
+  plot_title <- "PCA of First 50 Samples (colored by Exposure)"
   plot_file <- "trimmed_pca_exposure.png"
 } else {
   expr_mat <- expression_df_full

@@ -1,0 +1,1022 @@
+refinebio_accession_code	experiment_accession	refinebio_age	refinebio_cell_line	refinebio_compound	refinebio_developmental_stage	refinebio_disease	refinebio_disease_stage	refinebio_genetic_information	refinebio_organism	refinebio_platform	refinebio_processed	refinebio_processor_id	refinebio_processor_name	refinebio_processor_version	refinebio_race	refinebio_sex	refinebio_source_archive_url	refinebio_source_database	refinebio_specimen_part	refinebio_subject	refinebio_time	refinebio_title	refinebio_treatment	MetaSRA_age
+SRR8907879	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	1304q1		14.0
+SRR8907880	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	1304q1		14.0
+SRR8907881	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	1304q1		14.0
+SRR8907882	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	1304q1		14.0
+SRR8907883	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	1304q1		14.0
+SRR8907884	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	1304q1		14.0
+SRR8907885	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	1304q1		14.0
+SRR8907886	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	1304q1		14.0
+SRR8907887	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	1304q3		14.0
+SRR8907888	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	1304q3		14.0
+SRR8907889	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	1304q5		14.0
+SRR8907890	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	1304q5		14.0
+SRR8907891	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	1369q1		14.0
+SRR8907892	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	1369q1		14.0
+SRR8907893	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	1369q1		14.0
+SRR8907894	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	1369q1		14.0
+SRR8907895	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	1369q1		14.0
+SRR8907896	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	1369q1		14.0
+SRR8907897	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	1369q1		14.0
+SRR8907898	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	1369q1		14.0
+SRR8907899	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	1369q3		14.0
+SRR8907900	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	1369q3		14.0
+SRR8907901	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	1369q5		14.0
+SRR8907902	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	1369q5		14.0
+SRR8907903	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	1659q1		14.0
+SRR8907904	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	1659q1		14.0
+SRR8907905	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	1659q1		14.0
+SRR8907906	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	1659q1		14.0
+SRR8907907	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	1659q1		14.0
+SRR8907908	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	1659q1		14.0
+SRR8907909	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	1659q1		14.0
+SRR8907910	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	1659q1		14.0
+SRR8907911	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	1659q3		14.0
+SRR8907912	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	1659q3		14.0
+SRR8907913	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	1659q5		14.0
+SRR8907914	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	1659q5		14.0
+SRR8907915	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	2007q1		14.0
+SRR8907916	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	2007q1		14.0
+SRR8907917	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	2007q1		14.0
+SRR8907918	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	2007q1		14.0
+SRR8907919	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	2007q1		14.0
+SRR8907920	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	2007q1		14.0
+SRR8907921	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	2007q1		14.0
+SRR8907922	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	2007q1		14.0
+SRR8907923	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	2007q3		14.0
+SRR8907924	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	2007q3		14.0
+SRR8907925	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	2007q5		14.0
+SRR8907926	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	2007q5		14.0
+SRR8907927	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	201q1		14.0
+SRR8907928	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	201q1		14.0
+SRR8907929	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	201q1		14.0
+SRR8907930	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	201q1		14.0
+SRR8907931	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	201q1		14.0
+SRR8907932	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	201q1		14.0
+SRR8907933	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	201q1		14.0
+SRR8907934	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	201q1		14.0
+SRR8907935	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	201q3		14.0
+SRR8907936	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	201q3		14.0
+SRR8907937	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	201q5		14.0
+SRR8907938	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	201q5		14.0
+SRR8907939	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	2226q1		14.0
+SRR8907940	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	2226q1		14.0
+SRR8907941	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	2226q1		14.0
+SRR8907942	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	2226q1		14.0
+SRR8907943	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	2226q1		14.0
+SRR8907944	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	2226q1		14.0
+SRR8907945	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	2226q1		14.0
+SRR8907946	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	2226q1		14.0
+SRR8907947	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	2226q3		14.0
+SRR8907948	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	2226q3		14.0
+SRR8907949	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	2226q5		14.0
+SRR8907950	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	2226q5		14.0
+SRR8907951	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	2226q5		14.0
+SRR8907952	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	3132q1		14.0
+SRR8907953	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	3132q1		14.0
+SRR8907954	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	3132q1		14.0
+SRR8907955	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	3132q1		14.0
+SRR8907956	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	3132q1		14.0
+SRR8907957	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	3132q1		14.0
+SRR8907958	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	3132q1		14.0
+SRR8907959	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	3132q1		14.0
+SRR8907960	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	3132q3		14.0
+SRR8907961	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	3132q3		14.0
+SRR8907962	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	3132q5		14.0
+SRR8907963	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	3132q5		14.0
+SRR8907964	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	3758q1		14.0
+SRR8907965	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	3758q1		14.0
+SRR8907966	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	3758q1		14.0
+SRR8907967	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	3758q1		14.0
+SRR8907968	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	3758q1		14.0
+SRR8907969	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	3758q1		14.0
+SRR8907970	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	3758q1		14.0
+SRR8907971	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	3758q1		14.0
+SRR8907972	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	3758q3		14.0
+SRR8907973	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	3758q3		14.0
+SRR8907974	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	3758q5		14.0
+SRR8907975	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	3758q5		14.0
+SRR8907976	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4041q1		13.0
+SRR8907977	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4041q1		13.0
+SRR8907978	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4041q1		13.0
+SRR8907979	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4041q1		13.0
+SRR8907980	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4041q1		13.0
+SRR8907981	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4041q1		13.0
+SRR8907982	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4041q1		13.0
+SRR8907983	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4041q1		13.0
+SRR8907984	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	4041q3		13.0
+SRR8907985	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	4041q3		13.0
+SRR8907986	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	4041q5		13.0
+SRR8907987	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	4041q5		13.0
+SRR8907988	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	4069q1		13.0
+SRR8907989	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	4069q1		13.0
+SRR8907990	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	4069q3		13.0
+SRR8907991	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	4069q3		13.0
+SRR8907992	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	4203q1		13.0
+SRR8907993	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	4203q1		13.0
+SRR8907994	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	4203q1		13.0
+SRR8907995	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	4203q1		13.0
+SRR8907996	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	4203q1		13.0
+SRR8907997	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	4203q1		13.0
+SRR8907998	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	4203q1		13.0
+SRR8907999	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	4203q1		13.0
+SRR8908000	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	4203q3		13.0
+SRR8908001	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	4203q3		13.0
+SRR8908002	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	4203q5		13.0
+SRR8908003	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	4203q5		13.0
+SRR8908004	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	4243q1		12.0
+SRR8908005	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	4243q1		12.0
+SRR8908006	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	4243q1		12.0
+SRR8908007	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	4243q1		12.0
+SRR8908008	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	4243q1		12.0
+SRR8908009	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	4243q1		12.0
+SRR8908010	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	4243q1		12.0
+SRR8908011	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	4243q1		12.0
+SRR8908012	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	4243q3		12.0
+SRR8908013	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	4243q3		12.0
+SRR8908014	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	4243q5		12.0
+SRR8908015	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	4243q5		12.0
+SRR8908016	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4359q1		12.0
+SRR8908017	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4359q1		12.0
+SRR8908018	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4359q1		12.0
+SRR8908019	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4359q1		12.0
+SRR8908020	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4359q1		12.0
+SRR8908021	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4359q1		12.0
+SRR8908022	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4359q1		12.0
+SRR8908023	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4359q1		12.0
+SRR8908024	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	4359q3		12.0
+SRR8908025	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	4359q3		12.0
+SRR8908026	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	4359q5		12.0
+SRR8908027	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	4359q5		12.0
+SRR8908028	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4445q2		12.0
+SRR8908029	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4445q2		12.0
+SRR8908030	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4445q2		12.0
+SRR8908031	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4445q2		12.0
+SRR8908032	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4445q2		12.0
+SRR8908033	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4445q2		12.0
+SRR8908034	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4445q2		12.0
+SRR8908035	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4445q2		12.0
+SRR8908036	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	4445q3		12.0
+SRR8908037	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	4445q3		12.0
+SRR8908038	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	4445q5		12.0
+SRR8908039	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	4445q5		12.0
+SRR8908040	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4515q1		12.0
+SRR8908041	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4515q1		12.0
+SRR8908042	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4515q1		12.0
+SRR8908043	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4515q1		12.0
+SRR8908044	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4515q1		12.0
+SRR8908045	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4515q1		12.0
+SRR8908046	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4515q1		12.0
+SRR8908047	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4515q1		12.0
+SRR8908048	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	4515q3		12.0
+SRR8908049	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	4515q3		12.0
+SRR8908050	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	4515q5		12.0
+SRR8908051	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	4515q5		12.0
+SRR8908052	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4606q1		11.0
+SRR8908053	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4606q1		11.0
+SRR8908054	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4606q1		11.0
+SRR8908055	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4606q1		11.0
+SRR8908056	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4606q1		11.0
+SRR8908057	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4606q1		11.0
+SRR8908058	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4606q1		11.0
+SRR8908059	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4606q1		11.0
+SRR8908060	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	4606q3		11.0
+SRR8908061	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	4606q3		11.0
+SRR8908062	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	4606q5		11.0
+SRR8908063	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	4606q5		11.0
+SRR8908064	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4723q1		11.0
+SRR8908065	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4723q1		11.0
+SRR8908066	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4723q1		11.0
+SRR8908067	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4723q1		11.0
+SRR8908068	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4723q1		11.0
+SRR8908069	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4723q1		11.0
+SRR8908070	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4723q1		11.0
+SRR8908071	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4723q1		11.0
+SRR8908072	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	4723q3		11.0
+SRR8908073	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	4723q3		11.0
+SRR8908074	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	4723q5		11.0
+SRR8908075	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	4723q5		11.0
+SRR8908076	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4749q1		13.0
+SRR8908077	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4749q1		13.0
+SRR8908078	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4749q1		13.0
+SRR8908079	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4749q1		13.0
+SRR8908080	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4749q1		13.0
+SRR8908081	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4749q1		13.0
+SRR8908082	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4749q1		13.0
+SRR8908083	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4749q1		13.0
+SRR8908084	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	4749q3		13.0
+SRR8908085	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	4749q3		13.0
+SRR8908086	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	4749q5		13.0
+SRR8908087	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	4749q5		13.0
+SRR8908088	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	4772q1		10.0
+SRR8908089	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	4772q1		10.0
+SRR8908090	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	4772q1		10.0
+SRR8908091	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	4772q1		10.0
+SRR8908092	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	4772q1		10.0
+SRR8908093	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	4772q1		10.0
+SRR8908094	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	4772q1		10.0
+SRR8908095	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	4772q1		10.0
+SRR8908096	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	4772q3		10.0
+SRR8908097	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	4772q3		10.0
+SRR8908098	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	4772q5		10.0
+SRR8908099	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	4772q5		10.0
+SRR8908100	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	4797q1		11.0
+SRR8908101	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	4797q1		11.0
+SRR8908102	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	4797q1		11.0
+SRR8908103	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	4797q1		11.0
+SRR8908104	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	4797q1		11.0
+SRR8908105	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	4797q1		11.0
+SRR8908106	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	4797q1		11.0
+SRR8908107	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	4797q1		11.0
+SRR8908108	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	4797q3		11.0
+SRR8908109	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	4797q3		11.0
+SRR8908110	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	4797q5		11.0
+SRR8908111	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	4797q5		11.0
+SRR8908112	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4817q1		13.0
+SRR8908113	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4817q1		13.0
+SRR8908114	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4817q1		13.0
+SRR8908115	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4817q1		13.0
+SRR8908116	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4817q1		13.0
+SRR8908117	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4817q1		13.0
+SRR8908118	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4817q1		13.0
+SRR8908119	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4817q1		13.0
+SRR8908120	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	4817q3		13.0
+SRR8908121	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	4817q3		13.0
+SRR8908122	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	4817q5		13.0
+SRR8908123	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	4817q5		13.0
+SRR8908124	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4858q1		13.0
+SRR8908125	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4858q1		13.0
+SRR8908126	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4858q1		13.0
+SRR8908127	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4858q1		13.0
+SRR8908128	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4858q1		13.0
+SRR8908129	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4858q1		13.0
+SRR8908130	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4858q1		13.0
+SRR8908131	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	4858q1		13.0
+SRR8908132	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	4858q3		13.0
+SRR8908133	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	4858q3		13.0
+SRR8908134	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	4858q5		13.0
+SRR8908135	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	4858q5		13.0
+SRR8908136	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	4948q1		12.0
+SRR8908137	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	4948q1		12.0
+SRR8908138	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	4948q1		12.0
+SRR8908139	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	4948q1		12.0
+SRR8908140	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	4948q1		12.0
+SRR8908141	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	4948q1		12.0
+SRR8908142	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	4948q1		12.0
+SRR8908143	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	4948q1		12.0
+SRR8908144	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	4948q3		12.0
+SRR8908145	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	4948q3		12.0
+SRR8908146	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	4948q5		12.0
+SRR8908147	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	4948q5		12.0
+SRR8908148	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5013q1		12.0
+SRR8908149	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5013q1		12.0
+SRR8908150	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5013q1		12.0
+SRR8908151	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5013q1		12.0
+SRR8908152	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5013q1		12.0
+SRR8908153	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5013q1		12.0
+SRR8908154	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5013q1		12.0
+SRR8908155	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5013q1		12.0
+SRR8908156	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	5013q3		12.0
+SRR8908157	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	5013q3		12.0
+SRR8908158	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	5013q5		12.0
+SRR8908159	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	5013q5		12.0
+SRR8908160	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5066q1		11.0
+SRR8908161	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5066q1		11.0
+SRR8908162	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5066q1		11.0
+SRR8908163	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5066q1		11.0
+SRR8908164	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5066q1		11.0
+SRR8908165	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5066q1		11.0
+SRR8908166	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5066q1		11.0
+SRR8908167	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5066q1		11.0
+SRR8908168	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	5066q3		11.0
+SRR8908169	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	5066q3		11.0
+SRR8908170	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	5066q5		11.0
+SRR8908171	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	5066q5		11.0
+SRR8908172	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5138q1		11.0
+SRR8908173	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5138q1		11.0
+SRR8908174	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5138q1		11.0
+SRR8908175	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5138q1		11.0
+SRR8908176	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5138q1		11.0
+SRR8908177	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5138q1		11.0
+SRR8908178	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5138q1		11.0
+SRR8908179	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5138q1		11.0
+SRR8908180	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	5138q3		11.0
+SRR8908181	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	5138q3		11.0
+SRR8908182	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	5138q5		11.0
+SRR8908183	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	5138q5		11.0
+SRR8908184	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5149q1		11.0
+SRR8908185	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5149q1		11.0
+SRR8908186	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5149q1		11.0
+SRR8908187	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5149q1		11.0
+SRR8908188	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5149q1		11.0
+SRR8908189	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5149q1		11.0
+SRR8908190	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5149q1		11.0
+SRR8908191	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5149q1		11.0
+SRR8908192	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	5149q3		11.0
+SRR8908193	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	5149q3		11.0
+SRR8908194	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	5149q5		11.0
+SRR8908195	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	5149q5		11.0
+SRR8908196	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5248q1		14.0
+SRR8908197	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5248q1		14.0
+SRR8908198	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5248q1		14.0
+SRR8908199	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5248q1		14.0
+SRR8908200	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5248q1		14.0
+SRR8908201	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5248q1		14.0
+SRR8908202	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5248q1		14.0
+SRR8908203	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5248q1		14.0
+SRR8908204	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	5248q3		14.0
+SRR8908205	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	5248q3		14.0
+SRR8908206	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	5248q5		14.0
+SRR8908207	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	5248q5		14.0
+SRR8908208	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5256q1		10.0
+SRR8908209	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5256q1		10.0
+SRR8908210	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5256q1		10.0
+SRR8908211	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5256q1		10.0
+SRR8908212	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5256q1		10.0
+SRR8908213	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5256q1		10.0
+SRR8908214	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5256q1		10.0
+SRR8908215	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5256q1		10.0
+SRR8908216	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	5256q3		10.0
+SRR8908217	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	5256q3		10.0
+SRR8908218	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	5256q5		10.0
+SRR8908219	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	5256q5		10.0
+SRR8908220	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5329q1		10.0
+SRR8908221	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5329q1		10.0
+SRR8908222	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5329q1		10.0
+SRR8908223	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5329q1		10.0
+SRR8908224	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5329q1		10.0
+SRR8908225	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5329q1		10.0
+SRR8908226	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5329q1		10.0
+SRR8908227	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5329q1		10.0
+SRR8908228	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	5329q3		10.0
+SRR8908229	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	5329q3		10.0
+SRR8908230	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	5329q5		10.0
+SRR8908231	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	5329q5		10.0
+SRR8908232	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5338q1		14.0
+SRR8908233	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5338q1		14.0
+SRR8908234	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5338q1		14.0
+SRR8908235	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5338q1		14.0
+SRR8908236	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5338q1		14.0
+SRR8908237	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5338q1		14.0
+SRR8908238	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5338q1		14.0
+SRR8908239	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5338q1		14.0
+SRR8908240	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	5338q3		14.0
+SRR8908241	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	5338q3		14.0
+SRR8908242	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	5338q5		14.0
+SRR8908243	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	5338q5		14.0
+SRR8908244	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5355q1		11.0
+SRR8908245	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5355q1		11.0
+SRR8908246	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5355q1		11.0
+SRR8908247	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5355q1		11.0
+SRR8908248	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5355q1		11.0
+SRR8908249	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5355q1		11.0
+SRR8908250	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5355q1		11.0
+SRR8908251	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5355q1		11.0
+SRR8908252	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	5355q3		11.0
+SRR8908253	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	5355q3		11.0
+SRR8908254	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	5355q5		11.0
+SRR8908255	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	5355q5		11.0
+SRR8908256	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5376q1		11.0
+SRR8908257	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5376q1		11.0
+SRR8908258	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5376q1		11.0
+SRR8908259	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5376q1		11.0
+SRR8908260	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5376q1		11.0
+SRR8908261	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5376q1		11.0
+SRR8908262	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5376q1		11.0
+SRR8908263	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5376q1		11.0
+SRR8908264	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	5376q3		11.0
+SRR8908265	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	5376q3		11.0
+SRR8908266	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	5376q5		11.0
+SRR8908267	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	5376q5		11.0
+SRR8908268	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5406q1		12.0
+SRR8908269	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5406q1		12.0
+SRR8908270	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5406q1		12.0
+SRR8908271	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5406q1		12.0
+SRR8908272	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5406q1		12.0
+SRR8908273	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5406q1		12.0
+SRR8908274	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5406q1		12.0
+SRR8908275	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5406q1		12.0
+SRR8908276	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	5406q3		12.0
+SRR8908277	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	5406q3		12.0
+SRR8908278	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	5406q5		12.0
+SRR8908279	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	5406q5		12.0
+SRR8908280	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5506q1		10.0
+SRR8908281	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5506q1		10.0
+SRR8908282	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5506q1		10.0
+SRR8908283	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5506q1		10.0
+SRR8908284	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5506q1		10.0
+SRR8908285	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5506q1		10.0
+SRR8908286	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5506q1		10.0
+SRR8908287	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5506q1		10.0
+SRR8908288	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	5506q3		10.0
+SRR8908289	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	5506q3		10.0
+SRR8908290	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	5506q5		10.0
+SRR8908291	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	5506q5		10.0
+SRR8908292	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5540q1		14.0
+SRR8908293	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5540q1		14.0
+SRR8908294	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5540q1		14.0
+SRR8908295	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5540q1		14.0
+SRR8908296	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5540q1		14.0
+SRR8908297	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5540q1		14.0
+SRR8908298	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5540q1		14.0
+SRR8908299	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5540q1		14.0
+SRR8908300	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	5540q3		14.0
+SRR8908301	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	5540q3		14.0
+SRR8908302	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	5540q5		14.0
+SRR8908303	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	5540q5		14.0
+SRR8908304	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5550q1		11.0
+SRR8908305	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5550q1		11.0
+SRR8908306	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5550q1		11.0
+SRR8908307	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5550q1		11.0
+SRR8908308	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5550q1		11.0
+SRR8908309	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5550q1		11.0
+SRR8908310	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5550q1		11.0
+SRR8908311	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5550q1		11.0
+SRR8908312	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	5550q3		11.0
+SRR8908313	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	5550q3		11.0
+SRR8908314	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	5550q5		11.0
+SRR8908315	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	5550q5		11.0
+SRR8908316	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5575q1		14.0
+SRR8908317	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5575q1		14.0
+SRR8908318	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5575q1		14.0
+SRR8908319	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5575q1		14.0
+SRR8908320	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5575q1		14.0
+SRR8908321	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5575q1		14.0
+SRR8908322	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5575q1		14.0
+SRR8908323	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5575q1		14.0
+SRR8908324	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	5575q3		14.0
+SRR8908325	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	5575q3		14.0
+SRR8908326	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	5575q5		14.0
+SRR8908327	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	5575q5		14.0
+SRR8908328	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5660q1		11.0
+SRR8908329	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5660q1		11.0
+SRR8908330	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5660q1		11.0
+SRR8908331	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5660q1		11.0
+SRR8908332	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5660q1		11.0
+SRR8908333	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5660q1		11.0
+SRR8908334	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5660q1		11.0
+SRR8908335	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5660q1		11.0
+SRR8908336	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	5660q3		11.0
+SRR8908337	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	5660q3		11.0
+SRR8908338	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	5660q5		11.0
+SRR8908339	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	5660q5		11.0
+SRR8908340	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5695q1		10.0
+SRR8908341	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5695q1		10.0
+SRR8908342	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5695q1		10.0
+SRR8908343	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5695q1		10.0
+SRR8908344	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5695q1		10.0
+SRR8908345	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5695q1		10.0
+SRR8908346	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5695q1		10.0
+SRR8908347	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5695q1		10.0
+SRR8908348	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	5695q3		10.0
+SRR8908349	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	5695q3		10.0
+SRR8908350	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	5695q5		10.0
+SRR8908351	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	5695q5		10.0
+SRR8908352	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5893q1		9.0
+SRR8908353	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5893q1		9.0
+SRR8908354	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5893q1		9.0
+SRR8908355	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5893q1		9.0
+SRR8908356	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5893q1		9.0
+SRR8908357	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5893q1		9.0
+SRR8908358	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5893q1		9.0
+SRR8908359	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	5893q1		9.0
+SRR8908360	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	5893q3		9.0
+SRR8908361	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	5893q3		9.0
+SRR8908362	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	5893q5		9.0
+SRR8908363	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	5893q5		9.0
+SRR8908364	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5953q1		9.0
+SRR8908365	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5953q1		9.0
+SRR8908366	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5953q1		9.0
+SRR8908367	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5953q1		9.0
+SRR8908368	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5953q1		9.0
+SRR8908369	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5953q1		9.0
+SRR8908370	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5953q1		9.0
+SRR8908371	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5953q1		9.0
+SRR8908372	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	5953q3		9.0
+SRR8908373	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	5953q3		9.0
+SRR8908374	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	5953q5		9.0
+SRR8908375	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	5953q5		9.0
+SRR8908376	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5962q1		9.0
+SRR8908377	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5962q1		9.0
+SRR8908378	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	5962q3		9.0
+SRR8908379	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	5962q3		9.0
+SRR8908380	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5966q1		9.0
+SRR8908381	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5966q1		9.0
+SRR8908382	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5966q1		9.0
+SRR8908383	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5966q1		9.0
+SRR8908384	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5966q1		9.0
+SRR8908385	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5966q1		9.0
+SRR8908386	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5966q1		9.0
+SRR8908387	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	5966q1		9.0
+SRR8908388	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	5966q3		9.0
+SRR8908389	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	5966q3		9.0
+SRR8908390	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	5966q5		9.0
+SRR8908391	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	5966q5		9.0
+SRR8908392	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6215q1		7.0
+SRR8908393	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6215q1		7.0
+SRR8908394	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6215q1		7.0
+SRR8908395	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6215q1		7.0
+SRR8908396	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6215q1		7.0
+SRR8908397	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6215q1		7.0
+SRR8908398	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6215q1		7.0
+SRR8908399	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6215q1		7.0
+SRR8908400	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	6215q3		7.0
+SRR8908401	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	6215q3		7.0
+SRR8908402	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	6215q5		7.0
+SRR8908403	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	6215q5		7.0
+SRR8908404	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6248q1		8.0
+SRR8908405	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6248q1		8.0
+SRR8908406	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6248q1		8.0
+SRR8908407	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6248q1		8.0
+SRR8908408	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6248q1		8.0
+SRR8908409	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6248q1		8.0
+SRR8908410	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6248q1		8.0
+SRR8908411	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6248q1		8.0
+SRR8908412	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	6248q3		8.0
+SRR8908413	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	6248q3		8.0
+SRR8908414	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	6248q5		8.0
+SRR8908415	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	6248q5		8.0
+SRR8908416	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6253q1		5.0
+SRR8908417	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6253q1		5.0
+SRR8908418	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6253q1		5.0
+SRR8908419	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6253q1		5.0
+SRR8908420	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6253q1		5.0
+SRR8908421	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6253q1		5.0
+SRR8908422	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6253q1		5.0
+SRR8908423	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6253q1		5.0
+SRR8908424	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	6253q3		5.0
+SRR8908425	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	6253q3		5.0
+SRR8908426	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	6253q5		5.0
+SRR8908427	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	6253q5		5.0
+SRR8908428	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6364q1		7.0
+SRR8908429	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6364q1		7.0
+SRR8908430	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6364q1		7.0
+SRR8908431	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6364q1		7.0
+SRR8908432	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6364q1		7.0
+SRR8908433	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6364q1		7.0
+SRR8908434	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6364q1		7.0
+SRR8908435	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6364q1		7.0
+SRR8908436	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	6364q3		7.0
+SRR8908437	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	6364q3		7.0
+SRR8908438	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	6364q5		7.0
+SRR8908439	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	6364q5		7.0
+SRR8908440	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6547q1		7.0
+SRR8908441	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6547q1		7.0
+SRR8908442	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6547q1		7.0
+SRR8908443	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6547q1		7.0
+SRR8908444	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6547q1		7.0
+SRR8908445	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6547q1		7.0
+SRR8908446	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6547q1		7.0
+SRR8908447	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6547q1		7.0
+SRR8908448	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	6547q3		7.0
+SRR8908449	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	6547q3		7.0
+SRR8908450	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	6547q5		7.0
+SRR8908451	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	6547q5		7.0
+SRR8908452	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6558q1		7.0
+SRR8908453	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6558q1		7.0
+SRR8908454	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6558q1		7.0
+SRR8908455	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6558q1		7.0
+SRR8908456	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6558q1		7.0
+SRR8908457	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6558q1		7.0
+SRR8908458	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6558q1		7.0
+SRR8908459	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6558q1		7.0
+SRR8908460	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	6558q3		7.0
+SRR8908461	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	6558q3		7.0
+SRR8908462	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	6558q5		7.0
+SRR8908463	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	6558q5		7.0
+SRR8908464	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6563q1		7.0
+SRR8908465	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6563q1		7.0
+SRR8908466	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6563q1		7.0
+SRR8908467	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6563q1		7.0
+SRR8908468	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6563q1		7.0
+SRR8908469	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6563q1		7.0
+SRR8908470	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6563q1		7.0
+SRR8908471	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6563q1		7.0
+SRR8908472	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	6563q3		7.0
+SRR8908473	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	6563q3		7.0
+SRR8908474	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	6563q5		7.0
+SRR8908475	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	6563q5		7.0
+SRR8908476	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6605q1		7.0
+SRR8908477	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6605q1		7.0
+SRR8908478	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6605q1		7.0
+SRR8908479	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6605q1		7.0
+SRR8908480	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6605q1		7.0
+SRR8908481	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6605q1		7.0
+SRR8908482	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6605q1		7.0
+SRR8908483	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6605q1		7.0
+SRR8908484	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	6605q3		7.0
+SRR8908485	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	6605q3		7.0
+SRR8908486	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	6605q5		7.0
+SRR8908487	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	6605q5		7.0
+SRR8908488	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6625q1		10.0
+SRR8908489	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6625q1		10.0
+SRR8908490	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	6625q3		10.0
+SRR8908491	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	6625q3		10.0
+SRR8908492	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6643q1		8.0
+SRR8908493	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6643q1		8.0
+SRR8908494	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6643q1		8.0
+SRR8908495	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6643q1		8.0
+SRR8908496	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6643q1		8.0
+SRR8908497	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6643q1		8.0
+SRR8908498	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6643q1		8.0
+SRR8908499	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6643q1		8.0
+SRR8908500	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	6643q3		8.0
+SRR8908501	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	6643q3		8.0
+SRR8908502	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	6643q5		8.0
+SRR8908503	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	6643q5		8.0
+SRR8908504	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6661q1		9.0
+SRR8908505	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6661q1		9.0
+SRR8908506	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6661q1		9.0
+SRR8908507	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6661q1		9.0
+SRR8908508	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6661q1		9.0
+SRR8908509	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6661q1		9.0
+SRR8908510	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6661q1		9.0
+SRR8908511	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6661q1		9.0
+SRR8908512	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	6661q3		9.0
+SRR8908513	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	6661q3		9.0
+SRR8908514	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	6661q5		9.0
+SRR8908515	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	6661q5		9.0
+SRR8908516	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6669q1		9.0
+SRR8908517	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6669q1		9.0
+SRR8908518	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6669q1		9.0
+SRR8908519	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6669q1		9.0
+SRR8908520	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6669q1		9.0
+SRR8908521	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6669q1		9.0
+SRR8908522	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6669q1		9.0
+SRR8908523	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6669q1		9.0
+SRR8908524	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	6669q3		9.0
+SRR8908525	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	6669q3		9.0
+SRR8908526	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	6669q5		9.0
+SRR8908527	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	6669q5		9.0
+SRR8908528	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6697q1		9.0
+SRR8908529	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6697q1		9.0
+SRR8908530	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6697q1		9.0
+SRR8908531	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6697q1		9.0
+SRR8908532	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6697q1		9.0
+SRR8908533	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6697q1		9.0
+SRR8908534	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6697q1		9.0
+SRR8908535	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6697q1		9.0
+SRR8908536	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	6697q3		9.0
+SRR8908537	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	6697q3		9.0
+SRR8908538	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	6697q5		9.0
+SRR8908539	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	6697q5		9.0
+SRR8908540	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6739q1		7.0
+SRR8908541	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6739q1		7.0
+SRR8908542	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6739q1		7.0
+SRR8908543	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6739q1		7.0
+SRR8908544	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6739q1		7.0
+SRR8908545	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6739q1		7.0
+SRR8908546	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6739q1		7.0
+SRR8908547	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6739q1		7.0
+SRR8908548	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	6739q3		7.0
+SRR8908549	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	6739q3		7.0
+SRR8908550	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	6739q5		7.0
+SRR8908551	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	6739q5		7.0
+SRR8908552	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6763q1		7.0
+SRR8908553	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6763q1		7.0
+SRR8908554	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6763q1		7.0
+SRR8908555	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6763q1		7.0
+SRR8908556	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6763q1		7.0
+SRR8908557	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6763q1		7.0
+SRR8908558	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6763q1		7.0
+SRR8908559	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6763q1		7.0
+SRR8908560	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	6763q3		7.0
+SRR8908561	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	6763q3		7.0
+SRR8908562	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	6763q5		7.0
+SRR8908563	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	6763q5		7.0
+SRR8908564	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6775q1		8.0
+SRR8908565	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6775q1		8.0
+SRR8908566	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6775q1		8.0
+SRR8908567	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6775q1		8.0
+SRR8908568	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6775q1		8.0
+SRR8908569	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6775q1		8.0
+SRR8908570	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6775q1		8.0
+SRR8908571	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6775q1		8.0
+SRR8908572	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	6775q3		8.0
+SRR8908573	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	6775q3		8.0
+SRR8908574	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	6775q5		8.0
+SRR8908575	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	6775q5		8.0
+SRR8908576	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6777q1		8.0
+SRR8908577	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6777q1		8.0
+SRR8908578	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6777q1		8.0
+SRR8908579	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6777q1		8.0
+SRR8908580	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6777q1		8.0
+SRR8908581	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6777q1		8.0
+SRR8908582	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6777q1		8.0
+SRR8908583	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6777q1		8.0
+SRR8908584	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	6777q3		8.0
+SRR8908585	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	6777q3		8.0
+SRR8908586	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	6777q5		8.0
+SRR8908587	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	6777q5		8.0
+SRR8908588	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6790q1		8.0
+SRR8908589	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6790q1		8.0
+SRR8908590	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6790q1		8.0
+SRR8908591	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6790q1		8.0
+SRR8908592	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6790q1		8.0
+SRR8908593	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6790q1		8.0
+SRR8908594	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6790q1		8.0
+SRR8908595	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6790q1		8.0
+SRR8908596	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	6790q3		8.0
+SRR8908597	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	6790q3		8.0
+SRR8908598	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	6790q5		8.0
+SRR8908599	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	6790q5		8.0
+SRR8908600	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6819q1		5.0
+SRR8908601	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	6819q1		5.0
+SRR8908602	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	6819q5		5.0
+SRR8908603	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	6819q5		5.0
+SRR8908604	SRP192714	4.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6918q1		4.0
+SRR8908605	SRP192714	4.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6918q1		4.0
+SRR8908606	SRP192714	4.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6918q1		4.0
+SRR8908607	SRP192714	4.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6918q1		4.0
+SRR8908608	SRP192714	4.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6918q1		4.0
+SRR8908609	SRP192714	4.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6918q1		4.0
+SRR8908610	SRP192714	4.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6918q1		4.0
+SRR8908611	SRP192714	4.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	6918q1		4.0
+SRR8908612	SRP192714	4.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	6918q3		4.0
+SRR8908613	SRP192714	4.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	6918q3		4.0
+SRR8908614	SRP192714	4.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	6918q5		4.0
+SRR8908615	SRP192714	4.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	6918q5		4.0
+SRR8908616	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7066q1		8.0
+SRR8908617	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7066q1		8.0
+SRR8908618	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7066q1		8.0
+SRR8908619	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7066q1		8.0
+SRR8908620	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7066q1		8.0
+SRR8908621	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7066q1		8.0
+SRR8908622	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7066q1		8.0
+SRR8908623	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7066q1		8.0
+SRR8908624	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	7066q3		8.0
+SRR8908625	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	7066q3		8.0
+SRR8908626	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	7066q5		8.0
+SRR8908627	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	7066q5		8.0
+SRR8908628	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7096q1		8.0
+SRR8908629	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7096q1		8.0
+SRR8908630	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7096q1		8.0
+SRR8908631	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7096q1		8.0
+SRR8908632	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7096q1		8.0
+SRR8908633	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7096q1		8.0
+SRR8908634	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7096q1		8.0
+SRR8908635	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7096q1		8.0
+SRR8908636	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	7096q3		8.0
+SRR8908637	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	7096q3		8.0
+SRR8908638	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	7096q5		8.0
+SRR8908639	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	7096q5		8.0
+SRR8908640	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7100q1		12.0
+SRR8908641	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7100q1		12.0
+SRR8908642	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7100q1		12.0
+SRR8908643	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7100q1		12.0
+SRR8908644	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7100q1		12.0
+SRR8908645	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7100q1		12.0
+SRR8908646	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7100q1		12.0
+SRR8908647	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7100q1		12.0
+SRR8908648	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	7100q3		12.0
+SRR8908649	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	7100q3		12.0
+SRR8908650	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	7100q5		12.0
+SRR8908651	SRP192714	12.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	7100q5		12.0
+SRR8908652	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7119q1		11.0
+SRR8908653	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7119q1		11.0
+SRR8908654	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7119q1		11.0
+SRR8908655	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7119q1		11.0
+SRR8908656	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7119q1		11.0
+SRR8908657	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7119q1		11.0
+SRR8908658	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7119q1		11.0
+SRR8908659	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7119q1		11.0
+SRR8908660	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	7119q3		11.0
+SRR8908661	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	7119q3		11.0
+SRR8908662	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	7119q5		11.0
+SRR8908663	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	7119q5		11.0
+SRR8908664	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7127q1		8.0
+SRR8908665	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7127q1		8.0
+SRR8908666	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7127q1		8.0
+SRR8908667	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7127q1		8.0
+SRR8908668	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7127q1		8.0
+SRR8908669	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7127q1		8.0
+SRR8908670	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7127q1		8.0
+SRR8908671	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7127q1		8.0
+SRR8908672	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	7127q3		8.0
+SRR8908673	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	7127q3		8.0
+SRR8908674	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	7127q5		8.0
+SRR8908675	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	7127q5		8.0
+SRR8908676	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7134q1		8.0
+SRR8908677	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7134q1		8.0
+SRR8908678	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7134q1		8.0
+SRR8908679	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7134q1		8.0
+SRR8908680	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7134q1		8.0
+SRR8908681	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7134q1		8.0
+SRR8908682	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7134q1		8.0
+SRR8908683	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7134q1		8.0
+SRR8908684	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	7134q3		8.0
+SRR8908685	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	7134q3		8.0
+SRR8908686	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	7134q5		8.0
+SRR8908687	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	7134q5		8.0
+SRR8908688	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7180q1		7.0
+SRR8908689	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7180q1		7.0
+SRR8908690	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7180q1		7.0
+SRR8908691	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7180q1		7.0
+SRR8908692	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7180q1		7.0
+SRR8908693	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7180q1		7.0
+SRR8908694	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7180q1		7.0
+SRR8908695	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7180q1		7.0
+SRR8908696	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	7180q3		7.0
+SRR8908697	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	7180q3		7.0
+SRR8908698	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	7180q5		7.0
+SRR8908699	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	7180q5		7.0
+SRR8908700	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7208q1		8.0
+SRR8908701	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7208q1		8.0
+SRR8908702	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7208q1		8.0
+SRR8908703	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7208q1		8.0
+SRR8908704	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7208q1		8.0
+SRR8908705	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7208q1		8.0
+SRR8908706	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7208q1		8.0
+SRR8908707	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7208q1		8.0
+SRR8908708	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	7208q3		8.0
+SRR8908709	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	7208q3		8.0
+SRR8908710	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	7208q5		8.0
+SRR8908711	SRP192714	8.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	7208q5		8.0
+SRR8908712	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7253q1		7.0
+SRR8908713	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7253q1		7.0
+SRR8908714	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7253q1		7.0
+SRR8908715	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7253q1		7.0
+SRR8908716	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7253q1		7.0
+SRR8908717	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7253q1		7.0
+SRR8908718	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7253q1		7.0
+SRR8908719	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7253q1		7.0
+SRR8908720	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	7253q3		7.0
+SRR8908721	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	7253q3		7.0
+SRR8908722	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	7253q5		7.0
+SRR8908723	SRP192714	7.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	7253q5		7.0
+SRR8908724	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	726q1		14.0
+SRR8908725	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	726q1		14.0
+SRR8908726	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	726q1		14.0
+SRR8908727	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	726q1		14.0
+SRR8908728	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	726q1		14.0
+SRR8908729	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	726q1		14.0
+SRR8908730	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	726q1		14.0
+SRR8908731	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	726q1		14.0
+SRR8908732	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	726q3		14.0
+SRR8908733	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	726q3		14.0
+SRR8908734	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	726q5		14.0
+SRR8908735	SRP192714	14.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	726q5		14.0
+SRR8908736	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7320q1		13.0
+SRR8908737	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7320q1		13.0
+SRR8908738	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	7320q3		13.0
+SRR8908739	SRP192714	13.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	7320q3		13.0
+SRR8908740	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7418q1		10.0
+SRR8908741	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7418q1		10.0
+SRR8908742	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7418q1		10.0
+SRR8908743	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7418q1		10.0
+SRR8908744	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7418q1		10.0
+SRR8908745	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7418q1		10.0
+SRR8908746	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7418q1		10.0
+SRR8908747	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7418q1		10.0
+SRR8908748	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	7418q3		10.0
+SRR8908749	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	7418q3		10.0
+SRR8908750	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	7418q5		10.0
+SRR8908751	SRP192714	10.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	7418q5		10.0
+SRR8908752	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7434q1		11.0
+SRR8908753	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7434q1		11.0
+SRR8908754	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7434q1		11.0
+SRR8908755	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7434q1		11.0
+SRR8908756	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7434q1		11.0
+SRR8908757	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7434q1		11.0
+SRR8908758	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7434q1		11.0
+SRR8908759	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7434q1		11.0
+SRR8908760	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	7434q3		11.0
+SRR8908761	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	7434q3		11.0
+SRR8908762	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	7434q5		11.0
+SRR8908763	SRP192714	11.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	7434q5		11.0
+SRR8908764	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7444q1		9.0
+SRR8908765	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7444q1		9.0
+SRR8908766	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7444q1		9.0
+SRR8908767	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7444q1		9.0
+SRR8908768	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7444q1		9.0
+SRR8908769	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7444q1		9.0
+SRR8908770	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7444q1		9.0
+SRR8908771	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7444q1		9.0
+SRR8908772	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	7444q3		9.0
+SRR8908773	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	7444q3		9.0
+SRR8908774	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	7444q5		9.0
+SRR8908775	SRP192714	9.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	7444q5		9.0
+SRR8908776	SRP192714	4.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7487q1		4.0
+SRR8908777	SRP192714	4.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7487q1		4.0
+SRR8908778	SRP192714	4.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7487q1		4.0
+SRR8908779	SRP192714	4.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7487q1		4.0
+SRR8908780	SRP192714	4.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7487q1		4.0
+SRR8908781	SRP192714	4.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7487q1		4.0
+SRR8908782	SRP192714	4.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7487q1		4.0
+SRR8908783	SRP192714	4.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7487q1		4.0
+SRR8908784	SRP192714	4.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	7487q3		4.0
+SRR8908785	SRP192714	4.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	7487q3		4.0
+SRR8908786	SRP192714	4.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	7487q5		4.0
+SRR8908787	SRP192714	4.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	7487q5		4.0
+SRR8908788	SRP192714	4.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7504q1		4.0
+SRR8908789	SRP192714	4.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7504q1		4.0
+SRR8908790	SRP192714	4.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7504q1		4.0
+SRR8908791	SRP192714	4.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7504q1		4.0
+SRR8908792	SRP192714	4.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7504q1		4.0
+SRR8908793	SRP192714	4.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7504q1		4.0
+SRR8908794	SRP192714	4.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7504q1		4.0
+SRR8908795	SRP192714	4.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7504q1		4.0
+SRR8908796	SRP192714	4.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	7504q3		4.0
+SRR8908797	SRP192714	4.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	7504q3		4.0
+SRR8908798	SRP192714	4.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	7504q5		4.0
+SRR8908799	SRP192714	4.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	7504q5		4.0
+SRR8908800	SRP192714	3.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7543q1		3.0
+SRR8908801	SRP192714	3.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7543q1		3.0
+SRR8908802	SRP192714	3.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7543q1		3.0
+SRR8908803	SRP192714	3.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7543q1		3.0
+SRR8908804	SRP192714	3.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7543q1		3.0
+SRR8908805	SRP192714	3.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7543q1		3.0
+SRR8908806	SRP192714	3.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7543q1		3.0
+SRR8908807	SRP192714	3.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7543q1		3.0
+SRR8908808	SRP192714	3.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	7543q3		3.0
+SRR8908809	SRP192714	3.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	7543q3		3.0
+SRR8908810	SRP192714	3.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	7543q5		3.0
+SRR8908811	SRP192714	3.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	7543q5		3.0
+SRR8908812	SRP192714	3.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7612q1		3.0
+SRR8908813	SRP192714	3.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7612q1		3.0
+SRR8908814	SRP192714	3.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7612q1		3.0
+SRR8908815	SRP192714	3.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7612q1		3.0
+SRR8908816	SRP192714	3.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7612q1		3.0
+SRR8908817	SRP192714	3.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7612q1		3.0
+SRR8908818	SRP192714	3.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7612q1		3.0
+SRR8908819	SRP192714	3.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7612q1		3.0
+SRR8908820	SRP192714	3.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	7612q3		3.0
+SRR8908821	SRP192714	3.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	7612q3		3.0
+SRR8908822	SRP192714	3.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	7612q5		3.0
+SRR8908823	SRP192714	3.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	7612q5		3.0
+SRR8908824	SRP192714	3.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7658q1		3.0
+SRR8908825	SRP192714	3.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7658q1		3.0
+SRR8908826	SRP192714	3.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7658q1		3.0
+SRR8908827	SRP192714	3.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7658q1		3.0
+SRR8908828	SRP192714	3.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7658q1		3.0
+SRR8908829	SRP192714	3.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7658q1		3.0
+SRR8908830	SRP192714	3.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7658q1		3.0
+SRR8908831	SRP192714	3.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7658q1		3.0
+SRR8908832	SRP192714	3.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	7658q3		3.0
+SRR8908833	SRP192714	3.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	7658q3		3.0
+SRR8908834	SRP192714	3.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	7658q5		3.0
+SRR8908835	SRP192714	3.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	7658q5		3.0
+SRR8908836	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7706q1		5.0
+SRR8908837	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7706q1		5.0
+SRR8908838	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7706q1		5.0
+SRR8908839	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7706q1		5.0
+SRR8908840	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7706q1		5.0
+SRR8908841	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7706q1		5.0
+SRR8908842	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7706q1		5.0
+SRR8908843	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7706q1		5.0
+SRR8908844	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	7706q3		5.0
+SRR8908845	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	7706q3		5.0
+SRR8908846	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	7706q5		5.0
+SRR8908847	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	7706q5		5.0
+SRR8908848	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7871q2		5.0
+SRR8908849	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7871q2		5.0
+SRR8908850	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7871q2		5.0
+SRR8908851	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7871q2		5.0
+SRR8908852	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7871q2		5.0
+SRR8908853	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7871q2		5.0
+SRR8908854	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7871q2		5.0
+SRR8908855	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7871q2		5.0
+SRR8908856	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	7871q3		5.0
+SRR8908857	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	7871q3		5.0
+SRR8908858	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	7871q5		5.0
+SRR8908859	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	7871q5		5.0
+SRR8908860	SRP192714	6.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7883q1		6.0
+SRR8908861	SRP192714	6.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7883q1		6.0
+SRR8908862	SRP192714	6.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7883q1		6.0
+SRR8908863	SRP192714	6.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7883q1		6.0
+SRR8908864	SRP192714	6.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7883q1		6.0
+SRR8908865	SRP192714	6.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7883q1		6.0
+SRR8908866	SRP192714	6.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7883q1		6.0
+SRR8908867	SRP192714	6.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	7883q1		6.0
+SRR8908868	SRP192714	6.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	7883q3		6.0
+SRR8908869	SRP192714	6.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	7883q3		6.0
+SRR8908870	SRP192714	6.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	7883q5		6.0
+SRR8908871	SRP192714	6.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	early acute	7883q5		6.0
+SRR8908872	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7886q1		5.0
+SRR8908873	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7886q1		5.0
+SRR8908874	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7886q1		5.0
+SRR8908875	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7886q1		5.0
+SRR8908876	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7886q1		5.0
+SRR8908877	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7886q1		5.0
+SRR8908878	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7886q1		5.0
+SRR8908879	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7886q1		5.0
+SRR8908880	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	7886q3		5.0
+SRR8908881	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	7886q3		5.0
+SRR8908882	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	7886q5		5.0
+SRR8908883	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	7886q5		5.0
+SRR8908884	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7933q1		5.0
+SRR8908885	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7933q1		5.0
+SRR8908886	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7933q1		5.0
+SRR8908887	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7933q1		5.0
+SRR8908888	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7933q1		5.0
+SRR8908889	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7933q1		5.0
+SRR8908890	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7933q1		5.0
+SRR8908891	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	late acute	7933q1		5.0
+SRR8908892	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	7933q3		5.0
+SRR8908893	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	convalescent	7933q3		5.0
+SRR8908894	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	7933q5		5.0
+SRR8908895	SRP192714	5.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		female		SRA		serum	early acute	7933q5		5.0
+SRR8908896	SRP192714	2.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	8016q1		2.0
+SRR8908897	SRP192714	2.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	late acute	8016q1		2.0
+SRR8908898	SRP192714	2.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	8016q3		2.0
+SRR8908899	SRP192714	2.000							HOMO_SAPIENS	Illumina HiSeq 4000 (IlluminaHiSeq4000)	True	298	Tximport	v1.20.0		male		SRA		serum	convalescent	8016q3		2.0

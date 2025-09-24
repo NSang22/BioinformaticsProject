@@ -1,4 +1,6 @@
-data/
-*.tsv
+data/SRP192714/SRP192714.tsv
 .Rproj.user
 .Rhistory
+*.gz
+*.json
+results/*
