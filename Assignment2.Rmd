@@ -395,9 +395,11 @@ Differences
 
 # Section 2f
 
-```{r}
-
-```
+Findings
+	•	Across all three dimensionality reduction methods, samples show grouping consistent with Exposure categories, suggesting exposure status drives significant variation in gene expression.
+	•	PCA highlights the major global variance, but t-SNE and UMAP give a clearer view of sub-clusters.
+	•	UMAP provides a balance, maintaining both separation of clusters and an interpretable global structure.
+	•	Together, these plots confirm that exposure effects are strong and detectable across different approaches.
 
 # Section 3a-b
 
