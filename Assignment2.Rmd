@@ -1,28 +1,48 @@
 # Package Downloads
 ```{r}
-# Uncomment the below to download package dependencies
-# if (!require("BiocManager", quietly = TRUE))
-#   install.packages("BiocManager", repos = "https://cloud.r-project.org")
-# BiocManager::install(version = "3.21")
-# install.packages("tidyverse", repos = "https://cloud.r-project.org")
-# install.packages("devtools", repos = "https://cloud.r-project.org")
-# install.packages("GenomeInfoDb", repos = "https://cloud.r-project.org")
-# # Install the Homo Sapiens package
-# if (!("org.Hs.eg.db" %in% installed.packages())) {
-#   BiocManager::install("org.Hs.eg.db", update = FALSE)
-# }
-
-# # Attach the library
-# library(org.Hs.eg.db)
-
-# # We will need this so we can use the pipe: %>%
-# library(magrittr)
+if (!require("BiocManager", quietly = TRUE))
+  install.packages("BiocManager", repos = "https://cloud.r-project.org")
+BiocManager::install(version = "3.21")
+install.packages("tidyverse", repos = "https://cloud.r-project.org")
+install.packages("devtools", repos = "https://cloud.r-project.org")
+install.packages("GenomeInfoDb", repos = "https://cloud.r-project.org")
+# Install the Homo Sapiens package
+if (!("org.Hs.eg.db" %in% installed.packages())) {
+  BiocManager::install("org.Hs.eg.db", update = FALSE)
+}
 
 ```
 
 # Section 1a
 
 ```{r}
+# Attach the library
+library(org.Hs.eg.db)
+
+# We will need this so we can use the pipe: %>%
+library(magrittr)
+
+# Create the data folder if it doesn't exist
+if (!dir.exists("data")) {
+  dir.create("data")
+}
+
+# Define the file path to the plots directory
+plots_dir <- "plots"
+
+# Create the plots folder if it doesn't exist
+if (!dir.exists(plots_dir)) {
+  dir.create(plots_dir)
+}
+
+# Define the file path to the results directory
+results_dir <- "results"
+
+# Create the results folder if it doesn't exist
+if (!dir.exists(results_dir)) {
+  dir.create(results_dir)
+}
+
 # Define the file path to the data directory
 data_dir <- file.path("data", "SRP192714")
 
@@ -60,14 +80,48 @@ expression_df <- expression_df %>%
 
 # Write mapped data frame to output file
 readr::write_tsv(expression_df, file.path(
-  data_dir,
+  results_dir,
   "SRP192714_Symbols.tsv"
 ))
 ```
 
 # Section 1c
 ```{r}
+# Section 1c: Expression matrix summary and variation
 
+# Get matrix size
+matrix_dim <- dim(expression_df)
+cat("Expression matrix dimensions (genes x samples):", matrix_dim[1], "x", matrix_dim[2], "\n")
+
+# Number of genes
+cat("Number of genes:", nrow(expression_df), "\n")
+
+# Select only numeric columns for log transformation
+expr_numeric <- expression_df %>% dplyr::select(where(is.numeric))
+
+# Log-scale the data (add pseudocount to avoid log(0))
+log_expr <- log2(expr_numeric + 1)
+
+# Calculate per-gene median expression
+gene_medians <- apply(log_expr, 1, median, na.rm = TRUE)
+
+# Show summary statistics for gene medians
+summary(gene_medians)
+
+# Density plot of per-gene median expression
+library(ggplot2)
+plot_obj <- ggplot(data.frame(median=gene_medians), aes(x=median)) +
+  geom_density(fill="skyblue", alpha=0.5) +
+  labs(title="Density of Per-Gene Median Expression (log2 scale)",
+       x="Median log2(expression + 1)",
+       y="Density")
+
+# Save plot to the plots directory
+plot_path <- file.path(plots_dir, "per_gene_median_density.png")
+ggsave(plot_path, plot=plot_obj, width=6, height=4, dpi=300)
+
+# Also print the plot in the notebook
+plot_obj
 ```
 
 # Section 2a
