@@ -460,8 +460,111 @@ ggsave(plot = volcano_plot, filename = file.path(plots_dir, "SRP192714_volcano_p
 
 ```
 
+<<<<<<< Updated upstream
 # Section 4c
 ```{r}
+
+```
+=======
+## Differential Expression
+Please do not run this more than once it takes so long.
+```{r Data Wrangling}
+# Read in metadata TSV file and expression data TSV file
+metadata <- readr::read_tsv(metadata_file)
+expression_df <- readr::read_tsv(data_file) %>%
+  tibble::column_to_rownames("Gene") # Set Gene column as row names
+
+# Ensure expression data columns match the metadata sample order
+expression_df <- expression_df %>%
+  dplyr::select(metadata$refinebio_accession_code)
+
+# Check if this is in the same order
+all.equal(colnames(expression_df), metadata$refinebio_accession_code)
+
+# Bring back the "Gene" column in preparation for mapping
+expression_df <- expression_df %>%
+  tibble::rownames_to_column("Gene")
+
+# Ensemble to Gene Name
+mapped_list <- mapIds(
+  org.Hs.eg.db, # Annotation package for humans
+  keys = expression_df$Gene,
+  keytype = "ENSEMBL",
+  column = "SYMBOL")
+
+# List to df
+mapped_df <- mapped_list %>%
+  tibble::enframe(name = "Ensembl", value = "Gene") %>%
+  # enframe() makes a `list` column; we will simplify it with unnest()
+  # This will result in one row of our data frame per list item
+  tidyr::unnest(cols = Gene)
+
+# Join then remove Ensembl
+cts <- mapped_df %>%
+  dplyr::inner_join(expression_df, by = join_by(Ensembl == Gene)) %>%
+  dplyr::select(-Ensembl)
+# Filter for na
+cts_filtered <- cts %>%
+  tidyr::drop_na(Gene)
+# Drop low average count dupes
+cts_matrix <- cts_filtered %>%
+  dplyr::group_by(Gene) %>%
+  dplyr::summarise(across(everything(), sum)) %>%
+  tibble::column_to_rownames("Gene") %>%
+  as.matrix()
+# Check if this is in the same order
+all.equal(colnames(cts_matrix), metadata$refinebio_accession_code)
+```
+Metadata wrangling
+```{r}
+# Get complete metadata
+gseData <- getGEO("GSE129882")
+eset <- pData(phenoData(gseData[[1]]))
+
+#tibble of SRR code and title
+coldata <- metadata %>%
+  dplyr::select(refinebio_accession_code, experiment_accession, title = refinebio_title)
+
+
+# tibble of SRR joined on titles, selected for exposure
+coldata <- coldata %>%
+  dplyr::inner_join(eset %>%
+                      dplyr::mutate(title = str_remove(characteristics_ch1.1, "sample: "),
+                                    exposure = str_remove(characteristics_ch1.12, "exposure: "))
+                  , by = join_by(title == title)) %>% 
+  dplyr::select(sample = refinebio_accession_code, title, exposure)
+
+# convert exposure to a factor
+coldata <- coldata %>%
+  dplyr::mutate(
+    exposure = factor(exposure, levels = c("naive", "DENV"))
+  )
+
+# Set the sample names as rownames for colData
+coldata_final <- coldata %>%
+  tibble::column_to_rownames("sample")
+
+# Filter the count matrix columns to match the samples in coldata_final
+cts_matrix_final <- cts_matrix[, rownames(coldata_final)]
+
+# FINAL CHECK: Ensure column names in the count matrix match row names in colData
+# This should now return TRUE
+all.equal(colnames(cts_matrix_final), rownames(coldata_final))
+cts_matrix_integer <- round(cts_matrix_final)
+# Start DEseq
+dds <- DESeqDataSetFromMatrix(countData = cts_matrix_integer,
+                              colData = coldata_final,
+                              design= ~ exposure)
+dds
+```
+```{r perform deseq}
+deseq_object <- DESeq(dds)
+deseq_results <- results(deseq_object)
+```
+
+Output is TRUE.
+>>>>>>> Stashed changes
+
 
 ```
 
