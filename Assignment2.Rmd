@@ -1,6 +1,6 @@
 # Package Downloads
 
-```{r message=FALSE}
+```{r message=FALSE, eval = FALSE}
 if (!require("BiocManager", quietly = TRUE))
   install.packages("BiocManager", repos = "https://cloud.r-project.org")
 BiocManager::install(version = "3.21")
@@ -19,8 +19,8 @@ if (!("org.Hs.eg.db" %in% installed.packages())) {
 
 ```
 
-# Section 1a
-
+# Section 1
+## Section 1a
 ```{r}
 # Attach the library
 library(org.Hs.eg.db)
@@ -86,7 +86,7 @@ use_trimmed <- TRUE
 
 ```
 
-# Section 1b
+## Section 1b
 
 ```{r}
 # Bring back the "Gene" column in preparation for mapping
@@ -116,7 +116,7 @@ readr::write_tsv(expression_df, file.path(
 ))
 ```
 
-# Section 1c
+## Section 1c
 
 ```{r}
 
@@ -156,8 +156,8 @@ plot_obj
 ```
 
 The dataset contains 43,363 genes measured across 1,022 samples. The summary statistics show that most genes have low median expression (median ≈ 0.26 on log2 scale), with a long tail of higher expression values (max ≈ 7.6). From our research, this is typical for transcriptome data, where a small number of genes are highly expressed while the majority have low expression. The density plot visualizes this distribution, showing a peak at lower expression values and a gradual decline towards higher values. Log transformation helps to reduce the impact of extreme values and makes the distribution more interpretable.
-
-# Section 2a-c
+# Section 2
+## Section 2a-c
 
 ```{r}
 library(DESeq2)
@@ -240,7 +240,7 @@ ggsave(filename = file.path(plots_dir, plot_file), plot = pca_plot, width = 6, h
 pca_plot
 ```
 
-# Section 2d packages
+## Section 2d packages
 
 ```{r}
 if (!requireNamespace("M3C",  quietly = TRUE)) install.packages("M3C")
@@ -248,7 +248,7 @@ if (!requireNamespace("umap",  quietly = TRUE)) install.packages("umap")
 if (!requireNamespace("matrixStats", quietly = TRUE)) install.packages("matrixStats")
 ```
 
-# Section 2d i
+## Section 2d i
 
 ```{r}
 ## --- 2d i: t-SNE using Rtsne (colored by Exposure) ---
@@ -315,7 +315,7 @@ p_tsne
 
 ```
 
-# Section 2d ii
+## Section 2d ii
 
 ```{r}
 # --- 2d ii: UMAP using 'umap' (colored by Exposure) ---
@@ -382,7 +382,7 @@ p_umap
 
 ```
 
-# Section 2e
+## Section 2e
 Similarities
 	•	All three methods (PCA, t-SNE, UMAP) reduce the high-dimensional gene expression data into 2D, letting us see patterns between samples.
 	•	In each, samples tend to group by Exposure status (or whichever grouping variable you’re using).
@@ -393,7 +393,7 @@ Differences
 	•	t-SNE: Focuses on local structure, separates clusters more strongly. However, distances between clusters aren’t always meaningful (clusters may look far but be closer in high-D space).
 	•	UMAP: Balances global and local structure, sometimes keeps a more interpretable overall shape while still revealing clusters.
 
-# Section 2f
+## Section 2f
 
 Findings
 	•	Across all three dimensionality reduction methods, samples show grouping consistent with Exposure categories, suggesting exposure status drives significant variation in gene expression.
@@ -418,7 +418,7 @@ set.seed(12345)
 
 ```{r Read-in Metadata}
 metadata_file <- file.path(data_dir, "metadata_SRP192714.tsv")
-metadata <- readr::read_tsv("data/SRP192714/metadata_SRP192714.tsv")
+metadata <- readr::read_tsv(metadata_file)
 ```
 
 ```{r W}
@@ -537,7 +537,6 @@ metadata <- metadata %>%
 
 # Make sure mutation_status is a factor with desired levels
 metadata$mutation_status <- factor(metadata$mutation_status, levels = c("reference", "R98S"))
-
 # Filter low-count genes (sum across samples)
 filtered_expression_df <- expression_df[rowSums(expression_df) >= 10, , drop = FALSE]
 
@@ -605,17 +604,76 @@ ggsave(plot = volcano_plot, filename = file.path(plots_dir, "SRP192714_volcano_p
 
 ```
 
-# Section 4a
-
+# Section 4
+Heat Map
+## Attach Libraries
 ```{r}
-
+library(GEOquery)
 ```
 
-# Section 4c
-
+## Differential Expression
 ```{r}
+# Read in metadata TSV file and expression data TSV file
+metadata <- readr::read_tsv(metadata_file)
+expression_df <- readr::read_tsv(data_file) %>%
+  tibble::column_to_rownames("Gene") # Set Gene column as row names
 
+# Ensure expression data columns match the metadata sample order
+expression_df <- expression_df %>%
+  dplyr::select(metadata$refinebio_accession_code)
+
+# Check if this is in the same order
+all.equal(colnames(expression_df), metadata$refinebio_accession_code)
+
+# Bring back the "Gene" column in preparation for mapping
+expression_df <- expression_df %>%
+  tibble::rownames_to_column("Gene")
+
+# Ensemble to Gene Name
+mapped_list <- mapIds(
+  org.Hs.eg.db, # Annotation package for huamns
+  keys = expression_df$Gene,
+  keytype = "ENSEMBL", # Replace with the type of gene identifiers in your data
+  column = "SYMBOL", # The type of gene identifiers you would like to map to
+)
+# List to df
+mapped_df <- mapped_list %>%
+  tibble::enframe(name = "Ensembl", value = "Gene") %>%
+  # enframe() makes a `list` column; we will simplify it with unnest()
+  # This will result in one row of our data frame per list item
+  tidyr::unnest(cols = Gene)
+# Join then remove Ensembl
+cts <- mapped_df %>%
+  dplyr::inner_join(expression_df, by = join_by(Ensembl == Gene)) %>%
+  dplyr::select(-Ensembl)
+cts
+
+# Get complete metadata
+gseData <- getGEO("GSE129882")
+eset <- pData(phenoData(gseData[[1]]))
+metadata
+eset
+#tibble of SRR code and title
+coldata <- metadata %>%
+  dplyr::select(refinebio_accession_code, experiment_accession, title = refinebio_title)
+coldata
+# tibble of SRR joined on titles, selected for exposure
+coldata <- coldata %>%
+  dplyr::inner_join(eset %>%
+                      dplyr::mutate(title = str_remove(characteristics_ch1.1, "sample: "),
+                                    exposure = str_remove(characteristics_ch1.12, "exposure: "))
+                  , by = join_by(title == title)) %>% 
+  dplyr::select(sample = refinebio_accession_code, title, exposure)
+
+coldata
+
+# Start DEseq
+dds <- DESeqDataSetFromMatrix(countData = cts,
+                              colData = coldata,
+                              design= ~ batch + condition)
+dds
 ```
+Output is TRUE.
 
 # Section 5: William Le
 
