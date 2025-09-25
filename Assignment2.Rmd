@@ -620,8 +620,6 @@ if (length(plot_ids) > 0) {
 }
 ```
 
-<<<<<<< HEAD
-=======
 
 ## Section 3f Summary
 
@@ -652,7 +650,6 @@ if (exists("res_df")) {
 ```
 
 
->>>>>>> refs/remotes/origin/abeBranch
 # Section 4a
 
 ```{r}
