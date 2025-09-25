@@ -912,20 +912,59 @@ RAVmodel <- getModel("PLIERpriors", load=TRUE)
 ## Data Wrangle Ranked Gene List
 Validate expects a Expression Set or simple matrix.
 ```{r}
+# Define the file path to the data directory
+data_dir <- file.path("data", "SRP192714")
+
+# Declare the file path to the gene expression matrix file
+data_file <- file.path(data_dir, "SRP192714.tsv")
+
+# Read in data TSV file
+expression_df <- readr::read_tsv(data_file)
+
+# Ensemble to Gene Name
+mapped_list <- mapIds(
+  org.Hs.eg.db, # Annotation package for humans
+  keys = expression_df$Gene,
+  keytype = "ENSEMBL",
+  column = "SYMBOL")
+
+# List to df
+mapped_df <- mapped_list %>%
+  tibble::enframe(name = "Ensembl", value = "Gene") %>%
+  # This will result in one row of our data frame per list item
+  tidyr::unnest(cols = Gene)
+# Join then remove Ensembl
+cts <- mapped_df %>%
+  dplyr::inner_join(expression_df, by = join_by(Ensembl == Gene)) %>%
+  dplyr::select(-Ensembl)
+# Filter for na
+cts_filtered <- cts %>%
+  tidyr::drop_na(Gene)
+# Drop low average count dupes
+cts_matrix <- cts_filtered %>%
+  dplyr::group_by(Gene) %>%
+  dplyr::summarise(across(everything(), sum)) %>%
+  tibble::column_to_rownames("Gene") %>%
+  as.matrix()
+# Check if this is in the same order
+all.equal(colnames(cts_matrix), metadata$refinebio_accession_code)
 ```
 
 ```{r}
 # Validate on RAV
-RAVmodel
-validated_list <- GenomicSuperSignature::validate(ranked_gene_list, RAVmodel)
+validated_list <- GenomicSuperSignature::validate(cts_matrix, RAVmodel)
+head(validated_list)
 
-# 2. Run the enrichment analysis
-gsea_results <- GSEA.scan(
-  validated_list,
-  RAVmodel,
-  gsea.nperm = 1000 # Number of permutations for the test
-)
+validated_ind <- validatedSignatures(validated_list, RAVmodel, num.out = 3, 
+                                     swCutoff = 0, indexOnly = TRUE)
 ```
+## Tables
+```{r GSEA}
+annotateRAV(RAVmodel, validated_ind[3])
+heatmapTable(validated_list, RAVmodel)
+meshTable(RAVmodel, validated_ind[2])
+```
+
 
 # Section 5: Nikhil Sangamkar
 
