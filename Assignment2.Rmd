@@ -1106,9 +1106,261 @@ if (length(plot_ids) > 0) {
 
 
 # Section 4a
-
 ```{r}
+# Step 4: Extract significantly differentially expressed genes and generate heatmap
 
+# Load required libraries
+if (!requireNamespace("ComplexHeatmap", quietly = TRUE)) {
+  BiocManager::install("ComplexHeatmap")
+}
+if (!requireNamespace("circlize", quietly = TRUE)) {
+  BiocManager::install("circlize")
+}
+if (!requireNamespace("grid", quietly = TRUE)) {
+  install.packages("grid")
+}
+
+suppressPackageStartupMessages({
+  library(ComplexHeatmap)
+  library(circlize)
+  library(DESeq2)
+  library(dplyr)
+  library(RColorBrewer)
+  library(grid)
+})
+
+# Ensure we have the DESeq2 results and normalized counts from previous steps
+if (!exists("dds") || !exists("res_df")) {
+  stop("Please run the differential expression analysis (Step 3) first to generate 'dds' and 'res_df' objects")
+}
+
+# Extract significantly differentially expressed genes
+# Using adjusted p-value < 0.05 and absolute log2 fold change > 1
+sig_genes <- res_df %>%
+  filter(padj < 0.05 & abs(log2FoldChange) > 1) %>%
+  pull(GeneID)
+
+cat("Number of significantly differentially expressed genes:", length(sig_genes), "\n")
+
+# If no significant genes with fold change > 1, use less stringent criteria
+if (length(sig_genes) == 0) {
+  cat("No genes with |log2FC| > 1, using padj < 0.05 only\n")
+  sig_genes <- res_df %>%
+    filter(padj < 0.05) %>%
+    pull(GeneID)
+}
+
+# If still no significant genes, use top 50 by p-value
+if (length(sig_genes) == 0) {
+  cat("No significant genes found, using top 50 genes by p-value\n")
+  sig_genes <- res_df %>%
+    arrange(pvalue) %>%
+    slice_head(n = 50) %>%
+    pull(GeneID)
+}
+
+# Get normalized counts for significant genes
+norm_counts <- DESeq2::counts(dds, normalized = TRUE)
+
+# Filter for significant genes that exist in our count matrix
+sig_genes_present <- intersect(sig_genes, rownames(norm_counts))
+cat("Number of significant genes present in count matrix:", length(sig_genes_present), "\n")
+
+# If we have too many genes, select top by adjusted p-value
+max_genes <- 100
+if (length(sig_genes_present) > max_genes) {
+  top_sig_genes <- res_df %>%
+    filter(GeneID %in% sig_genes_present) %>%
+    arrange(padj) %>%
+    slice_head(n = max_genes) %>%
+    pull(GeneID)
+  sig_genes_present <- top_sig_genes
+  cat("Using top", max_genes, "genes by adjusted p-value for heatmap\n")
+}
+
+# Extract normalized counts for significant genes
+heatmap_data <- norm_counts[sig_genes_present, , drop = FALSE]
+
+# Log2 transform (add pseudocount to avoid log(0))
+log_heatmap_data <- log2(heatmap_data + 1)
+
+# Z-score normalization (scale by rows/genes)
+scaled_data <- t(scale(t(log_heatmap_data)))
+
+# Handle any NaN or infinite values
+scaled_data[!is.finite(scaled_data)] <- 0
+
+# Create sample grouping information
+sample_groups <- rep("Unknown", ncol(scaled_data))
+names(sample_groups) <- colnames(scaled_data)
+
+# Try to get grouping information from metadata
+if (exists("meta") && "Exposure2" %in% colnames(meta)) {
+  common_samples <- intersect(colnames(scaled_data), rownames(meta))
+  sample_groups[common_samples] <- as.character(meta[common_samples, "Exposure2"])
+} else if (exists("metadata") && any(c("Exposure", "Exposure2") %in% colnames(metadata))) {
+  # Create basic grouping from original metadata
+  temp_meta <- metadata %>%
+    mutate(
+      Exposure2 = case_when(
+        str_to_lower(Exposure) %in% c("naive","mock","control","uninfected","healthy") ~ "Naive",
+        str_detect(str_to_lower(Exposure), "denv|dengue") ~ "DENV",
+        TRUE ~ "Other"
+      )
+    )
+  
+  # Match samples
+  sample_map <- setNames(temp_meta$Exposure2, temp_meta$refinebio_accession_code)
+  matched_samples <- intersect(names(sample_groups), names(sample_map))
+  sample_groups[matched_samples] <- sample_map[matched_samples]
+}
+
+# Create annotation data frame
+annotation_df <- data.frame(
+  Group = factor(sample_groups),
+  row.names = names(sample_groups),
+  stringsAsFactors = FALSE
+)
+
+# Define colors for groups
+unique_groups <- unique(sample_groups)
+if (length(unique_groups) <= 2) {
+  group_colors <- c("#2E8B57", "#DC143C")[1:length(unique_groups)]
+  names(group_colors) <- unique_groups
+} else {
+  group_colors <- RColorBrewer::brewer.pal(min(length(unique_groups), 8), "Set2")
+  names(group_colors) <- unique_groups
+}
+
+# Create column annotation
+col_annotation <- HeatmapAnnotation(
+  df = annotation_df,
+  col = list(Group = group_colors),
+  annotation_name_side = "left",
+  simple_anno_size = unit(0.5, "cm"),
+  show_annotation_name = TRUE
+)
+
+# Add gene symbols if available
+gene_labels <- rownames(scaled_data)
+if (exists("res_annot")) {
+  # Use gene symbols if available from annotation
+  symbol_map <- setNames(res_annot$Symbol, res_annot$GeneID)
+  gene_labels <- ifelse(is.na(symbol_map[rownames(scaled_data)]), 
+                       rownames(scaled_data), 
+                       symbol_map[rownames(scaled_data)])
+  # Remove NA symbols
+  gene_labels[is.na(gene_labels)] <- rownames(scaled_data)[is.na(gene_labels)]
+}
+
+# Create the heatmap
+heatmap_plot <- Heatmap(
+  scaled_data,
+  name = "Z-score",
+  
+  # Row (gene) settings
+  row_names_gp = gpar(fontsize = 8),
+  show_row_names = ifelse(nrow(scaled_data) <= 50, TRUE, FALSE),
+  row_names_max_width = unit(6, "cm"),
+  row_labels = gene_labels,
+  
+  # Column (sample) settings
+  column_names_gp = gpar(fontsize = 6),
+  show_column_names = FALSE,
+  
+  # Color scheme
+  col = colorRamp2(c(-2, 0, 2), c("blue", "white", "red")),
+  
+  # Clustering
+  cluster_rows = TRUE,
+  cluster_columns = TRUE,
+  clustering_distance_rows = "euclidean",
+  clustering_distance_columns = "euclidean",
+  clustering_method_rows = "complete",
+  clustering_method_columns = "complete",
+  
+  # Annotations
+  top_annotation = col_annotation,
+  
+  # Heatmap legend
+  heatmap_legend_param = list(
+    title = "Z-score",
+    title_gp = gpar(fontsize = 12),
+    labels_gp = gpar(fontsize = 10),
+    legend_direction = "vertical"
+  ),
+  
+  # Size
+  width = unit(10, "cm"),
+  height = unit(max(6, nrow(scaled_data) * 0.15), "cm")
+)
+
+# Create plots directory if it doesn't exist
+if (!dir.exists(plots_dir)) {
+  dir.create(plots_dir, recursive = TRUE)
+}
+
+# Save the heatmap
+heatmap_file <- file.path(plots_dir, "heatmap_significant_genes.png")
+png(heatmap_file, width = 12, height = 8, units = "in", res = 300)
+tryCatch({
+  draw(heatmap_plot)
+}, error = function(e) {
+  cat("Error drawing heatmap:", e$message, "\n")
+  # Create a simple backup plot
+  plot.new()
+  text(0.5, 0.5, "Heatmap generation failed\nCheck data and try again", cex = 1.5)
+})
+dev.off()
+
+# Also save as PDF
+heatmap_file_pdf <- file.path(plots_dir, "heatmap_significant_genes.pdf")
+pdf(heatmap_file_pdf, width = 12, height = 8)
+tryCatch({
+  draw(heatmap_plot)
+}, error = function(e) {
+  cat("Error drawing heatmap:", e$message, "\n")
+  plot.new()
+  text(0.5, 0.5, "Heatmap generation failed\nCheck data and try again", cex = 1.5)
+})
+dev.off()
+
+# Display the heatmap
+tryCatch({
+  draw(heatmap_plot)
+}, error = function(e) {
+  cat("Error displaying heatmap:", e$message, "\n")
+  cat("Heatmap files may still be saved successfully\n")
+})
+
+# Save the list of genes used in the heatmap
+heatmap_genes_df <- data.frame(
+  GeneID = rownames(scaled_data),
+  GeneSymbol = gene_labels,
+  stringsAsFactors = FALSE
+)
+
+if (exists("res_annot")) {
+  heatmap_genes_df <- heatmap_genes_df %>%
+    left_join(res_annot %>% select(GeneID, log2FoldChange, padj), by = "GeneID")
+} else if (exists("res_df")) {
+  heatmap_genes_df <- heatmap_genes_df %>%
+    left_join(res_df %>% select(GeneID, log2FoldChange, padj), by = "GeneID")
+}
+
+# Save to results directory
+if (!dir.exists(results_dir)) {
+  dir.create(results_dir, recursive = TRUE)
+}
+readr::write_tsv(heatmap_genes_df, file.path(results_dir, "heatmap_genes_list.tsv"))
+
+cat("\nHeatmap Summary:\n")
+cat("- Genes displayed:", nrow(scaled_data), "\n")
+cat("- Samples displayed:", ncol(scaled_data), "\n")
+cat("- Sample groups:", paste(names(table(sample_groups)), collapse = ", "), "\n")
+cat("- Data transformation: log2(normalized counts + 1), then z-score normalized by gene\n")
+cat("- Clustering: Hierarchical clustering with euclidean distance and complete linkage\n")
+cat("- Files saved:", heatmap_file, "and", heatmap_file_pdf, "\n")
 ```
 
 # Section 4c
