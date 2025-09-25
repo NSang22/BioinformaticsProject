@@ -81,6 +81,9 @@ merged_meta_trimmed <- merged_meta %>% dplyr::filter(refinebio_accession_code %i
 expression_df_full <- expression_df %>% dplyr::select(all_of(sample_names))
 merged_meta_full <- merged_meta
 
+merged_meta_path <- file.path(data_dir, "metadata_SRP192714_merged.tsv")
+readr::write_tsv(merged_meta, merged_meta_path)
+
 # Set this variable to TRUE to use trimmed data, FALSE for full data
 use_trimmed <- TRUE
 
@@ -247,8 +250,13 @@ if (!requireNamespace("M3C",  quietly = TRUE)) install.packages("M3C")
 if (!requireNamespace("umap",  quietly = TRUE)) install.packages("umap")
 if (!requireNamespace("matrixStats", quietly = TRUE)) install.packages("matrixStats")
 ```
+<<<<<<< HEAD
+  
+# Section 2d i
+=======
 
 ## Section 2d i
+>>>>>>> f1556c7e21704ae65e99c8f40d9d6bda5bbee2f2
 
 ```{r}
 ## --- 2d i: t-SNE using Rtsne (colored by Exposure) ---
@@ -422,168 +430,729 @@ metadata <- readr::read_tsv(metadata_file)
 ```
 
 ```{r W}
-# # Make the data in the order of the metadata
-# expression_df <- expression_df %>%
-#   dplyr::select(metadata$refinebio_accession_code)
+# Package Downloads
 
-# # Check if this is in the same order
-# all.equal(colnames(expression_df), metadata$refinebio_accession_code)
+```{r message=FALSE}
+if (!require("BiocManager", quietly = TRUE))
+  install.packages("BiocManager", repos = "https://cloud.r-project.org")
+BiocManager::install(version = "3.21")
+if (!requireNamespace("DESeq2", quietly = TRUE)) {
+  BiocManager::install("DESeq2")
+}
+install.packages("devtools", repos = "https://cloud.r-project.org")
+install.packages("GenomeInfoDb", repos = "https://cloud.r-project.org")
+install.packages("tidyverse", repos = "https://cloud.r-project.org")
+# Install the Homo Sapiens package
+if (!("org.Hs.eg.db" %in% installed.packages())) {
+  BiocManager::install("org.Hs.eg.db", update = FALSE)
+}
 
-# metadata <- metadata %>%
-#   # Let's get the RPL10 mutation status from this variable
-#   dplyr::mutate(mutation_status = dplyr::case_when(
-#     stringr::str_detect(refinebio_title, "R98S") ~ "R98S",
-#     stringr::str_detect(refinebio_title, "WT") ~ "reference"
-#   ))
+install.packages("BiocManager", repos = "https://cloud.r-project.org")
+BiocManager::install(version = "3.21")
 
-# # Print out a preview of `mutation_status`
-# str(metadata$mutation_status)
+if ("GenomeInfoDb" %in% rownames(installed.packages())) {
+  remove.packages("GenomeInfoDb")
+}
 
-# # Make mutation_status a factor and set the levels appropriately
-# metadata <- metadata %>%
-#   dplyr::mutate(
-#     # Here we define the values our factor variable can have and their order.
-#     mutation_status = factor(mutation_status, levels = c("reference", "R98S"))
-#   )
+BiocManager::install(c(
+  "BiocGenerics",
+  "S4Vectors",
+  "IRanges",
+  "MatrixGenerics",
+  "GenomicRanges",
+  "SummarizedExperiment",
+  "GenomeInfoDb",
+  "DESeq2"
+), update = TRUE, ask = FALSE)
 
-# # Define a minimum counts cutoff and filter the data to include
-# # only rows (genes) that have total counts above the cutoff
-# filtered_expression_df <- expression_df %>%
-#   dplyr::filter(rowSums(.) >= 10)
+BiocManager::valid()
 
-# # round all expression counts
-# gene_matrix <- round(filtered_expression_df)
 
-# ddset <- DESeqDataSetFromMatrix(
-#   # Here we supply non-normalized count data
-#   countData = gene_matrix,
-#   # Supply the `colData` with our metadata data frame
-#   colData = metadata,
-#   # Supply our experimental variable to `design`
-#   design = ~mutation_status
-# )
 
-# deseq_object <- DESeq(ddset)
-# deseq_results <- results(deseq_object)
+```
 
-# deseq_results <- lfcShrink(
-#   deseq_object, # The original DESeq2 object after running DESeq()
-#   coef = 2, # The log fold change coefficient used in DESeq(); the default is 2.
-#   res = deseq_results # The original DESeq2 results table
-# )
+# Section 1a
 
-# # this is of class DESeqResults -- we want a data frame
-# deseq_df <- deseq_results %>%
-#   # make into data.frame
-#   as.data.frame() %>%
-#   # the gene names are row names -- let's make them a column for easy display
-#   tibble::rownames_to_column("Gene") %>%
-#   # add a column for significance threshold results
-#   dplyr::mutate(threshold = padj < 0.05) %>%
-#   # sort by statistic -- the highest values will be genes with
-#   # higher expression in RPL10 mutated samples
-#   dplyr::arrange(dplyr::desc(log2FoldChange))
+```{r}
+# Attach the library
+library(org.Hs.eg.db)
 
-#   plotCounts(ddset, gene = "ENSMUSG00000026623", intgroup = "mutation_status")
-# readr::write_tsv(
-#   deseq_df,
-#   file.path(
-#     results_dir,
-#     "SRP123625_diff_expr_results.tsv" # Replace with a relevant output file name
-#   )
-# )
-# # We'll assign this as `volcano_plot`
-# volcano_plot <- EnhancedVolcano::EnhancedVolcano(
-#   deseq_df,
-#   lab = deseq_df$Gene,
-#   x = "log2FoldChange",
-#   y = "padj",
-#   pCutoff = 0.01 # Loosen the cutoff since we supplied corrected p-values
-# )
-# volcano_plot
-# ggsave(
-#   plot = volcano_plot,
-#   file.path(plots_dir, "SRP123625_volcano_plot.png")
-# ) # Replace with a plot name relevant to your data
-# Load required packages
-library(readr); library(dplyr); library(stringr); library(magrittr)
-library(tibble); library(DESeq2); library(apeglm); library(EnhancedVolcano)
-library(ggplot2)
+# We will need this so we can use the pipe: %>%
+library(magrittr)
 
-# Paths (use project-relative paths)
-metadata_path <- "data/SRP192714/metadata_SRP192714.tsv"
-expr_path     <- "data/SRP192714/SRP192714.tsv"
+# Create the data folder if it doesn't exist
+if (!dir.exists("data")) {
+  dir.create("data")
+}
 
-# Read metadata and expression
-metadata <- readr::read_tsv(metadata_path)
+# Define the file path to the plots directory
+plots_dir <- "plots"
 
-expression_df <- readr::read_tsv(expr_path) %>%
-  tibble::column_to_rownames(var = "Gene")   # ensure 'Gene' is the column name
+# Create the plots folder if it doesn't exist
+if (!dir.exists(plots_dir)) {
+  dir.create(plots_dir)
+}
 
-# Reorder expression columns to match the metadata samples (use all_of for safety)
-# Make sure metadata$refinebio_accession_code contains the sample column names exactly.
-expression_df <- expression_df %>% dplyr::select(all_of(metadata$refinebio_accession_code))
-
-# Verify alignment
-stopifnot(all.equal(colnames(expression_df), metadata$refinebio_accession_code))
-
-# Create mutation_status from title (adjust regex to your data)
-metadata <- metadata %>%
-  dplyr::mutate(mutation_status = dplyr::case_when(
-    stringr::str_detect(refinebio_title, "R98S") ~ "R98S",
-    stringr::str_detect(refinebio_title, "WT") ~ "reference",
-    TRUE ~ NA_character_
-  ))
-
-# Make sure mutation_status is a factor with desired levels
-metadata$mutation_status <- factor(metadata$mutation_status, levels = c("reference", "R98S"))
-# Filter low-count genes (sum across samples)
-filtered_expression_df <- expression_df[rowSums(expression_df) >= 10, , drop = FALSE]
-
-# Convert to integer matrix (DESeq2 expects counts)
-gene_matrix <- round(as.matrix(filtered_expression_df))
-
-# Ensure rownames are genes and column order matches metadata rows order
-# (metadata rows must be in the same order as columns; if not, reorder metadata:)
-metadata <- metadata[match(colnames(gene_matrix), metadata$refinebio_accession_code), ]
-
-# Construct DESeq2 object
-dds <- DESeqDataSetFromMatrix(countData = gene_matrix,
-                              colData = metadata,
-                              design = ~ mutation_status)
-
-dds <- DESeq(dds)
-
-res <- results(dds)                 # raw results
-res_shrunk <- lfcShrink(dds, coef = 2, type = "apeglm", res = res)  # requires apeglm
-
-# Convert to tidy data.frame
-deseq_df <- as.data.frame(res_shrunk) %>%
-  tibble::rownames_to_column("Gene") %>%
-  dplyr::mutate(threshold = ifelse(is.na(padj), FALSE, padj < 0.05)) %>%
-  dplyr::arrange(dplyr::desc(log2FoldChange))
-
-# Example count plot for a single gene
-plotCounts(dds, gene = "ENSMUSG00000026623", intgroup = "mutation_status")  # adjust gene name
-
-# Save results (ensure results_dir exists)
+# Define the file path to the results directory
 results_dir <- "results"
-if (!dir.exists(results_dir)) dir.create(results_dir)
-readr::write_tsv(deseq_df, file.path(results_dir, "SRP192714_diff_expr_results.tsv"))
 
-# Volcano plot
-volcano_plot <- EnhancedVolcano::EnhancedVolcano(
-  deseq_df,
-  lab = deseq_df$Gene,
-  x = "log2FoldChange",
-  y = "padj",
-  pCutoff = 0.01
+# Create the results folder if it doesn't exist
+if (!dir.exists(results_dir)) {
+  dir.create(results_dir)
+}
+
+# Define the file path to the data directory
+data_dir <- file.path("data", "SRP192714")
+
+# Declare the file path to the gene expression matrix file
+data_file <- file.path(data_dir, "SRP192714.tsv")
+
+# Read in data TSV file
+expression_df <- readr::read_tsv(data_file) %>%
+  tibble::column_to_rownames("Gene")
+
+# Load refine.bio metadata
+refinebio_meta <- readr::read_tsv(file.path(data_dir, "metadata_SRP192714.tsv"))
+rownames(refinebio_meta) <- refinebio_meta$refinebio_accession_code
+
+# Load GEO metadata (CSV)
+geo_meta <- readr::read_csv("data/GSE129882_PhenoData.transcript.csv")
+
+# Merge on 'refinebio_title' (refine.bio) and 'Sample' (GEO), keep 'refinebio_title' as column name
+if ("Sample" %in% colnames(geo_meta) && "refinebio_title" %in% colnames(refinebio_meta)) {
+  merged_meta <- dplyr::left_join(refinebio_meta, geo_meta, by = c("refinebio_title" = "Sample"))
+} else {
+  merged_meta <- refinebio_meta
+}
+
+# Create trimmed and full versions of expression and metadata
+sample_names <- colnames(expression_df)[colnames(expression_df) != "Gene" & colnames(expression_df) != "Symbol"]
+trimmed_samples <- sample_names[1:50]
+expression_df_trimmed <- expression_df %>% dplyr::select(all_of(trimmed_samples))
+merged_meta_trimmed <- merged_meta %>% dplyr::filter(refinebio_accession_code %in% trimmed_samples)
+expression_df_full <- expression_df %>% dplyr::select(all_of(sample_names))
+merged_meta_full <- merged_meta
+
+merged_meta_path <- file.path(data_dir, "metadata_SRP192714_merged.tsv")
+readr::write_tsv(merged_meta, merged_meta_path)
+
+# Set this variable to TRUE to use trimmed data, FALSE for full data
+use_trimmed <- TRUE
+
+```
+
+# Section 1b
+
+```{r}
+# Bring back the "Gene" column in preparation for mapping
+expression_df <- expression_df %>%
+  tibble::rownames_to_column("Gene")
+
+# Map Ensembl IDs to their first mapped Symbol
+gene_symbols <- mapIds(
+  org.Hs.eg.db,
+  keys = expression_df$Gene,
+  keytype = "ENSEMBL",
+  column = "SYMBOL",
+  multiVals = "first"
 )
 
-# Save volcano
-plots_dir <- "plots"
-if (!dir.exists(plots_dir)) dir.create(plots_dir)
-ggsave(plot = volcano_plot, filename = file.path(plots_dir, "SRP192714_volcano_plot.png"), width = 8, height = 6)
+# Add the mapped symbols as a new column
+expression_df$Symbol <- gene_symbols[expression_df$Gene]
+
+# Reorder columns to have Gene, Symbol, then the rest
+expression_df <- expression_df %>%
+  dplyr::select(Gene, Symbol, dplyr::everything(), -Gene)
+
+# Write mapped data frame to output file
+readr::write_tsv(expression_df, file.path(
+  results_dir,
+  "SRP192714_Symbols.tsv"
+))
+```
+
+# Section 1c
+
+```{r}
+
+# Get matrix size
+matrix_dim <- dim(expression_df)
+cat("Expression matrix dimensions (genes x samples):", matrix_dim[1], "x", matrix_dim[2], "\n")
+
+# Number of genes
+cat("Number of genes:", nrow(expression_df), "\n")
+
+# Select only numeric columns for log transformation
+expr_numeric <- expression_df %>% dplyr::select(where(is.numeric))
+
+# Log-scale the data (add pseudocount to avoid log(0))
+log_expr <- log2(expr_numeric + 1)
+
+# Calculate per-gene median expression
+gene_medians <- apply(log_expr, 1, median, na.rm = TRUE)
+
+# Show summary statistics for gene medians
+summary(gene_medians)
+
+# Density plot of per-gene median expression
+library(ggplot2)
+plot_obj <- ggplot(data.frame(median=gene_medians), aes(x=median)) +
+  geom_density(fill="skyblue", alpha=0.5) +
+  labs(title="Density of Per-Gene Median Expression (log2 scale)",
+       x="Median log2(expression + 1)",
+       y="Density")
+
+# Save plot to the plots directory
+plot_path <- file.path(plots_dir, "per_gene_median_density.png")
+ggsave(plot_path, plot=plot_obj, width=6, height=4, dpi=300)
+
+# Also print the plot in the notebook
+plot_obj
+```
+
+The dataset contains 43,363 genes measured across 1,022 samples. The summary statistics show that most genes have low median expression (median ≈ 0.26 on log2 scale), with a long tail of higher expression values (max ≈ 7.6). From our research, this is typical for transcriptome data, where a small number of genes are highly expressed while the majority have low expression. The density plot visualizes this distribution, showing a peak at lower expression values and a gradual decline towards higher values. Log transformation helps to reduce the impact of extreme values and makes the distribution more interpretable.
+
+# Section 2a-c
+
+```{r}
+library(DESeq2)
+
+# --- FULL DATA VERSION (commented out) ---
+# # Use numeric columns from expression_df as count matrix
+# cts <- expression_df %>% dplyr::select(where(is.numeric)) %>% as.matrix()
+# 
+# # Update coldata for DESeq2
+# coldata <- merged_meta
+# rownames(coldata) <- coldata$refinebio_accession_code
+# 
+# # Subset cts columns to match coldata rownames
+# cts <- cts[, rownames(coldata)]
+# 
+# # Round count matrix to integers for DESeq2
+# cts <- round(cts)
+# 
+# # Check dimensions
+# stopifnot(ncol(cts) == nrow(coldata))
+# 
+# # Choose a grouping column for DESeq2 (update as needed)
+# # For example, use 'refinebio_title' or a column from GEO metadata
+# dds <- DESeqDataSetFromMatrix(countData = cts,
+#                               colData = coldata,
+#                               design = ~ refinebio_title)
+# 
+# dds <- DESeq(dds)
+# vsd <- vst(dds, blind=FALSE)
+# plotPCA(vsd, intgroup="refinebio_title")
+
+## --- ANALYSIS SECTION: works for trimmed or full data ---
+# Choose which dataset to use
+if (use_trimmed) {
+  expr_mat <- expression_df_trimmed
+  meta <- merged_meta_trimmed
+  plot_title <- "PCA of First 50 Samples (colored by Exposure)"
+  plot_file <- "trimmed_pca_exposure.png"
+} else {
+  expr_mat <- expression_df_full
+  meta <- merged_meta_full
+  plot_title <- "PCA of All Samples (colored by Exposure)"
+  plot_file <- "full_pca_exposure.png"
+}
+# Convert to numeric matrix
+cts <- as.matrix(sapply(expr_mat, as.numeric))
+# Subset metadata to match columns
+meta <- meta %>% dplyr::filter(refinebio_accession_code %in% colnames(expr_mat))
+rownames(meta) <- meta$refinebio_accession_code
+# Ensure columns and rows match
+cts <- cts[, rownames(meta)]
+# Remove negative values (set to zero)
+cts[cts < 0] <- 0
+cts <- round(cts)
+stopifnot(ncol(cts) == nrow(meta))
+# Run DESeq2
+dds <- DESeqDataSetFromMatrix(countData = cts,
+                              colData = meta,
+                              design = ~ refinebio_title)
+dds <- DESeq(dds)
+vsd <- vst(dds, blind=FALSE)
+# Extract PCA data for custom plot
+pca_data <- plotPCA(vsd, intgroup = c("Exposure"), returnData = TRUE)
+# Add sample names for merging
+pca_data$Sample <- rownames(pca_data)
+# Merge Exposure info from metadata
+pca_data <- dplyr::left_join(pca_data, meta %>% dplyr::select(refinebio_accession_code, Exposure), by = c("Sample" = "refinebio_accession_code"))
+# If Exposure column is missing, use meta$Exposure directly
+if (!"Exposure" %in% colnames(pca_data) || all(is.na(pca_data$Exposure))) {
+  pca_data$Exposure <- meta$Exposure[match(pca_data$Sample, meta$refinebio_accession_code)]
+}
+# Plot with ggplot2, color by Exposure
+pca_plot <- ggplot(pca_data, aes(x = PC1, y = PC2, color = Exposure)) +
+  geom_point(size = 3, alpha = 0.8) +
+  labs(title = plot_title, x = "PC1", y = "PC2") +
+  theme_minimal()
+# Save PCA plot to plots directory
+ggsave(filename = file.path(plots_dir, plot_file), plot = pca_plot, width = 6, height = 4, dpi = 300)
+# Print plot in notebook
+pca_plot
+```
+
+# Section 2d packages
+
+```{r}
+if (!requireNamespace("M3C",  quietly = TRUE)) install.packages("M3C")
+if (!requireNamespace("umap",  quietly = TRUE)) install.packages("umap")
+if (!requireNamespace("matrixStats", quietly = TRUE)) install.packages("matrixStats")
+```
+  
+# Section 2d i
+
+```{r}
+## --- 2d i: t-SNE using Rtsne (colored by Exposure) ---
+# deps
+library(SummarizedExperiment)   # for assay()
+library(matrixStats)            # for row/col variance
+library(Rtsne)
+library(ggplot2)
+
+set.seed(42)
+
+# 1) pull variance-stabilized matrix and align meta
+vsd_gxs <- SummarizedExperiment::assay(vsd)        # genes x samples
+if (!identical(rownames(meta), colnames(vsd_gxs))) {
+  stopifnot("refinebio_accession_code" %in% colnames(meta))
+  rownames(meta) <- meta$refinebio_accession_code
+  meta <- meta[colnames(vsd_gxs), , drop = FALSE]
+}
+# keep only labeled samples
+keep <- !is.na(meta$Exposure)
+vsd_gxs <- vsd_gxs[, keep, drop = FALSE]
+meta     <- meta[keep, , drop = FALSE]
+meta$Exposure <- factor(meta$Exposure)
+
+# 2) select top variable genes and reduce to ~50 PCs (denoising)
+ngenes <- min(2000, nrow(vsd_gxs))                           # 2k or fewer if dataset smaller
+top_genes <- head(order(matrixStats::rowVars(vsd_gxs), decreasing = TRUE), ngenes)
+X <- t(vsd_gxs[top_genes, , drop = FALSE])                   # samples x genes
+
+pcs   <- prcomp(X, center = TRUE, scale. = TRUE)
+pcmat <- pcs$x[, 1:min(50, ncol(pcs$x)), drop = FALSE]       # samples x PCs
+
+# 3) run t-SNE (safe perplexity ~ n/3 clamped to 5..30)
+n  <- nrow(pcmat)
+px <- max(5, min(30, floor((n - 1) / 3)))
+tsne_out <- Rtsne(
+  pcmat,
+  perplexity = px,
+  max_iter = 1000,
+  check_duplicates = FALSE,
+  verbose = FALSE
+)
+
+# 4) plot
+tsne_df <- data.frame(
+  tSNE1 = tsne_out$Y[, 1],
+  tSNE2 = tsne_out$Y[, 2],
+  Exposure = meta$Exposure
+)
+
+p_tsne <- ggplot(tsne_df, aes(tSNE1, tSNE2, color = Exposure)) +
+  geom_point(size = 2.6, alpha = 0.9) +
+  labs(
+    title = paste0("t-SNE of Samples (Rtsne; perplexity=", px, "; 50 PCs, top ", ngenes, " genes)"),
+    x = "t-SNE 1", y = "t-SNE 2"
+  ) +
+  theme_minimal()
+
+if (!dir.exists(plots_dir)) dir.create(plots_dir, recursive = TRUE)
+outfile_tsne <- if (exists("use_trimmed") && isTRUE(use_trimmed)) "trimmed_tsne_Rtsne.png" else "full_tsne_Rtsne.png"
+ggsave(file.path(plots_dir, outfile_tsne), p_tsne, width = 7, height = 5, dpi = 300)
+p_tsne
+
+
+```
+
+# Section 2d ii
+
+```{r}
+# --- 2d ii: UMAP using 'umap' (colored by Exposure) ---
+library(SummarizedExperiment)  # for assay()
+library(matrixStats)           # for row/col variance
+library(umap)
+library(ggplot2)
+
+set.seed(42)
+
+# 1) Pull variance-stabilized matrix (genes x samples) and align metadata
+vsd_gxs <- SummarizedExperiment::assay(vsd)
+
+# Ensure meta rows match sample columns
+if (!identical(rownames(meta), colnames(vsd_gxs))) {
+  stopifnot("refinebio_accession_code" %in% colnames(meta))
+  rownames(meta) <- meta$refinebio_accession_code
+  meta <- meta[colnames(vsd_gxs), , drop = FALSE]
+}
+# Keep only labeled samples
+keep <- !is.na(meta$Exposure)
+vsd_gxs <- vsd_gxs[, keep, drop = FALSE]
+meta     <- meta[keep, , drop = FALSE]
+meta$Exposure <- factor(meta$Exposure)
+
+# 2) Feature selection (top variable genes) and PCA denoising to ~50 PCs
+ngenes <- min(2000, nrow(vsd_gxs))  # clamp at 2k or less if fewer genes
+top_genes <- head(order(matrixStats::rowVars(vsd_gxs), decreasing = TRUE), ngenes)
+
+X <- t(vsd_gxs[top_genes, , drop = FALSE])          # samples x genes
+pcs   <- prcomp(X, center = TRUE, scale. = TRUE)
+pcmat <- pcs$x[, 1:min(50, ncol(pcs$x)), drop = FALSE]  # samples x PCs
+
+# 3) UMAP configuration (reasonable defaults; adapt n_neighbors to sample size)
+n <- nrow(pcmat)
+nn <- max(10, min(50, round(n / 3)))   # e.g., ~n/3, clamped to [10, 50]
+
+cfg <- umap.defaults
+cfg$n_neighbors <- nn
+cfg$min_dist    <- 0.3
+cfg$metric      <- "euclidean"
+
+um <- umap::umap(pcmat, config = cfg)  # returns list with $layout (samples x 2)
+
+# 4) Plot
+umap_df <- data.frame(
+  UMAP1 = um$layout[, 1],
+  UMAP2 = um$layout[, 2],
+  Exposure = meta$Exposure
+)
+
+p_umap <- ggplot(umap_df, aes(UMAP1, UMAP2, color = Exposure)) +
+  geom_point(size = 2.6, alpha = 0.9) +
+  labs(
+    title = paste0("UMAP of Samples (umap; n_neighbors=", nn, ", min_dist=0.3; 50 PCs, top ", ngenes, " genes)"),
+    x = "UMAP 1", y = "UMAP 2"
+  ) +
+  theme_minimal()
+
+if (!dir.exists(plots_dir)) dir.create(plots_dir, recursive = TRUE)
+outfile_umap <- if (exists("use_trimmed") && isTRUE(use_trimmed)) "trimmed_umap.png" else "full_umap.png"
+ggsave(file.path(plots_dir, outfile_umap), p_umap, width = 7, height = 5, dpi = 300)
+p_umap
+
+```
+
+# Section 2e
+Similarities
+	•	All three methods (PCA, t-SNE, UMAP) reduce the high-dimensional gene expression data into 2D, letting us see patterns between samples.
+	•	In each, samples tend to group by Exposure status (or whichever grouping variable you’re using).
+	•	Outliers and variability across samples are visible in all three.
+
+Differences
+	•	PCA: Captures global variance structure, shows the main linear directions of variability. Often looks more “spread out” but may miss subtle clusters.
+	•	t-SNE: Focuses on local structure, separates clusters more strongly. However, distances between clusters aren’t always meaningful (clusters may look far but be closer in high-D space).
+	•	UMAP: Balances global and local structure, sometimes keeps a more interpretable overall shape while still revealing clusters.
+
+# Section 2f
+
+Findings
+	•	Across all three dimensionality reduction methods, samples show grouping consistent with Exposure categories, suggesting exposure status drives significant variation in gene expression.
+	•	PCA highlights the major global variance, but t-SNE and UMAP give a clearer view of sub-clusters.
+	•	UMAP provides a balance, maintaining both separation of clusters and an interpretable global structure.
+	•	Together, these plots confirm that exposure effects are strong and detectable across different approaches.
+
+# Section 3a-b
+
+```{r attach library, echo = FALSE}
+# Attach the DESeq2 library
+library(DESeq2)
+
+# Attach the ggplot2 library for plotting
+library(ggplot2)
+
+# We will need this so we can use the pipe: %>%
+library(magrittr)
+
+set.seed(12345)
+```
+
+```{r Read-in Metadata}
+metadata_file <- file.path(data_dir, "metadata_SRP192714_merged.tsv")
+metadata <- readr::read_tsv(metadata_file)
+```
+
+
+```{r }
+# ---- 3a-b: Differential expression: DENV vs Naive ----
+suppressPackageStartupMessages({
+  library(readr); library(dplyr); library(stringr); library(tibble)
+  library(DESeq2); library(ggplot2)
+})
+
+# paths (match earlier sections)
+expr_path <- "data/SRP192714/SRP192714.tsv"
+meta_path <- "data/SRP192714/metadata_SRP192714_merged.tsv"
+
+# 1) read counts and merged metadata
+counts <- readr::read_tsv(expr_path, show_col_types = FALSE) |>
+  tibble::column_to_rownames("Gene") |>
+  as.matrix()
+mode(counts) <- "numeric"
+
+metadata <- readr::read_tsv(meta_path, show_col_types = FALSE)
+
+# 2) make a clean two-level grouping: Exposure2 = Naive vs DENV
+stopifnot(all(c("refinebio_accession_code","Exposure") %in% names(metadata)))
+metadata <- metadata |>
+  mutate(
+    Exposure2 = case_when(
+      str_to_lower(Exposure) %in% c("naive","mock","control","uninfected","healthy") ~ "Naive",
+      str_detect(str_to_lower(Exposure), "denv|dengue") ~ "DENV",
+      TRUE ~ NA_character_
+    )
+  )
+
+# 3) align samples (use only samples with Exposure2)
+metadata <- metadata |> filter(!is.na(Exposure2))
+common_ids <- intersect(colnames(counts), metadata$refinebio_accession_code)
+if (length(common_ids) == 0) stop("No overlapping sample IDs between counts and metadata.")
+
+# subset BOTH objects to the same ids and order identically
+common_ids <- sort(common_ids)  # deterministic order
+counts  <- counts[, common_ids, drop = FALSE]
+metadata <- metadata |>
+  filter(refinebio_accession_code %in% common_ids) |>
+  arrange(match(refinebio_accession_code, common_ids))
+
+stopifnot(identical(colnames(counts), metadata$refinebio_accession_code))
+
+# finalize colData
+metadata$Exposure2 <- factor(metadata$Exposure2, levels = c("Naive","DENV"))
+rownames(metadata) <- metadata$refinebio_accession_code
+
+# 4) basic QC on counts
+counts[counts < 0] <- 0
+counts <- round(counts)
+keep_genes <- rowSums(counts) >= 10
+counts_f <- counts[keep_genes, , drop = FALSE]
+
+cat("DE input — genes x samples:", nrow(counts_f), "x", ncol(counts_f), "\n")
+print(table(metadata$Exposure2))
+
+# 5) DESeq2
+dds <- DESeqDataSetFromMatrix(countData = counts_f,
+                              colData   = metadata,
+                              design    = ~ Exposure2)
+dds <- DESeq(dds)
+
+# 6) results: DENV vs Naive (Naive is reference because of factor levels above)
+res <- results(dds, contrast = c("Exposure2","DENV","Naive"))
+
+# tidy + save
+results_dir <- "results"; plots_dir <- "plots"
+if (!dir.exists(results_dir)) dir.create(results_dir, recursive = TRUE)
+if (!dir.exists(plots_dir))   dir.create(plots_dir,   recursive = TRUE)
+
+res_df <- as.data.frame(res) |>
+  tibble::rownames_to_column("GeneID") |>
+  mutate(padj = ifelse(is.na(padj), 1, padj),
+         sig  = padj < 0.05) |>
+  arrange(padj)
+
+readr::write_tsv(res_df,           file.path(results_dir, "DE_full_results_DENV_vs_Naive.tsv"))
+readr::write_tsv(head(res_df, 50), file.path(results_dir, "DE_top50_DENV_vs_Naive.tsv"))
+cat("Significant genes (padj < 0.05):", sum(res_df$sig), "\n")
+
+# Build volcano data from res_df created earlier
+volc_df <- res_df %>%
+  dplyr::filter(!is.na(padj) & padj > 0) %>%
+  dplyr::mutate(nlog10p = -log10(padj))
+
+p_volc <- ggplot(volc_df, aes(x = log2FoldChange, y = nlog10p, color = sig)) +
+  geom_point(alpha = 0.75, size = 1.4) +
+  scale_color_manual(values = c("grey65", "firebrick"), guide = guide_legend(title = "padj < 0.05")) +
+  labs(
+    title = "Volcano: DENV vs Naive",
+    x = "log2 Fold Change (DENV vs Naive)",
+    y = "-log10 adjusted p-value"
+  ) +
+  theme_minimal()
+
+# save and print
+ggsave(file.path(plots_dir, "DE_volcano_DENV_vs_Naive.png"),
+       p_volc, width = 7, height = 5, dpi = 300)
+p_volc
+```
+# Section 3c
+
+```{r}
+suppressPackageStartupMessages({ library(dplyr); library(ggplot2) })
+
+stopifnot(exists("res_df"), exists("results_dir"), exists("plots_dir"))
+
+# basic significance and direction
+sum_sig   <- sum(res_df$padj < 0.05, na.rm = TRUE)
+sum_up    <- sum(res_df$padj < 0.05 & res_df$log2FoldChange >  0, na.rm = TRUE)  # higher in DENV
+sum_down  <- sum(res_df$padj < 0.05 & res_df$log2FoldChange <  0, na.rm = TRUE)  # lower in DENV
+
+cat("3c) Significant genes (padj < 0.05):", sum_sig, "\n")
+cat("    Up in DENV:", sum_up, " | Down in DENV:", sum_down, "\n")
+
+# tidy summary table and save
+de_summary <- data.frame(
+  comparison = "DENV vs Naive",
+  n_sig = sum_sig,
+  n_up  = sum_up,
+  n_down = sum_down,
+  stringsAsFactors = FALSE
+)
+if (!dir.exists(results_dir)) dir.create(results_dir, recursive = TRUE)
+readr::write_tsv(de_summary, file.path(results_dir, "DE_summary_DENV_vs_Naive.tsv"))
+
+# small bar plot of up/down counts
+plot_df <- data.frame(
+  direction = c("Up in DENV","Down in DENV"),
+  n = c(sum_up, sum_down)
+)
+if (!dir.exists(plots_dir)) dir.create(plots_dir, recursive = TRUE)
+p_counts <- ggplot(plot_df, aes(direction, n, fill = direction)) +
+  geom_col() +
+  labs(title = "Significant DE genes (padj < 0.05)", x = NULL, y = "Count") +
+  theme_minimal() + theme(legend.position = "none")
+ggsave(file.path(plots_dir, "DE_sig_counts_bar.png"), p_counts, width = 6, height = 4, dpi = 300)
+p_counts
+```
+
+# Section 3d
+
+```{r}
+suppressPackageStartupMessages({ library(org.Hs.eg.db); library(dplyr); library(ggplot2); library(ggrepel) })
+
+
+clean_ids <- sub("\\.\\d+$", "", res_df$GeneID)
+
+symb <- AnnotationDbi::mapIds(
+  org.Hs.eg.db,
+  keys = clean_ids,
+  keytype = "ENSEMBL",
+  column = "SYMBOL",
+  multiVals = "first"
+)
+
+res_annot <- res_df %>%
+  mutate(ENSEMBL = clean_ids,
+         Symbol  = unname(symb[clean_ids])) %>%
+  relocate(ENSEMBL, Symbol, .before = GeneID)
+
+# Save full annotated and top lists
+readr::write_tsv(res_annot, file.path(results_dir, "DE_full_results_DENV_vs_Naive_annotated.tsv"))
+readr::write_tsv(head(res_annot %>% arrange(padj), 50), file.path(results_dir, "DE_top50_annotated.tsv"))
+
+# Labeled volcano highlighting top 10 by padj
+volc_df <- res_annot %>%
+  filter(!is.na(padj) & padj > 0) %>%
+  mutate(nlog10p = -log10(padj))
+
+lab_genes <- volc_df %>%
+  arrange(padj) %>%
+  slice(1:min(10, n())) %>%
+  pull(Symbol)
+
+p_volc_lab <- ggplot(volc_df, aes(x = log2FoldChange, y = nlog10p, color = padj < 0.05)) +
+  geom_point(alpha = 0.75, size = 1.3) +
+  scale_color_manual(values = c("grey70","firebrick"), labels = c("NS","padj<0.05"), name = "") +
+  geom_text_repel(
+    data = subset(volc_df, Symbol %in% lab_genes),
+    aes(label = Symbol), size = 3, max.overlaps = 50
+  ) +
+  labs(title = "Volcano (DENV vs Naive) — top 10 labeled",
+       x = "log2 Fold Change (DENV vs Naive)", y = "-log10 adjusted p-value") +
+  theme_minimal()
+
+ggsave(file.path(plots_dir, "DE_volcano_DENV_vs_Naive_labeled.png"),
+       p_volc_lab, width = 7.5, height = 5.2, dpi = 300)
+p_volc_lab
+```
+
+# Section 3e
+
+```{r}
+norm_counts <- DESeq2::counts(dds, normalized = TRUE)
+
+# pick top 30 DE genes (by padj), ensure they exist in norm matrix
+top30 <- res_annot %>%
+  filter(!is.na(padj)) %>%
+  arrange(padj) %>%
+  slice(1:min(30, n())) %>%
+  pull(GeneID)
+top30 <- intersect(top30, rownames(norm_counts))
+
+# write wide matrix (genes x samples) for these genes
+if (length(top30) >= 2) {
+  top_norm <- norm_counts[top30, , drop = FALSE] %>%
+    as.data.frame() %>%
+    rownames_to_column("GeneID")
+  readr::write_tsv(top_norm, file.path(results_dir, "NormalizedCounts_top30.tsv"))
+}
+
+# Plot counts for top 3 genes (if present), save PNGs
+plot_ids <- head(top30, 3)
+if (length(plot_ids) > 0) {
+  if (!dir.exists(plots_dir)) dir.create(plots_dir, recursive = TRUE)
+  for (gid in plot_ids) {
+    png(file.path(plots_dir, paste0("plotCounts_", gid, ".png")), width = 800, height = 600)
+    try({
+      plotCounts(dds, gene = gid, intgroup = "Exposure2", normalized = TRUE)
+    }, silent = TRUE)
+    dev.off()
+  }
+}
+```
+
+
+# Section 4a
+
+```{r}
+
+```
+
+# Section 4c
+
+```{r}
+
+```
+
+# Section 5: William Le
+
+```{r}
+
+```
+
+# Section 5: Nikhil Sangamkar
+
+```{r}
+
+```
+
+# Section 5: Taylor Tillander
+
+```{r}
+
+```
+
+# Section 5: Ibrahim Zbib
+
+```{r}
+
+```
+
+# Section 6
+
+```{r}
+
+```
+
+# Section 7
+
+```{r}
+
+```
+
 ```
 
 # Section 3c
