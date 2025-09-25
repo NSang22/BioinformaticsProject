@@ -912,7 +912,7 @@ cat("- Clustering: Hierarchical clustering with euclidean distance and complete 
 cat("- Files saved:", heatmap_file, "and", heatmap_file_pdf, "\n")
 ```
 
-## Section 4b Summary
+## Section 4 Summary
 
 ```{r echo=FALSE}
 if (exists("scaled_data")) {
@@ -923,12 +923,6 @@ if (exists("scaled_data")) {
               heatmap_gene_n, heatmap_sample_n, group_counts))
   cat(" Sample annotations on the column sidebar reflect the Exposure2 labels used in the differential expression analysis, and both PNG and PDF versions are stored in the plots directory.\n")
 }
-```
-
-# Section 4c
-
-```{r}
-
 ```
 
 # Section 5: William Le
@@ -1033,6 +1027,34 @@ dev.off()
 print(paste("Heatmap plot saved to:", output_path))
 ```
 
+```{r write_gss_summary, echo=FALSE}
+# Save a small summary table of validated signatures so Section 6 can pick it up
+gss_indices <- as.integer(validated_ind)
+if (length(gss_indices) > 0) {
+  gss_df <- tibble::tibble(
+    method_detail = paste0("GSS_validated_", run_label),
+    term_id = paste0("RAV_", gss_indices),
+    term_name = NA_character_,
+    score = NA_real_
+  )
+
+  ann_try <- tryCatch(annotateRAV(RAVmodel, validated_ind), error = function(e) NULL)
+  if (is.data.frame(ann_try)) {
+    desc_cols <- intersect(c("Description","Term","name","Annotation","label"), names(ann_try))
+    if (length(desc_cols) >= 1) {
+      desc_col <- desc_cols[1]
+      n <- min(nrow(ann_try), nrow(gss_df))
+      gss_df$term_name[seq_len(n)] <- as.character(ann_try[[desc_col]][seq_len(n)])
+    }
+  }
+
+  if (!dir.exists(results_dir)) dir.create(results_dir, recursive = TRUE)
+  gss_path <- file.path(results_dir, paste0("GSS_validated_signatures_", run_label, ".tsv"))
+  readr::write_tsv(gss_df, gss_path)
+  message("Wrote GenomicSuperSignature summary to: ", gss_path)
+}
+```
+
 
 As seen in the above graphs, the annotated_RAV and meshTables are key words and phrases associated with a specific principle component, while the heatmapTable shows highly correlated RAV groupings themselves.
 
@@ -1076,9 +1098,9 @@ names(gene_scores) <- gene_table$base_id
 
 selection_fun <- function(x) x < 0.05
 
-go_data_taylor <- topGO::new(
+go_data_bp <- topGO::new(
   "topGOdata",
-  description = "Taylor Tillander GO BP",
+  description = "topGO GO BP",
   ontology = "BP",
   allGenes = gene_scores,
   geneSelectionFunc = selection_fun,
@@ -1088,8 +1110,8 @@ go_data_taylor <- topGO::new(
   ID = "ENSEMBL"
 )
 
-result_classic <- topGO::runTest(go_data_taylor, algorithm = "classic", statistic = "fisher")
-result_weight01 <- topGO::runTest(go_data_taylor, algorithm = "weight01", statistic = "fisher")
+result_classic <- topGO::runTest(go_data_bp, algorithm = "classic", statistic = "fisher")
+result_weight01 <- topGO::runTest(go_data_bp, algorithm = "weight01", statistic = "fisher")
 
 parse_topgo_p <- function(x) {
   vals <- stringr::str_trim(as.character(x))
@@ -1099,8 +1121,8 @@ parse_topgo_p <- function(x) {
   ifelse(is.na(num), 1, num)
 }
 
-go_table_taylor <- topGO::GenTable(
-  go_data_taylor,
+go_table_bp <- topGO::GenTable(
+  go_data_bp,
   classicFisher = result_classic,
   weight01Fisher = result_weight01,
   orderBy = "weight01Fisher",
@@ -1113,14 +1135,14 @@ go_table_taylor <- topGO::GenTable(
     neglog_weight01 = -log10(weight01Fisher_p)
   )
 
-assign("topgo_results_taylor", go_table_taylor, envir = .GlobalEnv)
+assign("topgo_results_bp", go_table_bp, envir = .GlobalEnv)
 
 if (!dir.exists(results_dir)) dir.create(results_dir, recursive = TRUE)
-readr::write_tsv(go_table_taylor, file.path(results_dir, "topGO_BP_TaylorTillander.tsv"))
+readr::write_tsv(go_table_bp, file.path(results_dir, "topGO_BP.tsv"))
 
-topgo_top10 <- go_table_taylor %>% slice_head(n = 10)
-assign("topgo_top10_taylor", topgo_top10, envir = .GlobalEnv)
-readr::write_tsv(topgo_top10, file.path(results_dir, "topGO_BP_TaylorTillander_top10.tsv"))
+topgo_top10 <- go_table_bp %>% slice_head(n = 10)
+assign("topgo_top10_bp", topgo_top10, envir = .GlobalEnv)
+readr::write_tsv(topgo_top10, file.path(results_dir, "topGO_BP_top10.tsv"))
 
 if (!dir.exists(plots_dir)) dir.create(plots_dir, recursive = TRUE)
 topgo_plot <- topgo_top10 %>%
@@ -1128,27 +1150,27 @@ topgo_plot <- topgo_top10 %>%
   ggplot(aes(neglog_weight01, Term)) +
   geom_col(fill = "#3B82F6") +
   labs(
-    title = "topGO BP enrichment (weight01 Fisher) — Taylor Tillander",
+    title = "topGO BP enrichment (weight01 Fisher)",
     x = "-log10(weight01 Fisher p-value)",
     y = NULL
   ) +
   theme_minimal()
 
-plot_path <- file.path(plots_dir, paste0(run_label, "_topgo_BP_TaylorTillander.png"))
+plot_path <- file.path(plots_dir, paste0(run_label, "_topgo_BP.png"))
 ggsave(plot_path, topgo_plot, width = 8, height = 5, dpi = 300)
 topgo_plot
 ```
 
 ```{r echo=FALSE}
-if (exists("topgo_results_taylor")) {
-  total_terms <- nrow(topgo_results_taylor)
-  sig_terms <- sum(topgo_results_taylor$weight01Fisher_p < 0.05, na.rm = TRUE)
-  highlight <- topgo_results_taylor %>%
+if (exists("topgo_results_bp")) {
+  total_terms <- nrow(topgo_results_bp)
+  sig_terms <- sum(topgo_results_bp$weight01Fisher_p < 0.05, na.rm = TRUE)
+  highlight <- topgo_results_bp %>%
     arrange(weight01Fisher_p) %>%
     slice_head(n = 3) %>%
     transmute(label = sprintf("%s (weight01 p = %.2g)", Term, weight01Fisher_p))
 
-  cat(sprintf("Taylor Tillander's topGO Biological Process analysis tested %d GO terms and found %d passing the 0.05 weight01 Fisher threshold.",
+  cat(sprintf("The topGO Biological Process analysis tested %d GO terms and found %d passing the 0.05 weight01 Fisher threshold.",
               total_terms, sig_terms))
   if (nrow(highlight) > 0) {
     cat(" Top signals include ")
@@ -1507,10 +1529,10 @@ if (exists("summary_results") && nrow(summary_results) > 0) {
   cat("Run the enrichment chunk above to populate the clusterProfiler results summary before compiling cross-method tables.\n")
 }
 
-if (exists("topgo_results_taylor")) {
-  cat(sprintf("Taylor Tillander's topGO run contributed %d Biological Process terms (with %d passing weight01 < 0.05), and the summaries were written alongside the clusterProfiler outputs.\n",
-              nrow(topgo_results_taylor),
-              sum(topgo_results_taylor$weight01Fisher_p < 0.05, na.rm = TRUE)))
+if (exists("topgo_results_bp")) {
+  cat(sprintf("The topGO run contributed %d Biological Process terms (with %d passing weight01 < 0.05), and the summaries were written alongside the clusterProfiler outputs.\n",
+              nrow(topgo_results_bp),
+              sum(topgo_results_bp$weight01Fisher_p < 0.05, na.rm = TRUE)))
 }
 ```
 
@@ -1574,7 +1596,7 @@ if (exists("summary_results") && nrow(summary_results) > 0) {
   }
 }
 
-# topGO or other team methods saved to results directory
+# Team methods saved to results directory
 topgo_files <- list.files(results_dir, pattern = "^topGO_.*\\.tsv$", full.names = TRUE)
 if (length(topgo_files) > 0) {
   topgo_tables <- purrr::map(topgo_files, ~{
@@ -1593,6 +1615,27 @@ if (length(topgo_files) > 0) {
       mutate(significant = p_value < 0.05)
   })
   enrichment_tables <- append(enrichment_tables, topgo_tables)
+}
+
+gss_files <- list.files(results_dir, pattern = "^GSS_.*\\.tsv$|^GSS_validated_signatures_.*\\.tsv$", full.names = TRUE)
+if (length(gss_files) > 0) {
+  gss_tables <- purrr::map(gss_files, ~{
+    df <- readr::read_tsv(.x, show_col_types = FALSE)
+    method_label <- tools::file_path_sans_ext(basename(.x))
+    df %>%
+      transmute(
+        source_method = "GSS",
+        method_detail = method_label,
+        term_id = as.character(term_id),
+        term_name = as.character(term_name),
+        p_value = NA_real_,
+        adj_p_value = NA_real_,
+        q_value = NA_real_,
+        score = ifelse("score" %in% names(df), as.numeric(df$score), NA_real_)
+      ) %>%
+      mutate(significant = FALSE)
+  })
+  enrichment_tables <- append(enrichment_tables, gss_tables)
 }
 
 if (length(enrichment_tables) == 0) {
