@@ -71,7 +71,7 @@ if ("Sample" %in% colnames(geo_meta) && "refinebio_title" %in% colnames(refinebi
 }
 
 # Choose how many samples to keep for this run (set to Inf to keep all samples)
-sample_limit <- Inf
+sample_limit <- 25
 
 all_samples <- colnames(expression_df)
 selected_samples <- all_samples
@@ -574,7 +574,7 @@ volc_df <- res_annot %>%
 
 lab_genes <- volc_df %>%
   arrange(padj) %>%
-  dplyr::slice(1:min(10, n())) %>%
+  slice(1:min(10, n())) %>%
   pull(Symbol)
 
 p_volc_lab <- ggplot(volc_df, aes(x = log2FoldChange, y = nlog10p, color = padj < 0.05)) +
@@ -602,7 +602,7 @@ norm_counts <- DESeq2::counts(dds, normalized = TRUE)
 top30 <- res_annot %>%
   filter(!is.na(padj)) %>%
   arrange(padj) %>%
-  dplyr::slice(1:min(30, n())) %>%
+  slice(1:min(30, n())) %>%
   pull(GeneID)
 top30 <- intersect(top30, rownames(norm_counts))
 
@@ -894,37 +894,9 @@ cat("- Files saved:", heatmap_file, "and", heatmap_file_pdf, "\n")
 ```
 
 # Section 5: William Le
-GenomicSuperSignature
-## Install
-```{r Package Install, message = FALSE}
-if (!require("BiocManager"))
-    install.packages("BiocManager")
-BiocManager::install("GenomicSuperSignature")
-BiocManager::install("bcellViper")
-```
-## Libraries
-```{r Attach Packages}
-library(GenomicSuperSignature)
-library(bcellViper)
-# load RAV
-RAVmodel <- getModel("PLIERpriors", load=TRUE)
-```
-## Data Wrangle Ranked Gene List
-Validate expects a Expression Set or simple matrix.
-```{r}
-```
 
 ```{r}
-# Validate on RAV
-RAVmodel
-validated_list <- GenomicSuperSignature::validate(ranked_gene_list, RAVmodel)
 
-# 2. Run the enrichment analysis
-gsea_results <- GSEA.scan(
-  validated_list,
-  RAVmodel,
-  gsea.nperm = 1000 # Number of permutations for the test
-)
 ```
 
 # Section 5: Nikhil Sangamkar
