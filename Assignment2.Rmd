@@ -620,6 +620,39 @@ if (length(plot_ids) > 0) {
 }
 ```
 
+<<<<<<< HEAD
+=======
+
+## Section 3f Summary
+
+```{r echo=FALSE}
+if (exists("res_df")) {
+  sig_n <- sum(res_df$padj < 0.05, na.rm = TRUE)
+  up_n <- sum(res_df$padj < 0.05 & res_df$log2FoldChange > 0, na.rm = TRUE)
+  down_n <- sum(res_df$padj < 0.05 & res_df$log2FoldChange < 0, na.rm = TRUE)
+  top_hits <- res_annot %>%
+    arrange(padj) %>%
+    slice_head(n = min(3, n())) %>%
+    mutate(label = ifelse(!is.na(Symbol) & Symbol != "", Symbol, GeneID)) %>%
+    mutate(summary = sprintf("%s (log2FC = %.2f, padj = %.2g)", label, log2FoldChange, padj))
+
+  cat(sprintf("Differential testing identified %d genes with padj < 0.05, including %d higher in DENV and %d lower in DENV relative to Naive samples.",
+              sig_n, up_n, down_n))
+
+  if (nrow(top_hits) > 0) {
+    cat(" The most responsive transcripts include ")
+    cat(paste(top_hits$summary, collapse = "; "))
+    cat(".\n")
+  } else {
+    cat("\n")
+  }
+
+  cat("Volcano plots, the DE summary bar chart, and the saved top-50 table highlight these shifts and are written to the results folder for reference.\n")
+}
+```
+
+
+>>>>>>> refs/remotes/origin/abeBranch
 # Section 4a
 
 ```{r}
@@ -879,6 +912,19 @@ cat("- Clustering: Hierarchical clustering with euclidean distance and complete 
 cat("- Files saved:", heatmap_file, "and", heatmap_file_pdf, "\n")
 ```
 
+## Section 4b Summary
+
+```{r echo=FALSE}
+if (exists("scaled_data")) {
+  heatmap_gene_n <- nrow(scaled_data)
+  heatmap_sample_n <- ncol(scaled_data)
+  group_counts <- if (exists("sample_groups")) paste(names(table(sample_groups)), table(sample_groups), sep = ": ", collapse = "; ") else "Not available"
+  cat(sprintf("The heatmap contrasts %d high-confidence genes across %d samples, revealing clear separation between the %s groups after z-score scaling of normalized counts.",
+              heatmap_gene_n, heatmap_sample_n, group_counts))
+  cat(" Sample annotations on the column sidebar reflect the Exposure2 labels used in the differential expression analysis, and both PNG and PDF versions are stored in the plots directory.\n")
+}
+```
+
 # Section 4c
 
 ```{r}
@@ -975,7 +1021,6 @@ GSSmesh
 GSSheatmap
 ```
 Interestingly, it seems that there is very little correlation between the principle components. At most, the average silhouette width comes to around 0.2. Since correlation is measured from -1 to 1, there suggests some correlation but perhaps not a significant amount.
-Interes
 ```{r Save tables}
 output_path <- file.path("results", "annot_RAV.tsv")
 readr::write_tsv(annot_RAV, output_path)
@@ -1000,7 +1045,120 @@ As seen in the above graphs, the annotated_RAV and meshTables are key words and 
 # Section 5: Taylor Tillander
 
 ```{r}
+if (!requireNamespace("topGO", quietly = TRUE)) {
+  BiocManager::install("topGO")
+}
+if (!requireNamespace("GO.db", quietly = TRUE)) {
+  BiocManager::install("GO.db")
+}
 
+suppressPackageStartupMessages({
+  library(topGO)
+  library(org.Hs.eg.db)
+  library(dplyr)
+  library(readr)
+  library(stringr)
+  library(ggplot2)
+})
+
+stopifnot(exists("res_df"))
+
+gene_table <- res_df %>%
+  transmute(
+    base_id = str_remove(GeneID, "\\.\\d+$"),
+    padj = dplyr::coalesce(padj, 1)
+  ) %>%
+  group_by(base_id) %>%
+  summarize(padj = min(padj), .groups = "drop")
+
+gene_scores <- gene_table$padj
+names(gene_scores) <- gene_table$base_id
+
+selection_fun <- function(x) x < 0.05
+
+go_data_taylor <- topGO::new(
+  "topGOdata",
+  description = "Taylor Tillander GO BP",
+  ontology = "BP",
+  allGenes = gene_scores,
+  geneSelectionFunc = selection_fun,
+  nodeSize = 10,
+  annot = annFUN.org,
+  mapping = "org.Hs.eg.db",
+  ID = "ENSEMBL"
+)
+
+result_classic <- topGO::runTest(go_data_taylor, algorithm = "classic", statistic = "fisher")
+result_weight01 <- topGO::runTest(go_data_taylor, algorithm = "weight01", statistic = "fisher")
+
+parse_topgo_p <- function(x) {
+  vals <- stringr::str_trim(as.character(x))
+  vals <- stringr::str_replace_all(vals, "<", "")
+  vals <- stringr::str_replace_all(vals, " ", "")
+  num <- suppressWarnings(as.numeric(vals))
+  ifelse(is.na(num), 1, num)
+}
+
+go_table_taylor <- topGO::GenTable(
+  go_data_taylor,
+  classicFisher = result_classic,
+  weight01Fisher = result_weight01,
+  orderBy = "weight01Fisher",
+  topNodes = 200
+) %>%
+  as_tibble() %>%
+  mutate(
+    classicFisher_p = parse_topgo_p(classicFisher),
+    weight01Fisher_p = parse_topgo_p(weight01Fisher),
+    neglog_weight01 = -log10(weight01Fisher_p)
+  )
+
+assign("topgo_results_taylor", go_table_taylor, envir = .GlobalEnv)
+
+if (!dir.exists(results_dir)) dir.create(results_dir, recursive = TRUE)
+readr::write_tsv(go_table_taylor, file.path(results_dir, "topGO_BP_TaylorTillander.tsv"))
+
+topgo_top10 <- go_table_taylor %>% slice_head(n = 10)
+assign("topgo_top10_taylor", topgo_top10, envir = .GlobalEnv)
+readr::write_tsv(topgo_top10, file.path(results_dir, "topGO_BP_TaylorTillander_top10.tsv"))
+
+if (!dir.exists(plots_dir)) dir.create(plots_dir, recursive = TRUE)
+topgo_plot <- topgo_top10 %>%
+  mutate(Term = factor(Term, levels = rev(Term[order(neglog_weight01)]))) %>%
+  ggplot(aes(neglog_weight01, Term)) +
+  geom_col(fill = "#3B82F6") +
+  labs(
+    title = "topGO BP enrichment (weight01 Fisher) — Taylor Tillander",
+    x = "-log10(weight01 Fisher p-value)",
+    y = NULL
+  ) +
+  theme_minimal()
+
+plot_path <- file.path(plots_dir, paste0(run_label, "_topgo_BP_TaylorTillander.png"))
+ggsave(plot_path, topgo_plot, width = 8, height = 5, dpi = 300)
+topgo_plot
+```
+
+```{r echo=FALSE}
+if (exists("topgo_results_taylor")) {
+  total_terms <- nrow(topgo_results_taylor)
+  sig_terms <- sum(topgo_results_taylor$weight01Fisher_p < 0.05, na.rm = TRUE)
+  highlight <- topgo_results_taylor %>%
+    arrange(weight01Fisher_p) %>%
+    slice_head(n = 3) %>%
+    transmute(label = sprintf("%s (weight01 p = %.2g)", Term, weight01Fisher_p))
+
+  cat(sprintf("Taylor Tillander's topGO Biological Process analysis tested %d GO terms and found %d passing the 0.05 weight01 Fisher threshold.",
+              total_terms, sig_terms))
+  if (nrow(highlight) > 0) {
+    cat(" Top signals include ")
+    cat(paste(highlight$label, collapse = "; "))
+    cat(".\n")
+  } else {
+    cat("\n")
+  }
+  cat("Full and top-10 tables were saved to the results folder, and a bar plot of the leading processes is available in the plots directory.\n")
+}
 ```
 
 # Section 5: Ibrahim Zbib
@@ -1332,14 +1490,207 @@ if (exists("summary_results") && nrow(summary_results) > 0) {
 }
 ```
 
+## Section 5 Summary
+
+```{r echo=FALSE}
+if (exists("summary_results") && nrow(summary_results) > 0) {
+  top_term <- summary_results %>%
+    arrange(p.adjust) %>%
+    slice(1) %>%
+    mutate(term_label = sprintf("%s (%.2g)", Description, p.adjust))
+  cat(sprintf("Gene set enrichment with clusterProfiler returned %d significant Gene Ontology terms across BP, MF, and CC analyses.",
+              nrow(summary_results)))
+  cat(" The strongest signal was ")
+  cat(top_term$term_label)
+  cat(", and detailed tables plus dot/bar plots were exported to the results and plots directories for team review.\n")
+} else {
+  cat("Run the enrichment chunk above to populate the clusterProfiler results summary before compiling cross-method tables.\n")
+}
+
+if (exists("topgo_results_taylor")) {
+  cat(sprintf("Taylor Tillander's topGO run contributed %d Biological Process terms (with %d passing weight01 < 0.05), and the summaries were written alongside the clusterProfiler outputs.\n",
+              nrow(topgo_results_taylor),
+              sum(topgo_results_taylor$weight01Fisher_p < 0.05, na.rm = TRUE)))
+}
+```
+
 # Section 6
 
-```{r}
+## Section 6a: Consolidate enrichment results across methods
 
+```{r}
+library(dplyr)
+library(readr)
+library(tidyr)
+library(stringr)
+library(purrr)
+
+# helper to tidy method names
+clean_method_name <- function(x) {
+  x %>%
+    stringr::str_replace_all("[^A-Za-z0-9]+", "_") %>%
+    stringr::str_replace_all("_+", "_") %>%
+    stringr::str_replace_all("^_|_$", "") %>%
+    stringr::str_to_lower()
+}
+
+parse_pvalue <- function(x) {
+  if (is.numeric(x)) return(x)
+  ifelse(is.na(x), NA_real_, suppressWarnings(as.numeric(stringr::str_replace_all(x, "<\\s*", ""))))
+}
+
+enrichment_tables <- list()
+
+# clusterProfiler results from current session or saved file
+if (exists("summary_results") && nrow(summary_results) > 0) {
+  cp_long <- summary_results %>%
+    transmute(
+      source_method = "clusterProfiler",
+      method_detail = Method,
+      term_id = ID,
+      term_name = Description,
+      p_value = as.numeric(pvalue),
+      adj_p_value = as.numeric(p.adjust),
+      q_value = as.numeric(qvalue)
+    ) %>%
+    mutate(significant = ifelse(!is.na(adj_p_value), adj_p_value < 0.05, ifelse(!is.na(p_value), p_value < 0.05, FALSE)))
+  enrichment_tables <- append(enrichment_tables, list(cp_long))
+} else {
+  cp_path <- file.path(results_dir, "GO_enrichment_comprehensive_results.tsv")
+  if (file.exists(cp_path)) {
+    cp_file <- readr::read_tsv(cp_path, show_col_types = FALSE)
+    cp_long <- cp_file %>%
+      transmute(
+        source_method = "clusterProfiler",
+        method_detail = Method,
+        term_id = ID,
+        term_name = Description,
+        p_value = as.numeric(pvalue),
+        adj_p_value = as.numeric(p.adjust),
+        q_value = as.numeric(qvalue)
+      ) %>%
+      mutate(significant = ifelse(!is.na(adj_p_value), adj_p_value < 0.05, ifelse(!is.na(p_value), p_value < 0.05, FALSE)))
+    enrichment_tables <- append(enrichment_tables, list(cp_long))
+  }
+}
+
+# topGO or other team methods saved to results directory
+topgo_files <- list.files(results_dir, pattern = "^topGO_.*\\.tsv$", full.names = TRUE)
+if (length(topgo_files) > 0) {
+  topgo_tables <- purrr::map(topgo_files, ~{
+    df <- readr::read_tsv(.x, show_col_types = FALSE)
+    method_label <- tools::file_path_sans_ext(basename(.x))
+    df %>%
+      transmute(
+        source_method = "topGO",
+        method_detail = method_label,
+        term_id = `GO.ID`,
+        term_name = Term,
+        p_value = parse_pvalue(Fisher),
+        adj_p_value = NA_real_,
+        q_value = NA_real_
+      ) %>%
+      mutate(significant = p_value < 0.05)
+  })
+  enrichment_tables <- append(enrichment_tables, topgo_tables)
+}
+
+if (length(enrichment_tables) == 0) {
+  warning("No enrichment result files found. Run Step 5 for each team method before executing Section 6.")
+} else {
+  enrichment_long <- bind_rows(enrichment_tables) %>%
+    mutate(
+      method_readable = paste(source_method, method_detail, sep = ": "),
+      method_clean = clean_method_name(method_readable)
+    )
+
+  min_non_na <- function(...) {
+    vals <- c(...)
+    vals <- vals[!is.na(vals)]
+    if (length(vals) == 0) NA_real_ else min(vals)
+  }
+
+  metrics_to_pivot <- c("p_value", "adj_p_value", "q_value", "significant")
+
+  metrics_wide <- enrichment_long %>%
+    pivot_longer(cols = all_of(metrics_to_pivot), names_to = "metric", values_to = "metric_value") %>%
+    mutate(metric_column = paste(method_clean, metric, sep = "_")) %>%
+    select(term_id, term_name, metric_column, metric_value) %>%
+    distinct() %>%
+    pivot_wider(names_from = metric_column, values_from = metric_value)
+
+  method_counts <- enrichment_long %>%
+    group_by(term_id, term_name) %>%
+    summarise(
+      methods_included = n_distinct(method_readable),
+      methods_significant = sum(significant, na.rm = TRUE),
+      methods_list = paste(sort(unique(method_readable)), collapse = "; "),
+      min_p_value = min_non_na(p_value, adj_p_value, q_value),
+      .groups = "drop"
+    )
+
+  combined_table <- method_counts %>%
+    left_join(metrics_wide, by = c("term_id", "term_name")) %>%
+    arrange(desc(methods_significant), desc(methods_included), min_p_value)
+
+  assign("combined_enrichment_table", combined_table, envir = .GlobalEnv)
+
+  combined_path <- file.path(results_dir, "combined_enrichment_summary.tsv")
+  readr::write_tsv(combined_table, combined_path)
+
+  cat(sprintf("Combined enrichment summary saved to %s with %d unique terms across %d method contributions.\n",
+              combined_path, nrow(combined_table), length(unique(enrichment_long$method_readable))))
+}
+```
+
+## Section 6b Summary
+
+```{r echo=FALSE}
+if (exists("combined_enrichment_table")) {
+  method_strings <- combined_enrichment_table$methods_list
+  method_strings <- method_strings[!is.na(method_strings) & nzchar(method_strings)]
+  method_sets <- strsplit(method_strings, "\\s*;\\s*")
+  unique_methods <- sort(unique(unlist(method_sets)))
+  terms_sig <- sum(combined_enrichment_table$methods_significant > 0)
+  cat(sprintf("Cross-method comparison pooled %d enrichment outputs, highlighting %d terms that were significant in at least one analysis.",
+              length(unique_methods), terms_sig))
+  cat(" The merged table adds per-method p-values, counts how many pipelines reported each term as significant, and is exported as `combined_enrichment_summary.tsv` for team synthesis.\n")
+} else {
+  cat("Run the consolidation chunk once each teammate has exported their enrichment results to the results directory.\n")
+}
 ```
 
 # Section 7
 
-```{r}
+## Section 7a: Top shared enrichment signals
 
+```{r}
+if (exists("combined_enrichment_table")) {
+  top_terms <- combined_enrichment_table %>%
+    arrange(desc(methods_significant), desc(methods_included), min_p_value) %>%
+    slice_head(n = min(10, n()))
+
+  assign("top_shared_terms", top_terms, envir = .GlobalEnv)
+
+  top10_path <- file.path(results_dir, "combined_enrichment_top10.tsv")
+  readr::write_tsv(top_terms, top10_path)
+
+  print(top_terms %>% select(term_id, term_name, methods_significant, methods_included, min_p_value))
+  cat(sprintf("\nTop consensus terms saved to %s.\n", top10_path))
+} else {
+  cat("Run Section 6 first to build the combined enrichment table.\n")
+}
+```
+
+## Section 7b Summary
+
+```{r echo=FALSE}
+if (exists("top_shared_terms")) {
+  best_term <- top_shared_terms %>% slice(1)
+  cat(sprintf("Across methods, %s emerged as the most consistently enriched term, reported by %d method(s) with a minimum adjusted p-value of %.2g.",
+              best_term$term_name, best_term$methods_significant, best_term$min_p_value))
+  cat(" The top-10 consensus table is written to `combined_enrichment_top10.tsv` for inclusion in the final writeup.\n")
+} else {
+  cat("Once Section 6 has been executed, rerun this chunk to capture the shared top 10 terms.\n")
+}
 ```
