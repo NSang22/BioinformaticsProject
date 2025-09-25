@@ -1390,7 +1390,330 @@ cat("- Files saved:", heatmap_file, "and", heatmap_file_pdf, "\n")
 # Section 5: Ibrahim Zbib
 
 ```{r}
+# Step 5: Gene Set Enrichment Analysis using PyDESeq2 approach and Gene Ontology
+# Note: Since PyDESeq2 is primarily a Python differential expression tool, 
+# we'll use R's clusterProfiler for Gene Ontology enrichment analysis
+# which provides similar statistical rigor and is the standard approach
 
+# Load required libraries
+if (!requireNamespace("clusterProfiler", quietly = TRUE)) {
+  BiocManager::install("clusterProfiler")
+}
+if (!requireNamespace("org.Hs.eg.db", quietly = TRUE)) {
+  BiocManager::install("org.Hs.eg.db")
+}
+if (!requireNamespace("enrichplot", quietly = TRUE)) {
+  BiocManager::install("enrichplot")
+}
+if (!requireNamespace("ggplot2", quietly = TRUE)) {
+  install.packages("ggplot2")
+}
+
+suppressPackageStartupMessages({
+  library(clusterProfiler)
+  library(org.Hs.eg.db)
+  library(enrichplot)
+  library(ggplot2)
+  library(dplyr)
+  library(readr)
+})
+
+# Ensure we have differential expression results
+if (!exists("res_df")) {
+  stop("Please run the differential expression analysis first to generate 'res_df'")
+}
+
+cat("=== STEP 5: Gene Set Enrichment Analysis ===\n")
+cat("Method: clusterProfiler (PyDESeq2 alternative in R)\n")
+cat("Ontology: Gene Ontology (GO)\n\n")
+
+# Create directories
+if (!dir.exists(results_dir)) {
+  dir.create(results_dir, recursive = TRUE)
+}
+if (!dir.exists(plots_dir)) {
+  dir.create(plots_dir, recursive = TRUE)
+}
+
+# Extract significantly differentially expressed genes
+# Using both upregulated and downregulated genes
+sig_genes_up <- res_df %>%
+  filter(padj < 0.05 & log2FoldChange > 0 & !is.na(padj)) %>%
+  pull(GeneID)
+
+sig_genes_down <- res_df %>%
+  filter(padj < 0.05 & log2FoldChange < 0 & !is.na(padj)) %>%
+  pull(GeneID)
+
+sig_genes_all <- res_df %>%
+  filter(padj < 0.05 & !is.na(padj)) %>%
+  pull(GeneID)
+
+cat("Significant upregulated genes:", length(sig_genes_up), "\n")
+cat("Significant downregulated genes:", length(sig_genes_down), "\n")
+cat("Total significant genes:", length(sig_genes_all), "\n\n")
+
+# Convert Ensembl IDs to Entrez IDs for Gene Ontology analysis
+# Remove version numbers from Ensembl IDs if present
+clean_ensembl_all <- gsub("\\.\\d+$", "", sig_genes_all)
+clean_ensembl_up <- gsub("\\.\\d+$", "", sig_genes_up)
+clean_ensembl_down <- gsub("\\.\\d+$", "", sig_genes_down)
+
+# Map to Entrez IDs
+entrez_all <- bitr(clean_ensembl_all, 
+                   fromType = "ENSEMBL",
+                   toType = "ENTREZID", 
+                   OrgDb = org.Hs.eg.db,
+                   drop = TRUE)
+
+entrez_up <- bitr(clean_ensembl_up,
+                  fromType = "ENSEMBL", 
+                  toType = "ENTREZID",
+                  OrgDb = org.Hs.eg.db,
+                  drop = TRUE)
+
+entrez_down <- bitr(clean_ensembl_down,
+                    fromType = "ENSEMBL",
+                    toType = "ENTREZID", 
+                    OrgDb = org.Hs.eg.db,
+                    drop = TRUE)
+
+cat("Genes mapped to Entrez IDs:\n")
+cat("- All significant:", nrow(entrez_all), "\n")
+cat("- Upregulated:", nrow(entrez_up), "\n") 
+cat("- Downregulated:", nrow(entrez_down), "\n\n")
+
+# 1. Gene Ontology Biological Process (GO:BP) - All significant genes
+cat("=== Running GO Biological Process Enrichment (All Genes) ===\n")
+go_bp_all <- enrichGO(gene = entrez_all$ENTREZID,
+                      OrgDb = org.Hs.eg.db,
+                      ont = "BP",
+                      pAdjustMethod = "BH", 
+                      pvalueCutoff = 0.05,
+                      qvalueCutoff = 0.2,
+                      readable = TRUE)
+
+go_bp_all_df <- as.data.frame(go_bp_all)
+if (nrow(go_bp_all_df) > 0) {
+  write_tsv(go_bp_all_df, file.path(results_dir, "GO_BP_all_genes_results.tsv"))
+  
+  # Create visualizations
+  p1 <- dotplot(go_bp_all, showCategory = 20) + 
+    ggtitle("GO Biological Process - All Significant Genes") +
+    theme(axis.text.y = element_text(size = 8))
+  ggsave(file.path(plots_dir, "GO_BP_all_dotplot.png"), p1, width = 12, height = 8)
+  
+  p2 <- barplot(go_bp_all, showCategory = 15) +
+    ggtitle("GO Biological Process - All Significant Genes")
+  ggsave(file.path(plots_dir, "GO_BP_all_barplot.png"), p2, width = 10, height = 8)
+  
+  cat("Found", nrow(go_bp_all_df), "significant GO:BP terms (all genes)\n")
+} else {
+  cat("No significant GO:BP terms found (all genes)\n")
+}
+
+# 2. Gene Ontology Biological Process (GO:BP) - Upregulated genes only
+if (length(entrez_up$ENTREZID) > 5) {
+  cat("\n=== Running GO Biological Process Enrichment (Upregulated) ===\n")
+  go_bp_up <- enrichGO(gene = entrez_up$ENTREZID,
+                       OrgDb = org.Hs.eg.db,
+                       ont = "BP",
+                       pAdjustMethod = "BH",
+                       pvalueCutoff = 0.05,
+                       qvalueCutoff = 0.2,
+                       readable = TRUE)
+  
+  go_bp_up_df <- as.data.frame(go_bp_up)
+  if (nrow(go_bp_up_df) > 0) {
+    write_tsv(go_bp_up_df, file.path(results_dir, "GO_BP_upregulated_results.tsv"))
+    
+    p3 <- dotplot(go_bp_up, showCategory = 20) + 
+      ggtitle("GO Biological Process - Upregulated Genes") +
+      theme(axis.text.y = element_text(size = 8))
+    ggsave(file.path(plots_dir, "GO_BP_up_dotplot.png"), p3, width = 12, height = 8)
+    
+    cat("Found", nrow(go_bp_up_df), "significant GO:BP terms (upregulated)\n")
+  } else {
+    cat("No significant GO:BP terms found (upregulated)\n")
+  }
+}
+
+# 3. Gene Ontology Biological Process (GO:BP) - Downregulated genes only  
+if (length(entrez_down$ENTREZID) > 5) {
+  cat("\n=== Running GO Biological Process Enrichment (Downregulated) ===\n")
+  go_bp_down <- enrichGO(gene = entrez_down$ENTREZID,
+                         OrgDb = org.Hs.eg.db,
+                         ont = "BP", 
+                         pAdjustMethod = "BH",
+                         pvalueCutoff = 0.05,
+                         qvalueCutoff = 0.2,
+                         readable = TRUE)
+  
+  go_bp_down_df <- as.data.frame(go_bp_down)
+  if (nrow(go_bp_down_df) > 0) {
+    write_tsv(go_bp_down_df, file.path(results_dir, "GO_BP_downregulated_results.tsv"))
+    
+    p4 <- dotplot(go_bp_down, showCategory = 20) + 
+      ggtitle("GO Biological Process - Downregulated Genes") +
+      theme(axis.text.y = element_text(size = 8))
+    ggsave(file.path(plots_dir, "GO_BP_down_dotplot.png"), p4, width = 12, height = 8)
+    
+    cat("Found", nrow(go_bp_down_df), "significant GO:BP terms (downregulated)\n")
+  } else {
+    cat("No significant GO:BP terms found (downregulated)\n")
+  }
+}
+
+# 4. Gene Ontology Molecular Function (GO:MF) - All significant genes
+cat("\n=== Running GO Molecular Function Enrichment ===\n")
+go_mf_all <- enrichGO(gene = entrez_all$ENTREZID,
+                      OrgDb = org.Hs.eg.db,
+                      ont = "MF",
+                      pAdjustMethod = "BH",
+                      pvalueCutoff = 0.05,
+                      qvalueCutoff = 0.2,
+                      readable = TRUE)
+
+go_mf_all_df <- as.data.frame(go_mf_all)
+if (nrow(go_mf_all_df) > 0) {
+  write_tsv(go_mf_all_df, file.path(results_dir, "GO_MF_all_genes_results.tsv"))
+  
+  p5 <- dotplot(go_mf_all, showCategory = 20) + 
+    ggtitle("GO Molecular Function - All Significant Genes") +
+    theme(axis.text.y = element_text(size = 8))
+  ggsave(file.path(plots_dir, "GO_MF_all_dotplot.png"), p5, width = 12, height = 8)
+  
+  cat("Found", nrow(go_mf_all_df), "significant GO:MF terms\n")
+} else {
+  cat("No significant GO:MF terms found\n")
+}
+
+# 5. Gene Ontology Cellular Component (GO:CC) - All significant genes
+cat("\n=== Running GO Cellular Component Enrichment ===\n")
+go_cc_all <- enrichGO(gene = entrez_all$ENTREZID,
+                      OrgDb = org.Hs.eg.db,
+                      ont = "CC",
+                      pAdjustMethod = "BH",
+                      pvalueCutoff = 0.05,
+                      qvalueCutoff = 0.2,
+                      readable = TRUE)
+
+go_cc_all_df <- as.data.frame(go_cc_all)
+if (nrow(go_cc_all_df) > 0) {
+  write_tsv(go_cc_all_df, file.path(results_dir, "GO_CC_all_genes_results.tsv"))
+  
+  p6 <- dotplot(go_cc_all, showCategory = 20) + 
+    ggtitle("GO Cellular Component - All Significant Genes") +
+    theme(axis.text.y = element_text(size = 8))
+  ggsave(file.path(plots_dir, "GO_CC_all_dotplot.png"), p6, width = 12, height = 8)
+  
+  cat("Found", nrow(go_cc_all_df), "significant GO:CC terms\n")
+} else {
+  cat("No significant GO:CC terms found\n")
+}
+
+# 6. Create comprehensive summary table
+cat("\n=== Creating Summary Table ===\n")
+summary_results <- data.frame()
+
+# Helper function to add results to summary
+add_to_summary <- function(results_df, method_name, ontology_name) {
+  if (exists(deparse(substitute(results_df))) && nrow(results_df) > 0) {
+    results_df %>%
+      select(ID, Description, pvalue, p.adjust, qvalue, Count, GeneRatio, BgRatio) %>%
+      mutate(Method = method_name,
+             Ontology = ontology_name) %>%
+      select(Method, Ontology, ID, Description, pvalue, p.adjust, qvalue, Count, GeneRatio, BgRatio)
+  } else {
+    data.frame()
+  }
+}
+
+# Add all results to summary
+if (exists("go_bp_all_df") && nrow(go_bp_all_df) > 0) {
+  summary_results <- rbind(summary_results, 
+                          add_to_summary(go_bp_all_df, "GO_BP_All", "Gene Ontology Biological Process"))
+}
+
+if (exists("go_bp_up_df") && nrow(go_bp_up_df) > 0) {
+  summary_results <- rbind(summary_results,
+                          add_to_summary(go_bp_up_df, "GO_BP_Up", "Gene Ontology Biological Process (Up)"))
+}
+
+if (exists("go_bp_down_df") && nrow(go_bp_down_df) > 0) {
+  summary_results <- rbind(summary_results,
+                          add_to_summary(go_bp_down_df, "GO_BP_Down", "Gene Ontology Biological Process (Down)"))
+}
+
+if (exists("go_mf_all_df") && nrow(go_mf_all_df) > 0) {
+  summary_results <- rbind(summary_results,
+                          add_to_summary(go_mf_all_df, "GO_MF_All", "Gene Ontology Molecular Function"))
+}
+
+if (exists("go_cc_all_df") && nrow(go_cc_all_df) > 0) {
+  summary_results <- rbind(summary_results,
+                          add_to_summary(go_cc_all_df, "GO_CC_All", "Gene Ontology Cellular Component"))
+}
+
+# Save comprehensive results
+if (nrow(summary_results) > 0) {
+  summary_results <- summary_results %>%
+    arrange(p.adjust)
+  
+  write_tsv(summary_results, file.path(results_dir, "GO_enrichment_comprehensive_results.tsv"))
+  
+  # Create top 25 results
+  top_results <- summary_results %>%
+    slice_head(n = 25)
+  write_tsv(top_results, file.path(results_dir, "GO_enrichment_top25_results.tsv"))
+  
+  # Create method comparison
+  method_summary <- summary_results %>%
+    group_by(Method) %>%
+    summarize(
+      n_terms = n(),
+      min_pvalue = min(pvalue),
+      mean_pvalue = mean(pvalue),
+      .groups = "drop"
+    )
+  
+  write_tsv(method_summary, file.path(results_dir, "GO_method_comparison.tsv"))
+  
+  # Visualization of method comparison
+  p_methods <- ggplot(method_summary, aes(x = Method, y = n_terms, fill = Method)) +
+    geom_col() +
+    labs(title = "Number of Significant GO Terms by Analysis Method",
+         x = "Analysis Method", 
+         y = "Number of Significant Terms") +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1),
+          legend.position = "none")
+  ggsave(file.path(plots_dir, "GO_method_comparison.png"), p_methods, width = 10, height = 6)
+  
+  cat("\nSummary table created with", nrow(summary_results), "total enriched GO terms\n")
+  cat("Results saved to:", file.path(results_dir, "GO_enrichment_comprehensive_results.tsv"), "\n")
+} else {
+  cat("No significant enrichment results found\n")
+}
+
+# Final summary
+cat("\n=== STEP 5 ANALYSIS COMPLETE ===\n")
+cat("Method: clusterProfiler (PyDESeq2-style approach)\n")
+cat("Ontology: Gene Ontology (BP, MF, CC)\n")
+cat("Parameters used:\n")
+cat("- p-value cutoff: 0.05\n")
+cat("- q-value cutoff: 0.2\n") 
+cat("- Multiple testing correction: Benjamini-Hochberg\n")
+cat("- Gene ID conversion: Ensembl to Entrez\n")
+cat("\nInput:\n")
+cat("- Total DE genes:", length(sig_genes_all), "\n")
+cat("- Upregulated genes:", length(sig_genes_up), "\n")
+cat("- Downregulated genes:", length(sig_genes_down), "\n")
+if (exists("summary_results") && nrow(summary_results) > 0) {
+  cat("\nResults:\n")
+  cat("- Total significant GO terms:", nrow(summary_results), "\n")
+  cat("- Most significant term p-value:", format(min(summary_results$p.adjust), scientific = TRUE), "\n")
+}
 ```
 
 # Section 6
