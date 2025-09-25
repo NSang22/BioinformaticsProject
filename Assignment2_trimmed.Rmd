@@ -71,7 +71,7 @@ if ("Sample" %in% colnames(geo_meta) && "refinebio_title" %in% colnames(refinebi
 }
 
 # Choose how many samples to keep for this run (set to Inf to keep all samples)
-sample_limit <- Inf
+sample_limit <- 25
 
 all_samples <- colnames(expression_df)
 selected_samples <- all_samples
