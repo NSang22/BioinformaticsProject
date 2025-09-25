@@ -17,7 +17,9 @@ if (!("org.Hs.eg.db" %in% installed.packages())) {
 ```
 
 # Section 1
+
 ## Section 1a
+
 ```{r}
 # Attach the library
 library(org.Hs.eg.db)
@@ -162,9 +164,7 @@ ggsave(plot_path, plot=plot_obj, width=6, height=4, dpi=300)
 plot_obj
 ```
 
-The dataset contains `r format(matrix_dim[1], big.mark = ",")` genes measured across `r matrix_dim[2]` samples. The summary statistics show that most genes have low median expression (median ≈ `r round(median(gene_medians), 2)` on the log2 scale), with a long tail of higher expression values (max ≈ `r round(max(gene_medians), 2)`). From our research, this is typical for transcriptome data, where a small number of genes are highly expressed while the majority have low expression. The density plot visualizes this distribution, showing a peak at lower expression values and a gradual decline towards higher values. Log transformation helps to reduce the impact of extreme values and makes the distribution more interpretable.
-# Section 2
-## Section 2a-c
+The dataset contains `r format(matrix_dim[1], big.mark = ",")` genes measured across `r matrix_dim[2]` samples. The summary statistics show that most genes have low median expression (median ≈ `r round(median(gene_medians), 2)` on the log2 scale), with a long tail of higher expression values (max ≈ `r round(max(gene_medians), 2)`). From our research, this is typical for transcriptome data, where a small number of genes are highly expressed while the majority have low expression. The density plot visualizes this distribution, showing a peak at lower expression values and a gradual decline towards higher values. Log transformation helps to reduce the impact of extreme values and makes the distribution more interpretable. \# Section 2 \## Section 2a-c
 
 ```{r}
 library(DESeq2)
@@ -222,6 +222,7 @@ if (!requireNamespace("Rtsne", quietly = TRUE)) install.packages("Rtsne", repos 
 if (!requireNamespace("umap", quietly = TRUE)) install.packages("umap", repos = getOption("repos")[["CRAN"]])
 if (!requireNamespace("matrixStats", quietly = TRUE)) install.packages("matrixStats", repos = getOption("repos")[["CRAN"]])
 ```
+
 ## Section 2d i
 
 ```{r}
@@ -347,23 +348,14 @@ p_umap
 ```
 
 # Section 2e
-Similarities
-	•	All three methods (PCA, t-SNE, UMAP) reduce the high-dimensional gene expression data into 2D, letting us see patterns between samples.
-	•	In each, samples tend to group by Exposure status (or whichever grouping variable you’re using).
-	•	Outliers and variability across samples are visible in all three.
 
-Differences
-	•	PCA: Captures global variance structure, shows the main linear directions of variability. Often looks more “spread out” but may miss subtle clusters.
-	•	t-SNE: Focuses on local structure, separates clusters more strongly. However, distances between clusters aren’t always meaningful (clusters may look far but be closer in high-D space).
-	•	UMAP: Balances global and local structure, sometimes keeps a more interpretable overall shape while still revealing clusters.
+Similarities • All three methods (PCA, t-SNE, UMAP) reduce the high-dimensional gene expression data into 2D, letting us see patterns between samples. • In each, samples tend to group by Exposure status (or whichever grouping variable you’re using). • Outliers and variability across samples are visible in all three.
+
+Differences • PCA: Captures global variance structure, shows the main linear directions of variability. Often looks more “spread out” but may miss subtle clusters. • t-SNE: Focuses on local structure, separates clusters more strongly. However, distances between clusters aren’t always meaningful (clusters may look far but be closer in high-D space). • UMAP: Balances global and local structure, sometimes keeps a more interpretable overall shape while still revealing clusters.
 
 # Section 2f
 
-Findings
-	•	Across all three dimensionality reduction methods, samples show grouping consistent with Exposure categories, suggesting exposure status drives significant variation in gene expression.
-	•	PCA highlights the major global variance, but t-SNE and UMAP give a clearer view of sub-clusters.
-	•	UMAP provides a balance, maintaining both separation of clusters and an interpretable global structure.
-	•	Together, these plots confirm that exposure effects are strong and detectable across different approaches.
+Findings • Across all three dimensionality reduction methods, samples show grouping consistent with Exposure categories, suggesting exposure status drives significant variation in gene expression. • PCA highlights the major global variance, but t-SNE and UMAP give a clearer view of sub-clusters. • UMAP provides a balance, maintaining both separation of clusters and an interpretable global structure. • Together, these plots confirm that exposure effects are strong and detectable across different approaches.
 
 # Section 3a-b
 
@@ -393,7 +385,6 @@ set.seed(12345)
 metadata_file <- file.path(data_dir, "metadata_SRP192714_merged.tsv")
 metadata <- readr::read_tsv(metadata_file)
 ```
-
 
 ```{r }
 # ---- 3a-b: Differential expression: DENV vs Naive ----
@@ -502,6 +493,7 @@ ggsave(file.path(plots_dir, "DE_volcano_DENV_vs_Naive.png"),
        p_volc, width = 7, height = 5, dpi = 300)
 p_volc
 ```
+
 # Section 3c
 
 ```{r}
@@ -628,8 +620,8 @@ if (length(plot_ids) > 0) {
 }
 ```
 
-
 # Section 4a
+
 ```{r}
 # Step 4: Extract significantly differentially expressed genes and generate heatmap
 
@@ -894,23 +886,30 @@ cat("- Files saved:", heatmap_file, "and", heatmap_file_pdf, "\n")
 ```
 
 # Section 5: William Le
-GenomicSuperSignature
-## Install
+
+GenomicSuperSignature\
+\## Install
+
 ```{r Package Install, message = FALSE}
 if (!require("BiocManager"))
     install.packages("BiocManager")
 BiocManager::install("GenomicSuperSignature")
 BiocManager::install("bcellViper")
 ```
+
 ## Libraries
+
 ```{r Attach Packages}
 library(GenomicSuperSignature)
 library(bcellViper)
 # load RAV
 RAVmodel <- getModel("PLIERpriors", load=TRUE)
 ```
+
 ## Data Wrangle Ranked Gene List
-Validate expects a Expression Set or simple matrix.
+
+Validate expects a Expression Set or simple matrix. Below is the counts matrix.
+
 ```{r}
 # Define the file path to the data directory
 data_dir <- file.path("data", "SRP192714")
@@ -950,21 +949,47 @@ cts_matrix <- cts_filtered %>%
 all.equal(colnames(cts_matrix), metadata$refinebio_accession_code)
 ```
 
+Follow the GenomicSuperSignature quick start.
+
 ```{r}
 # Validate on RAV
 validated_list <- GenomicSuperSignature::validate(cts_matrix, RAVmodel)
 head(validated_list)
+validated_list
 
 validated_ind <- validatedSignatures(validated_list, RAVmodel, num.out = 3, 
                                      swCutoff = 0, indexOnly = TRUE)
 ```
+
+Here, the validated_list is a list of principal component genes from the counts matrix referred against the RAVmodel's known genes. This essentially creates a grouping of genes and pathways for further investigation. Any low expression or genes otherwise not in the RAV database are excluded.\
+The validated_ind from the validatedSignatures selects for the most relevant gene groupings/pathways/keywords from the RAV database. This effectively points us in the most effective direction for future study.\
+
 ## Tables
+
 ```{r GSEA}
-annotateRAV(RAVmodel, validated_ind[3])
-heatmapTable(validated_list, RAVmodel)
-meshTable(RAVmodel, validated_ind[2])
+annot_RAV <- annotateRAV(RAVmodel, validated_ind[1])
+GSSmesh <- meshTable(RAVmodel, validated_ind[1])
+GSSheatmap <- heatmapTable(validated_list, RAVmodel)
+annot_RAV
+GSSmesh
+GSSheatmap
+```
+Interestingly, it seems that there is very little correlation between the principle components. At most, the average silhouette width comes to around 0.2. Since correlation is measured from -1 to 1, there suggests some correlation but perhaps not a significant amount.
+Interes
+```{r Save tables}
+output_path <- file.path("results", "annot_RAV.tsv")
+readr::write_tsv(annot_RAV, output_path)
+outpath_path <- file.path("results", "GSSmesh.tsv")
+readr::write_tsv(GSSmesh, output_path)
+output_path <- file.path("results", "GSSheatmap.png")
+png(output_path, width = 800, height = 600)
+GSSheatmap
+dev.off()
+print(paste("Heatmap plot saved to:", output_path))
 ```
 
+
+As seen in the above graphs, the annotated_RAV and meshTables are key words and phrases associated with a specific principle component, while the heatmapTable shows highly correlated RAV groupings themselves.
 
 # Section 5: Nikhil Sangamkar
 
@@ -1318,4 +1343,3 @@ if (exists("summary_results") && nrow(summary_results) > 0) {
 ```{r}
 
 ```
-
