@@ -93,7 +93,7 @@ if ("Sample" %in% colnames(geo_meta) && "refinebio_title" %in% colnames(refinebi
 }
 
 # Choose how many samples to keep for this run (set to Inf to keep all samples)
-sample_limit <- 25
+sample_limit <- 200
 
 all_samples <- colnames(expression_df)
 selected_samples <- all_samples
@@ -184,7 +184,7 @@ ggsave(plot_path, plot=plot_obj, width=6, height=4, dpi=300)
 plot_obj
 ```
 
-The dataset contains `r format(matrix_dim[1], big.mark = ",")` genes measured across `r matrix_dim[2]` samples. The summary statistics show that most genes have low median expression (median $\approx$ `r round(median(gene_medians), 2)` on the log2 scale), with a long tail of higher expression values (max $\approx$ `r round(max(gene_medians), 2)`). From our research, this is typical for transcriptome data, where a small number of genes are highly expressed while the majority have low expression. The density plot visualizes this distribution, showing a peak at lower expression values and a gradual decline towards higher values. Log transformation helps to reduce the impact of extreme values and makes the distribution more interpretable.
+The dataset contains `r format(matrix_dim[1], big.mark = ",")` genes measured across `r matrix_dim[2]` samples. The summary statistics show that most genes have low median expression (median ≈ `r round(median(gene_medians), 2)` on the log2 scale), with a long tail of higher expression values (max ≈ `r round(max(gene_medians), 2)`). From our research, this is typical for transcriptome data, where a small number of genes are highly expressed while the majority have low expression. The density plot visualizes this distribution, showing a peak at lower expression values and a gradual decline towards higher values. Log transformation helps to reduce the impact of extreme values and makes the distribution more interpretable.
 # Section 2
 ## Section 2a-c
 
@@ -211,7 +211,7 @@ if (!exists("data_dir")) {
 }
 
 if (!exists("expression_df") || !exists("merged_meta")) {
-  sample_limit_local <- if (exists("sample_limit")) sample_limit else 25
+  sample_limit_local <- if (exists("sample_limit")) sample_limit else 200
   expression_df <- readr::read_tsv(file.path(data_dir, "SRP192714.tsv"), show_col_types = FALSE) %>%
     tibble::column_to_rownames("Gene")
 
@@ -1218,27 +1218,6 @@ if (length(sig_genes_all) < 5) {
 }
 ```
 
-```{r echo=FALSE}
-kegg_table_path <- if (exists("run_label")) file.path(results_dir, paste0("KEGG_enrichment_", run_label, ".tsv")) else NA_character_
-if (exists("kegg_results_df") && nrow(kegg_results_df) > 0) {
-  cat(sprintf("KEGG enrichment recovered %d pathways; the leading term was %s (adjusted p = %.2g).\n",
-              nrow(kegg_results_df),
-              kegg_results_df$Description[1],
-              kegg_results_df$p.adjust[1]))
-  cat("Full and top-20 tables were written to the results directory with a matching dot plot saved under plots/.\n")
-} else if (!is.na(kegg_table_path) && file.exists(kegg_table_path)) {
-  temp_kegg <- readr::read_tsv(kegg_table_path, show_col_types = FALSE)
-  if (nrow(temp_kegg) > 0) {
-    cat(sprintf("KEGG enrichment results loaded from %s include %d pathways; top hit %s (adjusted p = %.2g).\n",
-                basename(kegg_table_path), nrow(temp_kegg), temp_kegg$Description[1], temp_kegg$p.adjust[1]))
-  } else {
-    cat("KEGG enrichment file was created but contains no significant pathways at the chosen cutoffs.\n")
-  }
-} else {
-  cat("Run the KEGG enrichment chunk above to populate Nikhil's pathways before consolidating results in Section 6.\n")
-}
-```
-
 # Section 5: Taylor Tillander
 
 ```{r}
@@ -1634,10 +1613,10 @@ if (nrow(summary_results) > 0) {
   
   write_tsv(summary_results, file.path(results_dir, "GO_enrichment_comprehensive_results.tsv"))
   
-  # Create top 25 results
+  # Create top 200 results
   top_results <- summary_results %>%
-    slice_head(n = 25)
-  write_tsv(top_results, file.path(results_dir, "GO_enrichment_top25_results.tsv"))
+    slice_head(n = 200)
+  write_tsv(top_results, file.path(results_dir, "GO_enrichment_top200_results.tsv"))
   
   # Create method comparison
   method_summary <- summary_results %>%
