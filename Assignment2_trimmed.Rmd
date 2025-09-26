@@ -1137,7 +1137,101 @@ if (length(gss_indices) > 0) {
 # Section 5: Nikhil Sangamkar
 
 ```{r}
+if (!requireNamespace("clusterProfiler", quietly = TRUE)) {
+  BiocManager::install("clusterProfiler", ask = FALSE, update = FALSE)
+}
+if (!requireNamespace("org.Hs.eg.db", quietly = TRUE)) {
+  BiocManager::install("org.Hs.eg.db", ask = FALSE, update = FALSE)
+}
+if (!requireNamespace("enrichplot", quietly = TRUE)) {
+  BiocManager::install("enrichplot", ask = FALSE, update = FALSE)
+}
 
+suppressPackageStartupMessages({
+  library(clusterProfiler)
+  library(org.Hs.eg.db)
+  library(enrichplot)
+  library(dplyr)
+  library(readr)
+  library(ggplot2)
+})
+
+stopifnot(exists("res_df"), exists("results_dir"), exists("plots_dir"))
+
+sig_genes_all <- res_df %>%
+  filter(!is.na(padj) & padj < 0.05) %>%
+  pull(GeneID)
+
+if (length(sig_genes_all) < 5) {
+  warning("Fewer than five significant genes available; skipping KEGG enrichment.")
+} else {
+  clean_ids <- gsub("\\.\\d+$", "", sig_genes_all)
+  entrez_map <- bitr(unique(clean_ids),
+                     fromType = "ENSEMBL",
+                     toType = "ENTREZID",
+                     OrgDb = org.Hs.eg.db,
+                     drop = TRUE)
+  entrez_ids <- unique(entrez_map$ENTREZID)
+
+  if (length(entrez_ids) < 5) {
+    warning("Not enough Entrez IDs mapped for KEGG enrichment.")
+  } else {
+    kegg_enrich <- suppressWarnings(
+      enrichKEGG(
+        gene = entrez_ids,
+        organism = "hsa",
+        keyType = "ncbi-geneid",
+        pvalueCutoff = 0.05,
+        qvalueCutoff = 0.2
+      )
+    )
+
+    if (is.null(kegg_enrich) || nrow(as.data.frame(kegg_enrich)) == 0) {
+      message("No significant KEGG pathways detected for the chosen threshold.")
+    } else {
+      kegg_enrich <- setReadable(kegg_enrich, OrgDb = org.Hs.eg.db, keyType = "ENTREZID")
+      kegg_df <- as.data.frame(kegg_enrich)
+
+      if (!dir.exists(results_dir)) dir.create(results_dir, recursive = TRUE)
+      if (!dir.exists(plots_dir)) dir.create(plots_dir, recursive = TRUE)
+
+      kegg_path <- file.path(results_dir, paste0("KEGG_enrichment_", run_label, ".tsv"))
+      readr::write_tsv(kegg_df, kegg_path)
+
+      top_kegg <- kegg_df %>% slice_head(n = 20)
+      readr::write_tsv(top_kegg, file.path(results_dir, paste0("KEGG_enrichment_top20_", run_label, ".tsv")))
+
+      kegg_dot <- dotplot(kegg_enrich, showCategory = min(15, nrow(kegg_df))) +
+        labs(title = "KEGG Pathway Enrichment", subtitle = paste0("Nikhil Sangamkar (", run_label, ")")) +
+        theme(axis.text.y = element_text(size = 8))
+      ggsave(file.path(plots_dir, paste0("KEGG_enrichment_dotplot_", run_label, ".png")),
+             kegg_dot, width = 10, height = 7, dpi = 300)
+
+      assign("kegg_results_df", kegg_df, envir = .GlobalEnv)
+    }
+  }
+}
+```
+
+```{r echo=FALSE}
+kegg_table_path <- if (exists("run_label")) file.path(results_dir, paste0("KEGG_enrichment_", run_label, ".tsv")) else NA_character_
+if (exists("kegg_results_df") && nrow(kegg_results_df) > 0) {
+  cat(sprintf("KEGG enrichment recovered %d pathways; the leading term was %s (adjusted p = %.2g).\n",
+              nrow(kegg_results_df),
+              kegg_results_df$Description[1],
+              kegg_results_df$p.adjust[1]))
+  cat("Full and top-20 tables were written to the results directory with a matching dot plot saved under plots/.\n")
+} else if (!is.na(kegg_table_path) && file.exists(kegg_table_path)) {
+  temp_kegg <- readr::read_tsv(kegg_table_path, show_col_types = FALSE)
+  if (nrow(temp_kegg) > 0) {
+    cat(sprintf("KEGG enrichment results loaded from %s include %d pathways; top hit %s (adjusted p = %.2g).\n",
+                basename(kegg_table_path), nrow(temp_kegg), temp_kegg$Description[1], temp_kegg$p.adjust[1]))
+  } else {
+    cat("KEGG enrichment file was created but contains no significant pathways at the chosen cutoffs.\n")
+  }
+} else {
+  cat("Run the KEGG enrichment chunk above to populate Nikhil's pathways before consolidating results in Section 6.\n")
+}
 ```
 
 # Section 5: Taylor Tillander
@@ -1670,6 +1764,44 @@ if (exists("summary_results") && nrow(summary_results) > 0) {
       ) %>%
       mutate(significant = ifelse(!is.na(adj_p_value), adj_p_value < 0.05, ifelse(!is.na(p_value), p_value < 0.05, FALSE)))
     enrichment_tables <- append(enrichment_tables, list(cp_long))
+  }
+}
+
+# clusterProfiler KEGG results
+if (exists("kegg_results_df") && nrow(kegg_results_df) > 0) {
+  method_label <- if (exists("run_label")) paste0("KEGG_", run_label) else "KEGG_current_run"
+  kegg_long <- kegg_results_df %>%
+    transmute(
+      source_method = "clusterProfiler",
+      method_detail = method_label,
+      term_id = ID,
+      term_name = Description,
+      p_value = as.numeric(pvalue),
+      adj_p_value = as.numeric(p.adjust),
+      q_value = as.numeric(qvalue)
+    ) %>%
+    mutate(significant = ifelse(!is.na(adj_p_value), adj_p_value < 0.05, ifelse(!is.na(p_value), p_value < 0.05, FALSE)))
+  enrichment_tables <- append(enrichment_tables, list(kegg_long))
+} else {
+  kegg_files <- list.files(results_dir, pattern = "^KEGG_enrichment_.*\\.tsv$", full.names = TRUE)
+  kegg_files <- kegg_files[!grepl("_top20_", kegg_files)]
+  if (length(kegg_files) > 0) {
+    kegg_tables <- purrr::map(kegg_files, ~{
+      df <- readr::read_tsv(.x, show_col_types = FALSE)
+      method_label <- tools::file_path_sans_ext(basename(.x))
+      df %>%
+        transmute(
+          source_method = "clusterProfiler",
+          method_detail = method_label,
+          term_id = ID,
+          term_name = Description,
+          p_value = as.numeric(pvalue),
+          adj_p_value = as.numeric(p.adjust),
+          q_value = as.numeric(qvalue)
+        ) %>%
+        mutate(significant = ifelse(!is.na(adj_p_value), adj_p_value < 0.05, ifelse(!is.na(p_value), p_value < 0.05, FALSE)))
+    })
+    enrichment_tables <- append(enrichment_tables, kegg_tables)
   }
 }
 
