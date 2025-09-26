@@ -184,7 +184,7 @@ ggsave(plot_path, plot=plot_obj, width=6, height=4, dpi=300)
 plot_obj
 ```
 
-The dataset contains `r format(matrix_dim[1], big.mark = ",")` genes measured across `r matrix_dim[2]` samples. The summary statistics show that most genes have low median expression (median ≈ `r round(median(gene_medians), 2)` on the log2 scale), with a long tail of higher expression values (max ≈ `r round(max(gene_medians), 2)`). From our research, this is typical for transcriptome data, where a small number of genes are highly expressed while the majority have low expression. The density plot visualizes this distribution, showing a peak at lower expression values and a gradual decline towards higher values. Log transformation helps to reduce the impact of extreme values and makes the distribution more interpretable. \# Section 2 \## Section 2a-c
+The dataset contains `r format(matrix_dim[1], big.mark = ",")` genes measured across `r matrix_dim[2]` samples. The summary statistics show that most genes have low median expression (median $\\approx$ `r round(median(gene_medians), 2)` on the log2 scale), with a long tail of higher expression values (max $\\approx$ `r round(max(gene_medians), 2)`). From our research, this is typical for transcriptome data, where a small number of genes are highly expressed while the majority have low expression. The density plot visualizes this distribution, showing a peak at lower expression values and a gradual decline towards higher values. Log transformation helps to reduce the impact of extreme values and makes the distribution more interpretable. \# Section 2 \## Section 2a-c
 
 ```{r}
 suppressPackageStartupMessages({
