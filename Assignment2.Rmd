@@ -1007,7 +1007,7 @@ RAVmodel <- getModel("PLIERpriors", load=TRUE)
 
 ## Data Wrangle Ranked Gene List
 
-Validate expects a Expression Set or simple matrix. Below is the counts matrix.
+Validate expects a Expression Set or simple matrix.
 
 ```{r}
 # Define the file path to the data directory
@@ -1017,7 +1017,17 @@ data_dir <- file.path("data", "SRP192714")
 data_file <- file.path(data_dir, "SRP192714.tsv")
 
 # Read in data TSV file
-expression_df <- readr::read_tsv(data_file)
+expression_df <- readr::read_tsv(data_file, show_col_types = FALSE)
+
+# Respect trimmed runs by subsetting to the current sample selection when available
+if (exists("selected_samples")) {
+  sample_cols <- intersect(selected_samples, colnames(expression_df))
+  if (length(sample_cols) == 0) {
+    stop("No overlap between selected_samples and expression matrix columns for GenomicSuperSignature chunk.")
+  }
+  expression_df <- expression_df %>%
+    dplyr::select(dplyr::any_of(c("Gene", sample_cols)))
+}
 
 # Ensemble to Gene Name
 mapped_list <- mapIds(
@@ -1032,9 +1042,16 @@ mapped_df <- mapped_list %>%
   # This will result in one row of our data frame per list item
   tidyr::unnest(cols = Gene)
 # Join then remove Ensembl
-cts <- mapped_df %>%
-  dplyr::inner_join(expression_df, by = join_by(Ensembl == Gene)) %>%
-  dplyr::select(-Ensembl)
+cts <- tryCatch(
+  {
+    mapped_df %>%
+      dplyr::inner_join(expression_df, by = c("Ensembl" = "Gene")) %>%
+      dplyr::select(-Ensembl)
+  }, error = function(e) {
+    merged <- merge(mapped_df, expression_df, by.x = "Ensembl", by.y = "Gene", all.x = FALSE, all.y = FALSE)
+    tibble::as_tibble(merged) %>% dplyr::select(-Ensembl)
+  }
+)
 # Filter for na
 cts_filtered <- cts %>%
   tidyr::drop_na(Gene)
@@ -1044,6 +1061,20 @@ cts_matrix <- cts_filtered %>%
   dplyr::summarise(across(everything(), sum)) %>%
   tibble::column_to_rownames("Gene") %>%
   as.matrix()
+
+# Ensure columns retain trimmed ordering and align with metadata when present
+if (exists("selected_samples")) {
+  keep_order <- intersect(selected_samples, colnames(cts_matrix))
+  if (length(keep_order) > 0) {
+    cts_matrix <- cts_matrix[, keep_order, drop = FALSE]
+  }
+}
+if (exists("metadata")) {
+  meta_order <- intersect(metadata$refinebio_accession_code, colnames(cts_matrix))
+  if (length(meta_order) > 0) {
+    cts_matrix <- cts_matrix[, meta_order, drop = FALSE]
+  }
+}
 # Check if this is in the same order
 all.equal(colnames(cts_matrix), metadata$refinebio_accession_code)
 ```
