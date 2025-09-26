@@ -3,5 +3,4 @@ data/*
 .Rhistory
 *.gz
 *.json
-results/*
-*.tsv
+results/SRP192714_Symbols.tsv

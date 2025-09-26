@@ -1,0 +1,2 @@
+category	subcategory	ID	Description	GeneRatio	BgRatio	RichFactor	FoldEnrichment	zScore	pvalue	p.adjust	qvalue	geneID	Count
+Human Diseases	Immune disease	hsa05332	Graft-versus-host disease	3/29	45/9446	0.06666666666666667	21.714942528735634	7.729415578815621	3.385578940219028e-4	0.04705954726904449	0.037775933438233364	HLA-A/FAS/KLRD1	3

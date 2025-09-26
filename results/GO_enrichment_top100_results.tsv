@@ -1,0 +1,27 @@
+Method	Ontology	ID	Description	pvalue	p.adjust	qvalue	Count	GeneRatio	BgRatio
+GO_BP_Up	Gene Ontology Biological Process (Up)	GO:0070266	necroptotic process	3.042172443881219e-5	0.023820210235589945	0.01716425715705614	3	3/24	48/18805
+GO_BP_Up	Gene Ontology Biological Process (Up)	GO:0097300	programmed necrotic cell death	6.26169591264378e-5	0.0245145394980004	0.017664573732510874	3	3/24	61/18805
+GO_BP_All	Gene Ontology Biological Process	GO:0031952	regulation of protein autophosphorylation	3.635336331523607e-5	0.026574573081468118	0.0216988643950994	3	3/42	29/18805
+GO_BP_All	Gene Ontology Biological Process	GO:0051338	regulation of transferase activity	6.70662619138549e-5	0.026574573081468118	0.0216988643950994	7	7/42	463/18805
+GO_BP_All	Gene Ontology Biological Process	GO:0010562	positive regulation of phosphorus metabolic process	9.934419843539483e-5	0.026574573081468118	0.0216988643950994	7	7/42	493/18805
+GO_BP_All	Gene Ontology Biological Process	GO:0045937	positive regulation of phosphate metabolic process	9.934419843539483e-5	0.026574573081468118	0.0216988643950994	7	7/42	493/18805
+GO_BP_All	Gene Ontology Biological Process	GO:0033674	positive regulation of kinase activity	1.3341022054003064e-4	0.028549787195566556	0.02331168064173167	5	5/42	223/18805
+GO_BP_All	Gene Ontology Biological Process	GO:0070266	necroptotic process	1.6707169531395406e-4	0.029794452330988475	0.024327983703610858	3	3/42	48/18805
+GO_BP_All	Gene Ontology Biological Process	GO:0051347	positive regulation of transferase activity	2.870493353624544e-4	0.038217774793109366	0.031205856446906818	5	5/42	263/18805
+GO_BP_All	Gene Ontology Biological Process	GO:0001934	positive regulation of protein phosphorylation	2.944579652452816e-4	0.038217774793109366	0.031205856446906818	6	6/42	414/18805
+GO_BP_All	Gene Ontology Biological Process	GO:0097300	programmed necrotic cell death	3.407039856942246e-4	0.038217774793109366	0.031205856446906818	3	3/42	61/18805
+GO_BP_All	Gene Ontology Biological Process	GO:1903409	reactive oxygen species biosynthetic process	3.574729703270612e-4	0.038217774793109366	0.031205856446906818	3	3/42	62/18805
+GO_BP_All	Gene Ontology Biological Process	GO:0042327	positive regulation of phosphorylation	3.928930118917786e-4	0.038217774793109366	0.031205856446906818	6	6/42	437/18805
+GO_CC_All	Gene Ontology Cellular Component	GO:0045121	membrane raft	4.912560998832738e-4	0.04181032250599041	0.03174116987695604	5	5/45	291/19880
+GO_CC_All	Gene Ontology Cellular Component	GO:0098857	membrane microdomain	5.067917879513989e-4	0.04181032250599041	0.03174116987695604	5	5/45	293/19880
+GO_BP_Up	Gene Ontology Biological Process (Up)	GO:1902916	positive regulation of protein polyubiquitination	2.3587779036973267e-4	0.044549468523638565	0.03210125042504573	2	2/24	18/18805
+GO_BP_Up	Gene Ontology Biological Process (Up)	GO:1903428	positive regulation of reactive oxygen species biosynthetic process	2.9246378100169997e-4	0.044549468523638565	0.03210125042504573	2	2/24	20/18805
+GO_BP_Up	Gene Ontology Biological Process (Up)	GO:0010562	positive regulation of phosphorus metabolic process	3.4137523772903117e-4	0.044549468523638565	0.03210125042504573	5	5/24	493/18805
+GO_BP_Up	Gene Ontology Biological Process (Up)	GO:0045937	positive regulation of phosphate metabolic process	3.4137523772903117e-4	0.044549468523638565	0.03210125042504573	5	5/24	493/18805
+GO_BP_Up	Gene Ontology Biological Process (Up)	GO:0033209	tumor necrosis factor-mediated signaling pathway	4.4275639041096174e-4	0.04567994340644019	0.03291584279875236	3	3/24	118/18805
+GO_BP_Up	Gene Ontology Biological Process (Up)	GO:0031952	regulation of protein autophosphorylation	6.205809121230397e-4	0.04567994340644019	0.03291584279875236	2	2/24	29/18805
+GO_BP_Up	Gene Ontology Biological Process (Up)	GO:1902914	regulation of protein polyubiquitination	6.205809121230397e-4	0.04567994340644019	0.03291584279875236	2	2/24	29/18805
+GO_BP_Up	Gene Ontology Biological Process (Up)	GO:1903322	positive regulation of protein modification by small protein conjugation or removal	6.278938641180242e-4	0.04567994340644019	0.03291584279875236	3	3/24	133/18805
+GO_BP_Up	Gene Ontology Biological Process (Up)	GO:1901875	positive regulation of post-translational protein modification	6.417361142667204e-4	0.04567994340644019	0.03291584279875236	3	3/24	134/18805
+GO_BP_All	Gene Ontology Biological Process	GO:0016045	detection of bacterium	5.72887737216906e-4	0.04852109348043042	0.03961879743114339	2	2/42	16/18805
+GO_BP_All	Gene Ontology Biological Process	GO:0046777	protein autophosphorylation	5.895086123790612e-4	0.04852109348043042	0.03961879743114339	4	4/42	173/18805

@@ -1,0 +1,11 @@
+GO.ID	Term	Annotated	Significant	Expected	Rank in weight01Fisher	classicFisher	weight01Fisher	classicFisher_p	weight01Fisher_p	neglog_weight01
+GO:0032815	negative regulation of natural killer ce...	10	2	0.04	1	0.00055	0.00055	5.5e-4	5.5e-4	3.2596373105057563
+GO:0071803	positive regulation of podosome assembly	10	2	0.04	2	0.00055	0.00055	5.5e-4	5.5e-4	3.2596373105057563
+GO:0098974	postsynaptic actin cytoskeleton organiza...	15	2	0.05	3	0.00126	0.00126	0.00126	0.00126	2.899629454882437
+GO:1903428	positive regulation of reactive oxygen s...	15	2	0.05	4	0.00126	0.00126	0.00126	0.00126	2.899629454882437
+GO:1900242	regulation of synaptic vesicle endocytos...	22	2	0.08	5	0.00273	0.00273	0.00273	0.00273	2.563837352959244
+GO:0030048	actin filament-based movement	135	4	0.48	6	0.00134	0.00283	0.00134	0.00283	2.54821356447571
+GO:0002053	positive regulation of mesenchymal cell ...	25	2	0.09	7	0.00353	0.00353	0.00353	0.00353	2.452225294612177
+GO:0150105	protein localization to cell-cell juncti...	25	2	0.09	8	0.00353	0.00353	0.00353	0.00353	2.452225294612177
+GO:0001738	morphogenesis of a polarized epithelium	53	3	0.19	9	0.00088	0.00523	8.8e-4	0.00523	2.281498311132726
+GO:0007165	signal transduction	5545	31	19.68	10	0.00181	0.00566	0.00181	0.00566	2.2471835688117285
