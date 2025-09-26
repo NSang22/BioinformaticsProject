@@ -1,6 +1,6 @@
-data/SRP192714/SRP192714.tsv
+data/*
 .Rproj.user
 .Rhistory
 *.gz
 *.json
-results/*
+results/SRP192714_Symbols.tsv

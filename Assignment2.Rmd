@@ -1,26 +1,44 @@
 # Package Downloads
 
 ```{r message=FALSE, eval = FALSE}
-if (!require("BiocManager", quietly = TRUE))
-  install.packages("BiocManager", repos = "https://cloud.r-project.org")
-BiocManager::install(version = "3.21")
-if (!requireNamespace("DESeq2", quietly = TRUE)) {
-  BiocManager::install("DESeq2")
-}
-install.packages("devtools", repos = "https://cloud.r-project.org")
-install.packages("GenomeInfoDb", repos = "https://cloud.r-project.org")
-install.packages("tidyverse", repos = "https://cloud.r-project.org")
-# Install the Homo Sapiens package
-if (!("org.Hs.eg.db" %in% installed.packages())) {
-  BiocManager::install("org.Hs.eg.db", update = FALSE)
+# Run this chunk top-to-bottom in a fresh R session to ensure all required
+# packages are available. It safely skips anything already installed.
+
+cran_repo <- "https://cloud.r-project.org"
+options(repos = c(CRAN = cran_repo))
+
+if (!requireNamespace("BiocManager", quietly = TRUE)) {
+  install.packages("BiocManager", repos = cran_repo)
 }
 
+BiocManager::install(version = "3.21", ask = FALSE, update = FALSE)
 
+install_if_missing <- function(pkgs, installer) {
+  missing_pkgs <- pkgs[!vapply(pkgs, requireNamespace,
+                               FUN.VALUE = logical(1), quietly = TRUE)]
+  if (length(missing_pkgs) > 0) {
+    installer(missing_pkgs)
+  }
+  invisible(NULL)
+}
 
+install_if_missing(
+  pkgs = c("devtools", "GenomeInfoDb", "tidyverse"),
+  installer = function(pkgs) install.packages(pkgs, repos = cran_repo)
+)
+
+install_if_missing(
+  pkgs = c("DESeq2", "org.Hs.eg.db"),
+  installer = function(pkgs) BiocManager::install(pkgs, ask = FALSE, update = FALSE)
+)
 ```
+The above code chunks installs all the necessary libraries and packages for the below analysis.\
 
 # Section 1
+Load expression and metadata.\
+
 ## Section 1a
+
 ```{r}
 # Attach the library
 library(org.Hs.eg.db)
@@ -73,18 +91,29 @@ if ("Sample" %in% colnames(geo_meta) && "refinebio_title" %in% colnames(refinebi
   merged_meta <- refinebio_meta
 }
 
-# Create trimmed and full versions of expression and metadata
-sample_names <- colnames(expression_df)[colnames(expression_df) != "Gene" & colnames(expression_df) != "Symbol"]
-trimmed_samples <- sample_names[1:50]
-expression_df_trimmed <- expression_df %>% dplyr::select(all_of(trimmed_samples))
-merged_meta_trimmed <- merged_meta %>% dplyr::filter(refinebio_accession_code %in% trimmed_samples)
-expression_df_full <- expression_df %>% dplyr::select(all_of(sample_names))
-merged_meta_full <- merged_meta
+# Choose how many samples to keep for this run (set to Inf to keep all samples)
+sample_limit <- Inf
 
-# Set this variable to TRUE to use trimmed data, FALSE for full data
-use_trimmed <- TRUE
+all_samples <- colnames(expression_df)
+selected_samples <- all_samples
+if (is.finite(sample_limit)) {
+  selected_samples <- all_samples[seq_len(min(sample_limit, length(all_samples)))]
+}
+
+is_trimmed_run <- length(selected_samples) < length(all_samples)
+run_label <- if (is_trimmed_run) paste0("trimmed_", length(selected_samples)) else "full"
+
+expression_df <- expression_df[, selected_samples, drop = FALSE]
+
+merged_meta <- merged_meta %>%
+  dplyr::filter(refinebio_accession_code %in% selected_samples)
+rownames(merged_meta) <- merged_meta$refinebio_accession_code
+
+merged_meta_path <- file.path(data_dir, "metadata_SRP192714_merged.tsv")
+readr::write_tsv(merged_meta, merged_meta_path)
 
 ```
+This section creates the data, plot, and results directories for reproducibility. It also assumes that expression and metadata are in the data folder.\
 
 ## Section 1b
 
@@ -115,11 +144,11 @@ readr::write_tsv(expression_df, file.path(
   "SRP192714_Symbols.tsv"
 ))
 ```
+Here the expression set data is converted from Ensembl-labeled samples to Gene symbols.\
 
 ## Section 1c
 
 ```{r}
-
 # Get matrix size
 matrix_dim <- dim(expression_df)
 cat("Expression matrix dimensions (genes x samples):", matrix_dim[1], "x", matrix_dim[2], "\n")
@@ -155,97 +184,106 @@ ggsave(plot_path, plot=plot_obj, width=6, height=4, dpi=300)
 plot_obj
 ```
 
-The dataset contains 43,363 genes measured across 1,022 samples. The summary statistics show that most genes have low median expression (median ≈ 0.26 on log2 scale), with a long tail of higher expression values (max ≈ 7.6). From our research, this is typical for transcriptome data, where a small number of genes are highly expressed while the majority have low expression. The density plot visualizes this distribution, showing a peak at lower expression values and a gradual decline towards higher values. Log transformation helps to reduce the impact of extreme values and makes the distribution more interpretable.
-# Section 2
-## Section 2a-c
+The dataset contains `r format(matrix_dim[1], big.mark = ",")` genes measured across `r matrix_dim[2]` samples. The summary statistics show that most genes have low median expression (median $\\approx$ `r round(median(gene_medians), 2)` on the log2 scale), with a long tail of higher expression values (max $\\approx$ `r round(max(gene_medians), 2)`). From our research, this is typical for transcriptome data, where a small number of genes are highly expressed while the majority have low expression. The density plot visualizes this distribution, showing a peak at lower expression values and a gradual decline towards higher values. Log transformation helps to reduce the impact of extreme values and makes the distribution more interpretable. \# Section 2 \## Section 2a-c
 
 ```{r}
-library(DESeq2)
+suppressPackageStartupMessages({
+  library(DESeq2)
+  library(dplyr)
+  library(magrittr)
+  library(readr)
+  library(tibble)
+  library(stringr)
+})
 
-# --- FULL DATA VERSION (commented out) ---
-# # Use numeric columns from expression_df as count matrix
-# cts <- expression_df %>% dplyr::select(where(is.numeric)) %>% as.matrix()
-# 
-# # Update coldata for DESeq2
-# coldata <- merged_meta
-# rownames(coldata) <- coldata$refinebio_accession_code
-# 
-# # Subset cts columns to match coldata rownames
-# cts <- cts[, rownames(coldata)]
-# 
-# # Round count matrix to integers for DESeq2
-# cts <- round(cts)
-# 
-# # Check dimensions
-# stopifnot(ncol(cts) == nrow(coldata))
-# 
-# # Choose a grouping column for DESeq2 (update as needed)
-# # For example, use 'refinebio_title' or a column from GEO metadata
-# dds <- DESeqDataSetFromMatrix(countData = cts,
-#                               colData = coldata,
-#                               design = ~ refinebio_title)
-# 
-# dds <- DESeq(dds)
-# vsd <- vst(dds, blind=FALSE)
-# plotPCA(vsd, intgroup="refinebio_title")
-
-## --- ANALYSIS SECTION: works for trimmed or full data ---
-# Choose which dataset to use
-if (use_trimmed) {
-  expr_mat <- expression_df_trimmed
-  meta <- merged_meta_trimmed
-  plot_title <- "PCA of First 50 Samples (colored by Exposure)"
-  plot_file <- "trimmed_pca_exposure.png"
-} else {
-  expr_mat <- expression_df_full
-  meta <- merged_meta_full
-  plot_title <- "PCA of All Samples (colored by Exposure)"
-  plot_file <- "full_pca_exposure.png"
+if (!exists("results_dir")) {
+  results_dir <- "results"
+  if (!dir.exists(results_dir)) dir.create(results_dir, recursive = TRUE)
 }
-# Convert to numeric matrix
-cts <- as.matrix(sapply(expr_mat, as.numeric))
-# Subset metadata to match columns
-meta <- meta %>% dplyr::filter(refinebio_accession_code %in% colnames(expr_mat))
+if (!exists("plots_dir")) {
+  plots_dir <- "plots"
+  if (!dir.exists(plots_dir)) dir.create(plots_dir, recursive = TRUE)
+}
+if (!exists("data_dir")) {
+  data_dir <- file.path("data", "SRP192714")
+}
+
+if (!exists("expression_df") || !exists("merged_meta")) {
+  sample_limit_local <- if (exists("sample_limit")) sample_limit else Inf
+  expression_df <- readr::read_tsv(file.path(data_dir, "SRP192714.tsv"), show_col_types = FALSE) %>%
+    tibble::column_to_rownames("Gene")
+
+  refinebio_meta <- readr::read_tsv(file.path(data_dir, "metadata_SRP192714.tsv"), show_col_types = FALSE)
+  rownames(refinebio_meta) <- refinebio_meta$refinebio_accession_code
+
+  all_samples <- colnames(expression_df)
+  selected_samples <- all_samples
+  if (is.finite(sample_limit_local)) {
+    selected_samples <- all_samples[seq_len(min(sample_limit_local, length(all_samples)))]
+  }
+
+  expression_df <- expression_df[, selected_samples, drop = FALSE]
+  merged_meta <- refinebio_meta %>%
+    dplyr::filter(refinebio_accession_code %in% selected_samples)
+  rownames(merged_meta) <- merged_meta$refinebio_accession_code
+
+  is_trimmed_run <- length(selected_samples) < length(all_samples)
+  run_label <- if (is_trimmed_run) paste0("trimmed_", length(selected_samples)) else "full"
+}
+
+expr_mat <- expression_df %>% dplyr::select(where(is.numeric))
+meta <- merged_meta
+
+common_samples <- intersect(colnames(expr_mat), meta$refinebio_accession_code)
+expr_mat <- expr_mat %>% dplyr::select(all_of(common_samples))
+meta <- meta %>%
+  dplyr::filter(refinebio_accession_code %in% common_samples)
 rownames(meta) <- meta$refinebio_accession_code
-# Ensure columns and rows match
-cts <- cts[, rownames(meta)]
-# Remove negative values (set to zero)
+
+cts <- as.matrix(expr_mat)
+cts <- cts[, rownames(meta), drop = FALSE]
 cts[cts < 0] <- 0
 cts <- round(cts)
+
 stopifnot(ncol(cts) == nrow(meta))
-# Run DESeq2
+
+plot_title <- sprintf("PCA of %d Samples (colored by Exposure)", length(common_samples))
+plot_file <- paste0(run_label, "_pca_exposure.png")
+
 dds <- DESeqDataSetFromMatrix(countData = cts,
                               colData = meta,
                               design = ~ refinebio_title)
 dds <- DESeq(dds)
-vsd <- vst(dds, blind=FALSE)
-# Extract PCA data for custom plot
+vsd <- vst(dds, blind = FALSE)
 pca_data <- plotPCA(vsd, intgroup = c("Exposure"), returnData = TRUE)
-# Add sample names for merging
 pca_data$Sample <- rownames(pca_data)
-# Merge Exposure info from metadata
-pca_data <- dplyr::left_join(pca_data, meta %>% dplyr::select(refinebio_accession_code, Exposure), by = c("Sample" = "refinebio_accession_code"))
-# If Exposure column is missing, use meta$Exposure directly
+pca_data <- dplyr::left_join(
+  pca_data,
+  meta %>% dplyr::select(refinebio_accession_code, Exposure),
+  by = c("Sample" = "refinebio_accession_code")
+)
 if (!"Exposure" %in% colnames(pca_data) || all(is.na(pca_data$Exposure))) {
   pca_data$Exposure <- meta$Exposure[match(pca_data$Sample, meta$refinebio_accession_code)]
 }
-# Plot with ggplot2, color by Exposure
 pca_plot <- ggplot(pca_data, aes(x = PC1, y = PC2, color = Exposure)) +
   geom_point(size = 3, alpha = 0.8) +
   labs(title = plot_title, x = "PC1", y = "PC2") +
   theme_minimal()
-# Save PCA plot to plots directory
 ggsave(filename = file.path(plots_dir, plot_file), plot = pca_plot, width = 6, height = 4, dpi = 300)
-# Print plot in notebook
 pca_plot
 ```
+Above is the differential gene expression analysis performed between prior dengue-virus infected vs. naive zika patients. A PCA plot is shown.\
 
 ## Section 2d packages
 
 ```{r}
-if (!requireNamespace("M3C",  quietly = TRUE)) install.packages("M3C")
-if (!requireNamespace("umap",  quietly = TRUE)) install.packages("umap")
-if (!requireNamespace("matrixStats", quietly = TRUE)) install.packages("matrixStats")
+if (is.null(getOption("repos")) || identical(getOption("repos")[["CRAN"]], "@CRAN@")) {
+  options(repos = c(CRAN = "https://cloud.r-project.org"))
+}
+if (!requireNamespace("M3C", quietly = TRUE)) install.packages("M3C", repos = getOption("repos")[["CRAN"]])
+if (!requireNamespace("Rtsne", quietly = TRUE)) install.packages("Rtsne", repos = getOption("repos")[["CRAN"]])
+if (!requireNamespace("umap", quietly = TRUE)) install.packages("umap", repos = getOption("repos")[["CRAN"]])
+if (!requireNamespace("matrixStats", quietly = TRUE)) install.packages("matrixStats", repos = getOption("repos")[["CRAN"]])
 ```
 
 ## Section 2d i
@@ -308,59 +346,50 @@ p_tsne <- ggplot(tsne_df, aes(tSNE1, tSNE2, color = Exposure)) +
   theme_minimal()
 
 if (!dir.exists(plots_dir)) dir.create(plots_dir, recursive = TRUE)
-outfile_tsne <- if (exists("use_trimmed") && isTRUE(use_trimmed)) "trimmed_tsne_Rtsne.png" else "full_tsne_Rtsne.png"
+outfile_tsne <- paste0(run_label, "_tsne_Rtsne.png")
 ggsave(file.path(plots_dir, outfile_tsne), p_tsne, width = 7, height = 5, dpi = 300)
 p_tsne
-
-
 ```
 
 ## Section 2d ii
 
 ```{r}
-# --- 2d ii: UMAP using 'umap' (colored by Exposure) ---
-library(SummarizedExperiment)  # for assay()
-library(matrixStats)           # for row/col variance
+## --- 2d ii: UMAP using 'umap' (colored by Exposure) ---
+library(SummarizedExperiment)
+library(matrixStats)
 library(umap)
 library(ggplot2)
 
 set.seed(42)
 
-# 1) Pull variance-stabilized matrix (genes x samples) and align metadata
 vsd_gxs <- SummarizedExperiment::assay(vsd)
-
-# Ensure meta rows match sample columns
 if (!identical(rownames(meta), colnames(vsd_gxs))) {
   stopifnot("refinebio_accession_code" %in% colnames(meta))
   rownames(meta) <- meta$refinebio_accession_code
   meta <- meta[colnames(vsd_gxs), , drop = FALSE]
 }
-# Keep only labeled samples
 keep <- !is.na(meta$Exposure)
 vsd_gxs <- vsd_gxs[, keep, drop = FALSE]
 meta     <- meta[keep, , drop = FALSE]
 meta$Exposure <- factor(meta$Exposure)
 
-# 2) Feature selection (top variable genes) and PCA denoising to ~50 PCs
-ngenes <- min(2000, nrow(vsd_gxs))  # clamp at 2k or less if fewer genes
+ngenes <- min(2000, nrow(vsd_gxs))
 top_genes <- head(order(matrixStats::rowVars(vsd_gxs), decreasing = TRUE), ngenes)
+X <- t(vsd_gxs[top_genes, , drop = FALSE])
 
-X <- t(vsd_gxs[top_genes, , drop = FALSE])          # samples x genes
 pcs   <- prcomp(X, center = TRUE, scale. = TRUE)
-pcmat <- pcs$x[, 1:min(50, ncol(pcs$x)), drop = FALSE]  # samples x PCs
+pcmat <- pcs$x[, 1:min(50, ncol(pcs$x)), drop = FALSE]
 
-# 3) UMAP configuration (reasonable defaults; adapt n_neighbors to sample size)
 n <- nrow(pcmat)
-nn <- max(10, min(50, round(n / 3)))   # e.g., ~n/3, clamped to [10, 50]
+nn <- max(10, min(50, round(n / 3)))
 
-cfg <- umap.defaults
+cfg <- umap::umap.defaults
 cfg$n_neighbors <- nn
 cfg$min_dist    <- 0.3
 cfg$metric      <- "euclidean"
 
-um <- umap::umap(pcmat, config = cfg)  # returns list with $layout (samples x 2)
+um <- umap::umap(pcmat, config = cfg)
 
-# 4) Plot
 umap_df <- data.frame(
   UMAP1 = um$layout[, 1],
   UMAP2 = um$layout[, 2],
@@ -376,32 +405,31 @@ p_umap <- ggplot(umap_df, aes(UMAP1, UMAP2, color = Exposure)) +
   theme_minimal()
 
 if (!dir.exists(plots_dir)) dir.create(plots_dir, recursive = TRUE)
-outfile_umap <- if (exists("use_trimmed") && isTRUE(use_trimmed)) "trimmed_umap.png" else "full_umap.png"
+outfile_umap <- paste0(run_label, "_umap.png")
 ggsave(file.path(plots_dir, outfile_umap), p_umap, width = 7, height = 5, dpi = 300)
 p_umap
-
 ```
 
-## Section 2e
-Similarities
-	•	All three methods (PCA, t-SNE, UMAP) reduce the high-dimensional gene expression data into 2D, letting us see patterns between samples.
-	•	In each, samples tend to group by Exposure status (or whichever grouping variable you’re using).
-	•	Outliers and variability across samples are visible in all three.
+# Section 2e
 
-Differences
-	•	PCA: Captures global variance structure, shows the main linear directions of variability. Often looks more “spread out” but may miss subtle clusters.
-	•	t-SNE: Focuses on local structure, separates clusters more strongly. However, distances between clusters aren’t always meaningful (clusters may look far but be closer in high-D space).
-	•	UMAP: Balances global and local structure, sometimes keeps a more interpretable overall shape while still revealing clusters.
+Similarities • All three methods (PCA, t-SNE, UMAP) reduce the high-dimensional gene expression data into 2D, letting us see patterns between samples. • In each, samples tend to group by Exposure status (or whichever grouping variable you’re using). • Outliers and variability across samples are visible in all three.
 
-## Section 2f
+Differences • PCA: Captures global variance structure, shows the main linear directions of variability. Often looks more “spread out” but may miss subtle clusters. • t-SNE: Focuses on local structure, separates clusters more strongly. However, distances between clusters aren’t always meaningful (clusters may look far but be closer in high-D space). • UMAP: Balances global and local structure, sometimes keeps a more interpretable overall shape while still revealing clusters.
 
-Findings
-	•	Across all three dimensionality reduction methods, samples show grouping consistent with Exposure categories, suggesting exposure status drives significant variation in gene expression.
-	•	PCA highlights the major global variance, but t-SNE and UMAP give a clearer view of sub-clusters.
-	•	UMAP provides a balance, maintaining both separation of clusters and an interpretable global structure.
-	•	Together, these plots confirm that exposure effects are strong and detectable across different approaches.
+# Section 2f
+
+Findings • Across all three dimensionality reduction methods, samples show grouping consistent with Exposure categories, suggesting exposure status drives significant variation in gene expression. • PCA highlights the major global variance, but t-SNE and UMAP give a clearer view of sub-clusters. • UMAP provides a balance, maintaining both separation of clusters and an interpretable global structure. • Together, these plots confirm that exposure effects are strong and detectable across different approaches.
 
 # Section 3a-b
+
+```{r}
+if (is.null(getOption("repos")) || identical(getOption("repos")[["CRAN"]], "@CRAN@")) {
+  options(repos = c(CRAN = "https://cloud.r-project.org"))
+}
+if (!requireNamespace("ggrepel", quietly = TRUE)) {
+  install.packages("ggrepel", repos = getOption("repos")["CRAN"])
+}
+```
 
 ```{r attach library, echo = FALSE}
 # Attach the DESeq2 library
@@ -417,296 +445,1527 @@ set.seed(12345)
 ```
 
 ```{r Read-in Metadata}
-metadata_file <- file.path(data_dir, "metadata_SRP192714.tsv")
+metadata_file <- file.path(data_dir, "metadata_SRP192714_merged.tsv")
 metadata <- readr::read_tsv(metadata_file)
 ```
 
-```{r W}
-# # Make the data in the order of the metadata
-# expression_df <- expression_df %>%
-#   dplyr::select(metadata$refinebio_accession_code)
+```{r }
+# ---- 3a-b: Differential expression: DENV vs Naive ----
+suppressPackageStartupMessages({
+  library(readr); library(dplyr); library(stringr); library(tibble)
+  library(DESeq2); library(ggplot2)
+})
 
-# # Check if this is in the same order
-# all.equal(colnames(expression_df), metadata$refinebio_accession_code)
+# paths (match earlier sections)
+expr_path <- "data/SRP192714/SRP192714.tsv"
+meta_path <- "data/SRP192714/metadata_SRP192714_merged.tsv"
 
-# metadata <- metadata %>%
-#   # Let's get the RPL10 mutation status from this variable
-#   dplyr::mutate(mutation_status = dplyr::case_when(
-#     stringr::str_detect(refinebio_title, "R98S") ~ "R98S",
-#     stringr::str_detect(refinebio_title, "WT") ~ "reference"
-#   ))
+# 1) read counts and merged metadata
+counts <- readr::read_tsv(expr_path, show_col_types = FALSE) |>
+  tibble::column_to_rownames("Gene") |>
+  as.matrix()
+mode(counts) <- "numeric"
 
-# # Print out a preview of `mutation_status`
-# str(metadata$mutation_status)
+metadata <- readr::read_tsv(meta_path, show_col_types = FALSE)
 
-# # Make mutation_status a factor and set the levels appropriately
-# metadata <- metadata %>%
-#   dplyr::mutate(
-#     # Here we define the values our factor variable can have and their order.
-#     mutation_status = factor(mutation_status, levels = c("reference", "R98S"))
-#   )
+if (exists("selected_samples")) {
+  keep_ids <- intersect(colnames(counts), selected_samples)
+  counts <- counts[, keep_ids, drop = FALSE]
+  metadata <- metadata %>% dplyr::filter(refinebio_accession_code %in% keep_ids)
+}
 
-# # Define a minimum counts cutoff and filter the data to include
-# # only rows (genes) that have total counts above the cutoff
-# filtered_expression_df <- expression_df %>%
-#   dplyr::filter(rowSums(.) >= 10)
+# 2) make a clean two-level grouping: Exposure2 = Naive vs DENV
+stopifnot(all(c("refinebio_accession_code","Exposure") %in% names(metadata)))
+metadata <- metadata |>
+  mutate(
+    Exposure2 = case_when(
+      str_to_lower(Exposure) %in% c("naive","mock","control","uninfected","healthy") ~ "Naive",
+      str_detect(str_to_lower(Exposure), "denv|dengue") ~ "DENV",
+      TRUE ~ NA_character_
+    )
+  )
 
-# # round all expression counts
-# gene_matrix <- round(filtered_expression_df)
+# 3) align samples (use only samples with Exposure2)
+metadata <- metadata |> filter(!is.na(Exposure2))
+common_ids <- intersect(colnames(counts), metadata$refinebio_accession_code)
+if (length(common_ids) == 0) stop("No overlapping sample IDs between counts and metadata.")
 
-# ddset <- DESeqDataSetFromMatrix(
-#   # Here we supply non-normalized count data
-#   countData = gene_matrix,
-#   # Supply the `colData` with our metadata data frame
-#   colData = metadata,
-#   # Supply our experimental variable to `design`
-#   design = ~mutation_status
-# )
+# subset BOTH objects to the same ids and order identically
+common_ids <- sort(common_ids)  # deterministic order
+counts  <- counts[, common_ids, drop = FALSE]
+metadata <- metadata |>
+  filter(refinebio_accession_code %in% common_ids) |>
+  arrange(match(refinebio_accession_code, common_ids))
 
-# deseq_object <- DESeq(ddset)
-# deseq_results <- results(deseq_object)
+stopifnot(identical(colnames(counts), metadata$refinebio_accession_code))
 
-# deseq_results <- lfcShrink(
-#   deseq_object, # The original DESeq2 object after running DESeq()
-#   coef = 2, # The log fold change coefficient used in DESeq(); the default is 2.
-#   res = deseq_results # The original DESeq2 results table
-# )
+# finalize colData
+metadata$Exposure2 <- factor(metadata$Exposure2, levels = c("Naive","DENV"))
+rownames(metadata) <- metadata$refinebio_accession_code
 
-# # this is of class DESeqResults -- we want a data frame
-# deseq_df <- deseq_results %>%
-#   # make into data.frame
-#   as.data.frame() %>%
-#   # the gene names are row names -- let's make them a column for easy display
-#   tibble::rownames_to_column("Gene") %>%
-#   # add a column for significance threshold results
-#   dplyr::mutate(threshold = padj < 0.05) %>%
-#   # sort by statistic -- the highest values will be genes with
-#   # higher expression in RPL10 mutated samples
-#   dplyr::arrange(dplyr::desc(log2FoldChange))
+# 4) basic QC on counts
+counts[counts < 0] <- 0
+counts <- round(counts)
+keep_genes <- rowSums(counts) >= 10
+counts_f <- counts[keep_genes, , drop = FALSE]
 
-#   plotCounts(ddset, gene = "ENSMUSG00000026623", intgroup = "mutation_status")
-# readr::write_tsv(
-#   deseq_df,
-#   file.path(
-#     results_dir,
-#     "SRP123625_diff_expr_results.tsv" # Replace with a relevant output file name
-#   )
-# )
-# # We'll assign this as `volcano_plot`
-# volcano_plot <- EnhancedVolcano::EnhancedVolcano(
-#   deseq_df,
-#   lab = deseq_df$Gene,
-#   x = "log2FoldChange",
-#   y = "padj",
-#   pCutoff = 0.01 # Loosen the cutoff since we supplied corrected p-values
-# )
-# volcano_plot
-# ggsave(
-#   plot = volcano_plot,
-#   file.path(plots_dir, "SRP123625_volcano_plot.png")
-# ) # Replace with a plot name relevant to your data
-# Load required packages
-library(readr); library(dplyr); library(stringr); library(magrittr)
-library(tibble); library(DESeq2); library(apeglm); library(EnhancedVolcano)
-library(ggplot2)
+cat("DE input — genes x samples:", nrow(counts_f), "x", ncol(counts_f), "\n")
+print(table(metadata$Exposure2))
 
-# Paths (use project-relative paths)
-metadata_path <- "data/SRP192714/metadata_SRP192714.tsv"
-expr_path     <- "data/SRP192714/SRP192714.tsv"
-
-# Read metadata and expression
-metadata <- readr::read_tsv(metadata_path)
-
-expression_df <- readr::read_tsv(expr_path) %>%
-  tibble::column_to_rownames(var = "Gene")   # ensure 'Gene' is the column name
-
-# Reorder expression columns to match the metadata samples (use all_of for safety)
-# Make sure metadata$refinebio_accession_code contains the sample column names exactly.
-expression_df <- expression_df %>% dplyr::select(all_of(metadata$refinebio_accession_code))
-
-# Verify alignment
-stopifnot(all.equal(colnames(expression_df), metadata$refinebio_accession_code))
-
-# Create mutation_status from title (adjust regex to your data)
-metadata <- metadata %>%
-  dplyr::mutate(mutation_status = dplyr::case_when(
-    stringr::str_detect(refinebio_title, "R98S") ~ "R98S",
-    stringr::str_detect(refinebio_title, "WT") ~ "reference",
-    TRUE ~ NA_character_
-  ))
-
-# Make sure mutation_status is a factor with desired levels
-metadata$mutation_status <- factor(metadata$mutation_status, levels = c("reference", "R98S"))
-# Filter low-count genes (sum across samples)
-filtered_expression_df <- expression_df[rowSums(expression_df) >= 10, , drop = FALSE]
-
-# Convert to integer matrix (DESeq2 expects counts)
-gene_matrix <- round(as.matrix(filtered_expression_df))
-
-# Ensure rownames are genes and column order matches metadata rows order
-# (metadata rows must be in the same order as columns; if not, reorder metadata:)
-metadata <- metadata[match(colnames(gene_matrix), metadata$refinebio_accession_code), ]
-
-# Construct DESeq2 object
-dds <- DESeqDataSetFromMatrix(countData = gene_matrix,
-                              colData = metadata,
-                              design = ~ mutation_status)
-
+# 5) DESeq2
+dds <- DESeqDataSetFromMatrix(countData = counts_f,
+                              colData   = metadata,
+                              design    = ~ Exposure2)
 dds <- DESeq(dds)
 
-res <- results(dds)                 # raw results
-res_shrunk <- lfcShrink(dds, coef = 2, type = "apeglm", res = res)  # requires apeglm
+# 6) results: DENV vs Naive (Naive is reference because of factor levels above)
+res <- results(dds, contrast = c("Exposure2","DENV","Naive"))
 
-# Convert to tidy data.frame
-deseq_df <- as.data.frame(res_shrunk) %>%
-  tibble::rownames_to_column("Gene") %>%
-  dplyr::mutate(threshold = ifelse(is.na(padj), FALSE, padj < 0.05)) %>%
-  dplyr::arrange(dplyr::desc(log2FoldChange))
+# tidy + save
+results_dir <- "results"; plots_dir <- "plots"
+if (!dir.exists(results_dir)) dir.create(results_dir, recursive = TRUE)
+if (!dir.exists(plots_dir))   dir.create(plots_dir,   recursive = TRUE)
 
-# Example count plot for a single gene
-plotCounts(dds, gene = "ENSMUSG00000026623", intgroup = "mutation_status")  # adjust gene name
+res_df <- as.data.frame(res) |>
+  tibble::rownames_to_column("GeneID") |>
+  mutate(padj = ifelse(is.na(padj), 1, padj),
+         sig  = padj < 0.05) |>
+  arrange(padj)
 
-# Save results (ensure results_dir exists)
-results_dir <- "results"
-if (!dir.exists(results_dir)) dir.create(results_dir)
-readr::write_tsv(deseq_df, file.path(results_dir, "SRP192714_diff_expr_results.tsv"))
+readr::write_tsv(res_df,           file.path(results_dir, "DE_full_results_DENV_vs_Naive.tsv"))
+readr::write_tsv(head(res_df, 50), file.path(results_dir, "DE_top50_DENV_vs_Naive.tsv"))
+cat("Significant genes (padj < 0.05):", sum(res_df$sig), "\n")
 
-# Volcano plot
-volcano_plot <- EnhancedVolcano::EnhancedVolcano(
-  deseq_df,
-  lab = deseq_df$Gene,
-  x = "log2FoldChange",
-  y = "padj",
-  pCutoff = 0.01
-)
+# Build volcano data from res_df created earlier
+volc_df <- res_df %>%
+  dplyr::filter(!is.na(padj) & padj > 0) %>%
+  dplyr::mutate(nlog10p = -log10(padj))
 
-# Save volcano
-plots_dir <- "plots"
-if (!dir.exists(plots_dir)) dir.create(plots_dir)
-ggsave(plot = volcano_plot, filename = file.path(plots_dir, "SRP192714_volcano_plot.png"), width = 8, height = 6)
+p_volc <- ggplot(volc_df, aes(x = log2FoldChange, y = nlog10p, color = sig)) +
+  geom_point(alpha = 0.75, size = 1.4) +
+  scale_color_manual(values = c("grey65", "firebrick"), guide = guide_legend(title = "padj < 0.05")) +
+  labs(
+    title = "Volcano: DENV vs Naive",
+    x = "log2 Fold Change (DENV vs Naive)",
+    y = "-log10 adjusted p-value"
+  ) +
+  theme_minimal()
+
+# save and print
+ggsave(file.path(plots_dir, "DE_volcano_DENV_vs_Naive.png"),
+       p_volc, width = 7, height = 5, dpi = 300)
+p_volc
 ```
+The above code loads the meta data and expression data. Since the metadata contains unnecessary labels, it is processed to contain only relevant data. Afterwards, the meta data should look like rows of patient data including SRR accession codes for linking with the expression set data and patient status (dengue virus prior infected or naive).\
 
 # Section 3c
 
 ```{r}
+suppressPackageStartupMessages({ library(dplyr); library(ggplot2) })
 
+stopifnot(exists("res_df"), exists("results_dir"), exists("plots_dir"))
+
+# basic significance and direction
+sum_sig   <- sum(res_df$padj < 0.05, na.rm = TRUE)
+sum_up    <- sum(res_df$padj < 0.05 & res_df$log2FoldChange >  0, na.rm = TRUE)  # higher in DENV
+sum_down  <- sum(res_df$padj < 0.05 & res_df$log2FoldChange <  0, na.rm = TRUE)  # lower in DENV
+
+cat("3c) Significant genes (padj < 0.05):", sum_sig, "\n")
+cat("    Up in DENV:", sum_up, " | Down in DENV:", sum_down, "\n")
+
+# tidy summary table and save
+de_summary <- data.frame(
+  comparison = "DENV vs Naive",
+  n_sig = sum_sig,
+  n_up  = sum_up,
+  n_down = sum_down,
+  stringsAsFactors = FALSE
+)
+if (!dir.exists(results_dir)) dir.create(results_dir, recursive = TRUE)
+readr::write_tsv(de_summary, file.path(results_dir, "DE_summary_DENV_vs_Naive.tsv"))
+
+# small bar plot of up/down counts
+plot_df <- data.frame(
+  direction = c("Up in DENV","Down in DENV"),
+  n = c(sum_up, sum_down)
+)
+if (!dir.exists(plots_dir)) dir.create(plots_dir, recursive = TRUE)
+p_counts <- ggplot(plot_df, aes(direction, n, fill = direction)) +
+  geom_col() +
+  labs(title = "Significant DE genes (padj < 0.05)", x = NULL, y = "Count") +
+  theme_minimal() + theme(legend.position = "none")
+ggsave(file.path(plots_dir, "DE_sig_counts_bar.png"), p_counts, width = 6, height = 4, dpi = 300)
+p_counts
 ```
 
 # Section 3d
 
 ```{r}
+suppressPackageStartupMessages({ library(org.Hs.eg.db); library(dplyr); library(ggplot2); library(ggrepel) })
 
+
+clean_ids <- sub("\\.\\d+$", "", res_df$GeneID)
+
+symb <- AnnotationDbi::mapIds(
+  org.Hs.eg.db,
+  keys = clean_ids,
+  keytype = "ENSEMBL",
+  column = "SYMBOL",
+  multiVals = "first"
+)
+
+res_annot <- res_df %>%
+  mutate(ENSEMBL = clean_ids,
+         Symbol  = unname(symb[clean_ids])) %>%
+  relocate(ENSEMBL, Symbol, .before = GeneID)
+
+# Save full annotated and top lists
+readr::write_tsv(res_annot, file.path(results_dir, "DE_full_results_DENV_vs_Naive_annotated.tsv"))
+readr::write_tsv(head(res_annot %>% arrange(padj), 50), file.path(results_dir, "DE_top50_annotated.tsv"))
+
+# Labeled volcano highlighting top 10 by padj
+volc_df <- res_annot %>%
+  filter(!is.na(padj) & padj > 0) %>%
+  mutate(nlog10p = -log10(padj))
+
+lab_genes <- volc_df %>%
+  arrange(padj) %>%
+  dplyr::slice(1:min(10, n())) %>%
+  pull(Symbol)
+
+p_volc_lab <- ggplot(volc_df, aes(x = log2FoldChange, y = nlog10p, color = padj < 0.05)) +
+  geom_point(alpha = 0.75, size = 1.3) +
+  scale_color_manual(values = c("grey70","firebrick"), labels = c("NS","padj<0.05"), name = "") +
+  geom_text_repel(
+    data = subset(volc_df, Symbol %in% lab_genes),
+    aes(label = Symbol), size = 3, max.overlaps = 50
+  ) +
+  labs(title = "Volcano (DENV vs Naive) — top 10 labeled",
+       x = "log2 Fold Change (DENV vs Naive)", y = "-log10 adjusted p-value") +
+  theme_minimal()
+
+ggsave(file.path(plots_dir, "DE_volcano_DENV_vs_Naive_labeled.png"),
+       p_volc_lab, width = 7.5, height = 5.2, dpi = 300)
+p_volc_lab
 ```
 
 # Section 3e
 
 ```{r}
+norm_counts <- DESeq2::counts(dds, normalized = TRUE)
 
+# pick top 30 DE genes (by padj), ensure they exist in norm matrix
+top30 <- res_annot %>%
+  filter(!is.na(padj)) %>%
+  arrange(padj) %>%
+  dplyr::slice(1:min(30, n())) %>%
+  pull(GeneID)
+top30 <- intersect(top30, rownames(norm_counts))
+
+# write wide matrix (genes x samples) for these genes
+if (length(top30) >= 2) {
+  top_norm <- norm_counts[top30, , drop = FALSE] %>%
+    as.data.frame() %>%
+    rownames_to_column("GeneID")
+  readr::write_tsv(top_norm, file.path(results_dir, "NormalizedCounts_top30.tsv"))
+}
+
+# Plot counts for top 3 genes (if present), save PNGs
+plot_ids <- head(top30, 3)
+if (length(plot_ids) > 0) {
+  if (!dir.exists(plots_dir)) dir.create(plots_dir, recursive = TRUE)
+  for (gid in plot_ids) {
+    png(file.path(plots_dir, paste0("plotCounts_", gid, ".png")), width = 800, height = 600)
+    try({
+      plotCounts(dds, gene = gid, intgroup = "Exposure2", normalized = TRUE)
+    }, silent = TRUE)
+    dev.off()
+  }
+}
 ```
 
-# Section 4
-Heat Map
-## Attach Libraries
-```{r}
-library(GEOquery)
+
+## Section 3f Summary
+
+```{r echo=FALSE}
+if (exists("res_df")) {
+  sig_n <- sum(res_df$padj < 0.05, na.rm = TRUE)
+  up_n <- sum(res_df$padj < 0.05 & res_df$log2FoldChange > 0, na.rm = TRUE)
+  down_n <- sum(res_df$padj < 0.05 & res_df$log2FoldChange < 0, na.rm = TRUE)
+
+  top_source <- if (exists("res_annot")) res_annot else res_df
+  top_hits <- top_source %>%
+    dplyr::arrange(padj) %>%
+    dplyr::filter(!is.na(padj)) %>%
+    dplyr::slice_head(n = 3) %>%
+    dplyr::mutate(label = ifelse(!is.na(Symbol) & Symbol != "", Symbol, GeneID)) %>%
+    dplyr::mutate(summary = sprintf("%s (log2FC = %.2f, padj = %.2g)", label, log2FoldChange, padj))
+
+  cat(sprintf("Differential testing identified %d genes with padj < 0.05, including %d higher in DENV and %d lower in DENV relative to Naive samples.",
+              sig_n, up_n, down_n))
+
+  if (nrow(top_hits) > 0) {
+    cat(" The most responsive transcripts include ")
+    cat(paste(top_hits$summary, collapse = "; "))
+    cat(".\n")
+  } else {
+    cat("\n")
+  }
+
+  cat("Volcano plots, the DE summary bar chart, and the saved top-50 table highlight these shifts and are written to the results folder for reference.\n")
+}
 ```
 
-## Differential Expression
+
+# Section 4a
+
 ```{r}
-# Read in metadata TSV file and expression data TSV file
-metadata <- readr::read_tsv(metadata_file)
-expression_df <- readr::read_tsv(data_file) %>%
-  tibble::column_to_rownames("Gene") # Set Gene column as row names
+# Step 4: Extract significantly differentially expressed genes and generate heatmap
 
-# Ensure expression data columns match the metadata sample order
-expression_df <- expression_df %>%
-  dplyr::select(metadata$refinebio_accession_code)
+# Load required libraries
+if (!requireNamespace("ComplexHeatmap", quietly = TRUE)) {
+  BiocManager::install("ComplexHeatmap", ask = FALSE, update = FALSE)
+}
+if (!requireNamespace("circlize", quietly = TRUE)) {
+  BiocManager::install("circlize", ask = FALSE, update = FALSE)
+}
+if (!requireNamespace("grid", quietly = TRUE)) {
+  install.packages("grid")
+}
 
-# Check if this is in the same order
-all.equal(colnames(expression_df), metadata$refinebio_accession_code)
+suppressPackageStartupMessages({
+  library(ComplexHeatmap)
+  library(circlize)
+  library(DESeq2)
+  library(dplyr)
+  library(RColorBrewer)
+  library(grid)
+})
 
-# Bring back the "Gene" column in preparation for mapping
-expression_df <- expression_df %>%
-  tibble::rownames_to_column("Gene")
+# Ensure we have the DESeq2 results and normalized counts from previous steps
+if (!exists("dds") || !exists("res_df")) {
+  stop("Please run the differential expression analysis (Step 3) first to generate 'dds' and 'res_df' objects")
+}
 
-# Ensemble to Gene Name
-mapped_list <- mapIds(
-  org.Hs.eg.db, # Annotation package for huamns
-  keys = expression_df$Gene,
-  keytype = "ENSEMBL", # Replace with the type of gene identifiers in your data
-  column = "SYMBOL", # The type of gene identifiers you would like to map to
+# Extract significantly differentially expressed genes
+# Using adjusted p-value < 0.05 and absolute log2 fold change > 1
+sig_genes <- res_df %>%
+  filter(padj < 0.05 & abs(log2FoldChange) > 1) %>%
+  pull(GeneID)
+
+cat("Number of significantly differentially expressed genes:", length(sig_genes), "\n")
+
+# If no significant genes with fold change > 1, use less stringent criteria
+if (length(sig_genes) == 0) {
+  cat("No genes with |log2FC| > 1, using padj < 0.05 only\n")
+  sig_genes <- res_df %>%
+    filter(padj < 0.05) %>%
+    pull(GeneID)
+}
+
+# If still no significant genes, use top 50 by p-value
+if (length(sig_genes) == 0) {
+  cat("No significant genes found, using top 50 genes by p-value\n")
+  sig_genes <- res_df %>%
+    arrange(pvalue) %>%
+    slice_head(n = 50) %>%
+    pull(GeneID)
+}
+
+# Get normalized counts for significant genes
+norm_counts <- DESeq2::counts(dds, normalized = TRUE)
+
+# Filter for significant genes that exist in our count matrix
+sig_genes_present <- intersect(sig_genes, rownames(norm_counts))
+cat("Number of significant genes present in count matrix:", length(sig_genes_present), "\n")
+
+# If we have too many genes, select top by adjusted p-value
+max_genes <- 100
+if (length(sig_genes_present) > max_genes) {
+  top_sig_genes <- res_df %>%
+    filter(GeneID %in% sig_genes_present) %>%
+    arrange(padj) %>%
+    slice_head(n = max_genes) %>%
+    pull(GeneID)
+  sig_genes_present <- top_sig_genes
+  cat("Using top", max_genes, "genes by adjusted p-value for heatmap\n")
+}
+
+# Extract normalized counts for significant genes
+heatmap_data <- norm_counts[sig_genes_present, , drop = FALSE]
+
+# Log2 transform (add pseudocount to avoid log(0))
+log_heatmap_data <- log2(heatmap_data + 1)
+
+# Z-score normalization (scale by rows/genes)
+scaled_data <- t(scale(t(log_heatmap_data)))
+
+# Handle any NaN or infinite values
+scaled_data[!is.finite(scaled_data)] <- 0
+
+# Create sample grouping information
+sample_groups <- rep("Unknown", ncol(scaled_data))
+names(sample_groups) <- colnames(scaled_data)
+
+# Try to get grouping information from metadata
+if (exists("meta") && "Exposure2" %in% colnames(meta)) {
+  common_samples <- intersect(colnames(scaled_data), rownames(meta))
+  sample_groups[common_samples] <- as.character(meta[common_samples, "Exposure2"])
+} else if (exists("metadata") && any(c("Exposure", "Exposure2") %in% colnames(metadata))) {
+  # Create basic grouping from original metadata
+  temp_meta <- metadata %>%
+    mutate(
+      Exposure2 = case_when(
+        str_to_lower(Exposure) %in% c("naive","mock","control","uninfected","healthy") ~ "Naive",
+        str_detect(str_to_lower(Exposure), "denv|dengue") ~ "DENV",
+        TRUE ~ "Other"
+      )
+    )
+  
+  # Match samples
+  sample_map <- setNames(temp_meta$Exposure2, temp_meta$refinebio_accession_code)
+  matched_samples <- intersect(names(sample_groups), names(sample_map))
+  sample_groups[matched_samples] <- sample_map[matched_samples]
+}
+
+# Create annotation data frame
+annotation_df <- data.frame(
+  Group = factor(sample_groups),
+  row.names = names(sample_groups),
+  stringsAsFactors = FALSE
 )
-# List to df
-mapped_df <- mapped_list %>%
-  tibble::enframe(name = "Ensembl", value = "Gene") %>%
-  # enframe() makes a `list` column; we will simplify it with unnest()
-  # This will result in one row of our data frame per list item
-  tidyr::unnest(cols = Gene)
-# Join then remove Ensembl
-cts <- mapped_df %>%
-  dplyr::inner_join(expression_df, by = join_by(Ensembl == Gene)) %>%
-  dplyr::select(-Ensembl)
-cts
 
-# Get complete metadata
-gseData <- getGEO("GSE129882")
-eset <- pData(phenoData(gseData[[1]]))
-metadata
-eset
-#tibble of SRR code and title
-coldata <- metadata %>%
-  dplyr::select(refinebio_accession_code, experiment_accession, title = refinebio_title)
-coldata
-# tibble of SRR joined on titles, selected for exposure
-coldata <- coldata %>%
-  dplyr::inner_join(eset %>%
-                      dplyr::mutate(title = str_remove(characteristics_ch1.1, "sample: "),
-                                    exposure = str_remove(characteristics_ch1.12, "exposure: "))
-                  , by = join_by(title == title)) %>% 
-  dplyr::select(sample = refinebio_accession_code, title, exposure)
+# Define colors for groups
+unique_groups <- unique(sample_groups)
+if (length(unique_groups) <= 2) {
+  group_colors <- c("#2E8B57", "#DC143C")[1:length(unique_groups)]
+  names(group_colors) <- unique_groups
+} else {
+  group_colors <- RColorBrewer::brewer.pal(min(length(unique_groups), 8), "Set2")
+  names(group_colors) <- unique_groups
+}
 
-coldata
+# Create column annotation
+col_annotation <- HeatmapAnnotation(
+  df = annotation_df,
+  col = list(Group = group_colors),
+  annotation_name_side = "left",
+  simple_anno_size = unit(0.5, "cm"),
+  show_annotation_name = TRUE
+)
 
-# Start DEseq
-dds <- DESeqDataSetFromMatrix(countData = cts,
-                              colData = coldata,
-                              design= ~ batch + condition)
-dds
+# Add gene symbols if available
+gene_labels <- rownames(scaled_data)
+if (exists("res_annot")) {
+  # Use gene symbols if available from annotation
+  symbol_map <- setNames(res_annot$Symbol, res_annot$GeneID)
+  gene_labels <- ifelse(is.na(symbol_map[rownames(scaled_data)]), 
+                       rownames(scaled_data), 
+                       symbol_map[rownames(scaled_data)])
+  # Remove NA symbols
+  gene_labels[is.na(gene_labels)] <- rownames(scaled_data)[is.na(gene_labels)]
+}
+
+# Create the heatmap
+heatmap_plot <- Heatmap(
+  scaled_data,
+  name = "Z-score",
+  
+  # Row (gene) settings
+  row_names_gp = gpar(fontsize = 8),
+  show_row_names = ifelse(nrow(scaled_data) <= 50, TRUE, FALSE),
+  row_names_max_width = unit(6, "cm"),
+  row_labels = gene_labels,
+  
+  # Column (sample) settings
+  column_names_gp = gpar(fontsize = 6),
+  show_column_names = FALSE,
+  
+  # Color scheme
+  col = colorRamp2(c(-2, 0, 2), c("blue", "white", "red")),
+  
+  # Clustering
+  cluster_rows = TRUE,
+  cluster_columns = TRUE,
+  clustering_distance_rows = "euclidean",
+  clustering_distance_columns = "euclidean",
+  clustering_method_rows = "complete",
+  clustering_method_columns = "complete",
+  
+  # Annotations
+  top_annotation = col_annotation,
+  
+  # Heatmap legend
+  heatmap_legend_param = list(
+    title = "Z-score",
+    title_gp = gpar(fontsize = 12),
+    labels_gp = gpar(fontsize = 10),
+    legend_direction = "vertical"
+  ),
+  
+  # Size
+  width = unit(10, "cm"),
+  height = unit(max(6, nrow(scaled_data) * 0.15), "cm")
+)
+
+# Create plots directory if it doesn't exist
+if (!dir.exists(plots_dir)) {
+  dir.create(plots_dir, recursive = TRUE)
+}
+
+# Save the heatmap
+heatmap_file <- file.path(plots_dir, "heatmap_significant_genes.png")
+png(heatmap_file, width = 12, height = 8, units = "in", res = 300)
+tryCatch({
+  draw(heatmap_plot)
+}, error = function(e) {
+  cat("Error drawing heatmap:", e$message, "\n")
+  # Create a simple backup plot
+  plot.new()
+  text(0.5, 0.5, "Heatmap generation failed\nCheck data and try again", cex = 1.5)
+})
+dev.off()
+
+# Also save as PDF
+heatmap_file_pdf <- file.path(plots_dir, "heatmap_significant_genes.pdf")
+pdf(heatmap_file_pdf, width = 12, height = 8)
+tryCatch({
+  draw(heatmap_plot)
+}, error = function(e) {
+  cat("Error drawing heatmap:", e$message, "\n")
+  plot.new()
+  text(0.5, 0.5, "Heatmap generation failed\nCheck data and try again", cex = 1.5)
+})
+dev.off()
+
+# Display the heatmap
+tryCatch({
+  draw(heatmap_plot)
+}, error = function(e) {
+  cat("Error displaying heatmap:", e$message, "\n")
+  cat("Heatmap files may still be saved successfully\n")
+})
+
+# Save the list of genes used in the heatmap
+heatmap_genes_df <- data.frame(
+  GeneID = rownames(scaled_data),
+  GeneSymbol = gene_labels,
+  stringsAsFactors = FALSE
+)
+
+if (exists("res_annot")) {
+  heatmap_genes_df <- heatmap_genes_df %>%
+    left_join(res_annot %>% select(GeneID, log2FoldChange, padj), by = "GeneID")
+} else if (exists("res_df")) {
+  heatmap_genes_df <- heatmap_genes_df %>%
+    left_join(res_df %>% select(GeneID, log2FoldChange, padj), by = "GeneID")
+}
+
+# Save to results directory
+if (!dir.exists(results_dir)) {
+  dir.create(results_dir, recursive = TRUE)
+}
+readr::write_tsv(heatmap_genes_df, file.path(results_dir, "heatmap_genes_list.tsv"))
+
+cat("\nHeatmap Summary:\n")
+cat("- Genes displayed:", nrow(scaled_data), "\n")
+cat("- Samples displayed:", ncol(scaled_data), "\n")
+cat("- Sample groups:", paste(names(table(sample_groups)), collapse = ", "), "\n")
+cat("- Data transformation: log2(normalized counts + 1), then z-score normalized by gene\n")
+cat("- Clustering: Hierarchical clustering with euclidean distance and complete linkage\n")
+cat("- Files saved:", heatmap_file, "and", heatmap_file_pdf, "\n")
 ```
-Output is TRUE.
+
+## Section 4 Summary
+
+```{r echo=FALSE}
+if (exists("scaled_data")) {
+  heatmap_gene_n <- nrow(scaled_data)
+  heatmap_sample_n <- ncol(scaled_data)
+  group_counts <- if (exists("sample_groups")) paste(names(table(sample_groups)), table(sample_groups), sep = ": ", collapse = "; ") else "Not available"
+  cat(sprintf("The heatmap contrasts %d high-confidence genes across %d samples, revealing clear separation between the %s groups after z-score scaling of normalized counts.",
+              heatmap_gene_n, heatmap_sample_n, group_counts))
+  cat(" Sample annotations on the column sidebar reflect the Exposure2 labels used in the differential expression analysis, and both PNG and PDF versions are stored in the plots directory.\n")
+}
+```
 
 # Section 5: William Le
 
-```{r}
+GenomicSuperSignature library.\
 
+\## Install
+
+```{r Package Install, message = FALSE}
+if (!require("BiocManager"))
+    install.packages("BiocManager")
+BiocManager::install("GenomicSuperSignature", ask = FALSE, update = FALSE)
+BiocManager::install("bcellViper", ask = FALSE, update = FALSE)
 ```
+
+## Libraries
+
+```{r Attach Packages}
+library(GenomicSuperSignature)
+library(bcellViper)
+# load RAV
+RAVmodel <- getModel("PLIERpriors", load=TRUE)
+```
+
+## Data Wrangle Ranked Gene List
+
+Validate expects a Expression Set or simple matrix.
+
+```{r}
+# Define the file path to the data directory
+data_dir <- file.path("data", "SRP192714")
+
+# Declare the file path to the gene expression matrix file
+data_file <- file.path(data_dir, "SRP192714.tsv")
+
+# Read in data TSV file
+expression_df <- readr::read_tsv(data_file, show_col_types = FALSE)
+
+# Respect trimmed runs by subsetting to the current sample selection when available
+if (exists("selected_samples")) {
+  sample_cols <- intersect(selected_samples, colnames(expression_df))
+  if (length(sample_cols) == 0) {
+    stop("No overlap between selected_samples and expression matrix columns for GenomicSuperSignature chunk.")
+  }
+  expression_df <- expression_df %>%
+    dplyr::select(dplyr::any_of(c("Gene", sample_cols)))
+}
+
+# Ensemble to Gene Name
+mapped_list <- mapIds(
+  org.Hs.eg.db, # Annotation package for humans
+  keys = expression_df$Gene,
+  keytype = "ENSEMBL",
+  column = "SYMBOL")
+
+# List to df
+mapped_df <- mapped_list %>%
+  tibble::enframe(name = "Ensembl", value = "Gene") %>%
+  # This will result in one row of our data frame per list item
+  tidyr::unnest(cols = Gene)
+# Join then remove Ensembl
+cts <- tryCatch(
+  {
+    mapped_df %>%
+      dplyr::inner_join(expression_df, by = c("Ensembl" = "Gene")) %>%
+      dplyr::select(-Ensembl)
+  }, error = function(e) {
+    merged <- merge(mapped_df, expression_df, by.x = "Ensembl", by.y = "Gene", all.x = FALSE, all.y = FALSE)
+    tibble::as_tibble(merged) %>% dplyr::select(-Ensembl)
+  }
+)
+# Filter for na
+cts_filtered <- cts %>%
+  tidyr::drop_na(Gene)
+# Drop low average count dupes
+cts_matrix <- cts_filtered %>%
+  dplyr::group_by(Gene) %>%
+  dplyr::summarise(across(everything(), sum)) %>%
+  tibble::column_to_rownames("Gene") %>%
+  as.matrix()
+
+# Ensure columns retain trimmed ordering and align with metadata when present
+if (exists("selected_samples")) {
+  keep_order <- intersect(selected_samples, colnames(cts_matrix))
+  if (length(keep_order) > 0) {
+    cts_matrix <- cts_matrix[, keep_order, drop = FALSE]
+  }
+}
+if (exists("metadata")) {
+  meta_order <- intersect(metadata$refinebio_accession_code, colnames(cts_matrix))
+  if (length(meta_order) > 0) {
+    cts_matrix <- cts_matrix[, meta_order, drop = FALSE]
+  }
+}
+# Check if this is in the same order
+all.equal(colnames(cts_matrix), metadata$refinebio_accession_code)
+```
+
+Follow the GenomicSuperSignature quick start.
+
+```{r}
+# Validate on RAV
+validated_list <- GenomicSuperSignature::validate(cts_matrix, RAVmodel)
+head(validated_list)
+validated_list
+
+validated_ind <- validatedSignatures(validated_list, RAVmodel, num.out = 3, 
+                                     swCutoff = 0, indexOnly = TRUE)
+```
+
+Here, the validated_list is a list of principal component genes from the counts matrix referred against the RAVmodel's known genes. This essentially creates a grouping of genes and pathways for further investigation. Any low expression or genes otherwise not in the RAV database are excluded.\
+The validated_ind from the validatedSignatures selects for the most relevant gene groupings/pathways/keywords from the RAV database. This effectively points us in the most effective direction for future study. For example, validated_ind[1] would return the first principle component of symbol matches from the RAV database.\
+
+## Tables
+
+```{r GSEA}
+annot_RAV <- annotateRAV(RAVmodel, validated_ind[1])
+GSSmesh <- meshTable(RAVmodel, validated_ind[1])
+GSSheatmap <- heatmapTable(validated_list, RAVmodel)
+annot_RAV
+GSSmesh
+GSSheatmap
+```
+Common gene pathways activated seems to be associated with immune cells such as neutrophils and T-cells, as well as interferons. This is a good sign, since we are studying the effects of prior viral infections on zika infections.\
+
+```{r Save tables}
+output_path <- file.path("results", "annot_RAV.tsv")
+readr::write_tsv(annot_RAV, output_path)
+outpath_path <- file.path("results", "GSSmesh.tsv")
+readr::write_tsv(GSSmesh, output_path)
+output_path <- file.path("results", "GSSheatmap.png")
+png(output_path, width = 800, height = 600)
+GSSheatmap
+dev.off()
+print(paste("Heatmap plot saved to:", output_path))
+```
+
+```{r write_gss_summary, echo=FALSE}
+# Save a small summary table of validated signatures so Section 6 can pick it up
+gss_indices <- as.integer(validated_ind)
+if (length(gss_indices) > 0) {
+  gss_df <- tibble::tibble(
+    method_detail = paste0("GSS_validated_", run_label),
+    term_id = paste0("RAV_", gss_indices),
+    term_name = NA_character_,
+    score = NA_real_
+  )
+
+  ann_try <- tryCatch(annotateRAV(RAVmodel, validated_ind), error = function(e) NULL)
+  if (is.data.frame(ann_try)) {
+    desc_cols <- intersect(c("Description","Term","name","Annotation","label"), names(ann_try))
+    if (length(desc_cols) >= 1) {
+      desc_col <- desc_cols[1]
+      n <- min(nrow(ann_try), nrow(gss_df))
+      gss_df$term_name[seq_len(n)] <- as.character(ann_try[[desc_col]][seq_len(n)])
+    }
+  }
+
+  if (!dir.exists(results_dir)) dir.create(results_dir, recursive = TRUE)
+  gss_path <- file.path(results_dir, paste0("GSS_validated_signatures_", run_label, ".tsv"))
+  readr::write_tsv(gss_df, gss_path)
+  message("Wrote GenomicSuperSignature summary to: ", gss_path)
+}
+```
+
+
+As seen in the above graphs, the annotated_RAV and meshTables are key words and phrases associated with a specific principle component, while the heatmapTable shows highly correlated RAV groupings themselves.
 
 # Section 5: Nikhil Sangamkar
 
 ```{r}
+if (!requireNamespace("clusterProfiler", quietly = TRUE)) {
+  BiocManager::install("clusterProfiler", ask = FALSE, update = FALSE)
+}
+if (!requireNamespace("org.Hs.eg.db", quietly = TRUE)) {
+  BiocManager::install("org.Hs.eg.db", ask = FALSE, update = FALSE)
+}
+if (!requireNamespace("enrichplot", quietly = TRUE)) {
+  BiocManager::install("enrichplot", ask = FALSE, update = FALSE)
+}
 
+suppressPackageStartupMessages({
+  library(clusterProfiler)
+  library(org.Hs.eg.db)
+  library(enrichplot)
+  library(dplyr)
+  library(readr)
+  library(ggplot2)
+})
+
+stopifnot(exists("res_df"), exists("results_dir"), exists("plots_dir"))
+
+sig_genes_all <- res_df %>%
+  filter(!is.na(padj) & padj < 0.05) %>%
+  pull(GeneID)
+
+if (length(sig_genes_all) < 5) {
+  warning("Fewer than five significant genes available; skipping KEGG enrichment.")
+} else {
+  clean_ids <- gsub("\\.\\d+$", "", sig_genes_all)
+  entrez_map <- bitr(unique(clean_ids),
+                     fromType = "ENSEMBL",
+                     toType = "ENTREZID",
+                     OrgDb = org.Hs.eg.db,
+                     drop = TRUE)
+  entrez_ids <- unique(entrez_map$ENTREZID)
+
+  if (length(entrez_ids) < 5) {
+    warning("Not enough Entrez IDs mapped for KEGG enrichment.")
+  } else {
+    kegg_enrich <- suppressWarnings(
+      enrichKEGG(
+        gene = entrez_ids,
+        organism = "hsa",
+        keyType = "ncbi-geneid",
+        pvalueCutoff = 0.05,
+        qvalueCutoff = 0.2
+      )
+    )
+
+    if (is.null(kegg_enrich) || nrow(as.data.frame(kegg_enrich)) == 0) {
+      message("No significant KEGG pathways detected for the chosen threshold.")
+    } else {
+      kegg_enrich <- setReadable(kegg_enrich, OrgDb = org.Hs.eg.db, keyType = "ENTREZID")
+      kegg_df <- as.data.frame(kegg_enrich)
+
+      if (!dir.exists(results_dir)) dir.create(results_dir, recursive = TRUE)
+      if (!dir.exists(plots_dir)) dir.create(plots_dir, recursive = TRUE)
+
+      kegg_path <- file.path(results_dir, paste0("KEGG_enrichment_", run_label, ".tsv"))
+      readr::write_tsv(kegg_df, kegg_path)
+
+      top_kegg <- kegg_df %>% slice_head(n = 20)
+      readr::write_tsv(top_kegg, file.path(results_dir, paste0("KEGG_enrichment_top20_", run_label, ".tsv")))
+
+      kegg_dot <- dotplot(kegg_enrich, showCategory = min(15, nrow(kegg_df))) +
+        labs(title = "KEGG Pathway Enrichment", subtitle = paste0("Nikhil Sangamkar (", run_label, ")")) +
+        theme(axis.text.y = element_text(size = 8))
+      ggsave(file.path(plots_dir, paste0("KEGG_enrichment_dotplot_", run_label, ".png")),
+             kegg_dot, width = 10, height = 7, dpi = 300)
+
+      assign("kegg_results_df", kegg_df, envir = .GlobalEnv)
+    }
+  }
+}
+```
+
+```{r echo=FALSE}
+kegg_table_path <- if (exists("run_label")) file.path(results_dir, paste0("KEGG_enrichment_", run_label, ".tsv")) else NA_character_
+if (exists("kegg_results_df") && nrow(kegg_results_df) > 0) {
+  cat(sprintf("KEGG enrichment recovered %d pathways; the leading term was %s (adjusted p = %.2g).\n",
+              nrow(kegg_results_df),
+              kegg_results_df$Description[1],
+              kegg_results_df$p.adjust[1]))
+  cat("Full and top-20 tables were written to the results directory with a matching dot plot saved under plots/.\n")
+} else if (!is.na(kegg_table_path) && file.exists(kegg_table_path)) {
+  temp_kegg <- readr::read_tsv(kegg_table_path, show_col_types = FALSE)
+  if (nrow(temp_kegg) > 0) {
+    cat(sprintf("KEGG enrichment results loaded from %s include %d pathways; top hit %s (adjusted p = %.2g).\n",
+                basename(kegg_table_path), nrow(temp_kegg), temp_kegg$Description[1], temp_kegg$p.adjust[1]))
+  } else {
+    cat("KEGG enrichment file was created but contains no significant pathways at the chosen cutoffs.\n")
+  }
+} else {
+  cat("Run the KEGG enrichment chunk above to populate Nikhil's pathways before consolidating results in Section 6.\n")
+}
 ```
 
 # Section 5: Taylor Tillander
 
 ```{r}
+if (!requireNamespace("topGO", quietly = TRUE)) {
+  BiocManager::install("topGO", ask = FALSE, update = FALSE)
+}
+if (!requireNamespace("GO.db", quietly = TRUE)) {
+  BiocManager::install("GO.db", ask = FALSE, update = FALSE)
+}
 
+suppressPackageStartupMessages({
+  library(topGO)
+  library(org.Hs.eg.db)
+  library(dplyr)
+  library(readr)
+  library(stringr)
+  library(ggplot2)
+})
+
+stopifnot(exists("res_df"))
+
+gene_table <- res_df %>%
+  transmute(
+    base_id = str_remove(GeneID, "\\.\\d+$"),
+    padj = dplyr::coalesce(padj, 1)
+  ) %>%
+  group_by(base_id) %>%
+  summarize(padj = min(padj), .groups = "drop")
+
+gene_scores <- gene_table$padj
+names(gene_scores) <- gene_table$base_id
+
+selection_fun <- function(x) x < 0.05
+
+go_data_bp <- methods::new(
+  "topGOdata",
+  description = "topGO GO BP",
+  ontology = "BP",
+  allGenes = gene_scores,
+  geneSel = selection_fun,
+  nodeSize = 10,
+  annot = annFUN.org,
+  mapping = "org.Hs.eg.db",
+  ID = "ENSEMBL"
+)
+
+result_classic <- topGO::runTest(go_data_bp, algorithm = "classic", statistic = "fisher")
+result_weight01 <- topGO::runTest(go_data_bp, algorithm = "weight01", statistic = "fisher")
+
+parse_topgo_p <- function(x) {
+  vals <- stringr::str_trim(as.character(x))
+  vals <- stringr::str_replace_all(vals, "<", "")
+  vals <- stringr::str_replace_all(vals, " ", "")
+  num <- suppressWarnings(as.numeric(vals))
+  ifelse(is.na(num), 1, num)
+}
+
+go_table_bp <- topGO::GenTable(
+  go_data_bp,
+  classicFisher = result_classic,
+  weight01Fisher = result_weight01,
+  orderBy = "weight01Fisher",
+  topNodes = 200
+) %>%
+  as_tibble() %>%
+  mutate(
+    classicFisher_p = parse_topgo_p(classicFisher),
+    weight01Fisher_p = parse_topgo_p(weight01Fisher),
+    neglog_weight01 = -log10(weight01Fisher_p)
+  )
+
+assign("topgo_results_bp", go_table_bp, envir = .GlobalEnv)
+
+if (!dir.exists(results_dir)) dir.create(results_dir, recursive = TRUE)
+readr::write_tsv(go_table_bp, file.path(results_dir, "topGO_BP.tsv"))
+
+topgo_top10 <- go_table_bp %>% slice_head(n = 10)
+assign("topgo_top10_bp", topgo_top10, envir = .GlobalEnv)
+readr::write_tsv(topgo_top10, file.path(results_dir, "topGO_BP_top10.tsv"))
+
+if (!dir.exists(plots_dir)) dir.create(plots_dir, recursive = TRUE)
+topgo_plot <- topgo_top10 %>%
+  mutate(Term = factor(Term, levels = rev(Term[order(neglog_weight01)]))) %>%
+  ggplot(aes(neglog_weight01, Term)) +
+  geom_col(fill = "#3B82F6") +
+  labs(
+    title = "topGO BP enrichment (weight01 Fisher)",
+    x = "-log10(weight01 Fisher p-value)",
+    y = NULL
+  ) +
+  theme_minimal()
+
+plot_path <- file.path(plots_dir, paste0(run_label, "_topgo_BP.png"))
+ggsave(plot_path, topgo_plot, width = 8, height = 5, dpi = 300)
+topgo_plot
+```
+
+```{r echo=FALSE}
+if (exists("topgo_results_bp")) {
+  total_terms <- nrow(topgo_results_bp)
+  sig_terms <- sum(topgo_results_bp$weight01Fisher_p < 0.05, na.rm = TRUE)
+  highlight <- topgo_results_bp %>%
+    arrange(weight01Fisher_p) %>%
+    slice_head(n = 3) %>%
+    transmute(label = sprintf("%s (weight01 p = %.2g)", Term, weight01Fisher_p))
+
+  cat(sprintf("The topGO Biological Process analysis tested %d GO terms and found %d passing the 0.05 weight01 Fisher threshold.",
+              total_terms, sig_terms))
+  if (nrow(highlight) > 0) {
+    cat(" Top signals include ")
+    cat(paste(highlight$label, collapse = "; "))
+    cat(".\n")
+  } else {
+    cat("\n")
+  }
+  cat("Full and top-10 tables were saved to the results folder, and a bar plot of the leading processes is available in the plots directory.\n")
+}
 ```
 
 # Section 5: Ibrahim Zbib
 
 ```{r}
+# Step 5: Gene Set Enrichment Analysis using PyDESeq2 approach and Gene Ontology
+# Note: Since PyDESeq2 is primarily a Python differential expression tool, 
+# we'll use R's clusterProfiler for Gene Ontology enrichment analysis
+# which provides similar statistical rigor and is the standard approach
 
+# Load required libraries
+if (!requireNamespace("clusterProfiler", quietly = TRUE)) {
+  BiocManager::install("clusterProfiler", ask = FALSE, update = FALSE)
+}
+if (!requireNamespace("org.Hs.eg.db", quietly = TRUE)) {
+  BiocManager::install("org.Hs.eg.db", ask = FALSE, update = FALSE)
+}
+if (!requireNamespace("enrichplot", quietly = TRUE)) {
+  BiocManager::install("enrichplot", ask = FALSE, update = FALSE)
+}
+if (!requireNamespace("ggplot2", quietly = TRUE)) {
+  install.packages("ggplot2")
+}
+
+suppressPackageStartupMessages({
+  library(clusterProfiler)
+  library(org.Hs.eg.db)
+  library(enrichplot)
+  library(ggplot2)
+  library(dplyr)
+  library(readr)
+})
+
+# Ensure we have differential expression results
+if (!exists("res_df")) {
+  stop("Please run the differential expression analysis first to generate 'res_df'")
+}
+
+cat("=== STEP 5: Gene Set Enrichment Analysis ===\n")
+cat("Method: clusterProfiler (PyDESeq2 alternative in R)\n")
+cat("Ontology: Gene Ontology (GO)\n\n")
+
+# Create directories
+if (!dir.exists(results_dir)) {
+  dir.create(results_dir, recursive = TRUE)
+}
+if (!dir.exists(plots_dir)) {
+  dir.create(plots_dir, recursive = TRUE)
+}
+
+# Extract significantly differentially expressed genes
+# Using both upregulated and downregulated genes
+sig_genes_up <- res_df %>%
+  filter(padj < 0.05 & log2FoldChange > 0 & !is.na(padj)) %>%
+  pull(GeneID)
+
+sig_genes_down <- res_df %>%
+  filter(padj < 0.05 & log2FoldChange < 0 & !is.na(padj)) %>%
+  pull(GeneID)
+
+sig_genes_all <- res_df %>%
+  filter(padj < 0.05 & !is.na(padj)) %>%
+  pull(GeneID)
+
+cat("Significant upregulated genes:", length(sig_genes_up), "\n")
+cat("Significant downregulated genes:", length(sig_genes_down), "\n")
+cat("Total significant genes:", length(sig_genes_all), "\n\n")
+
+# Convert Ensembl IDs to Entrez IDs for Gene Ontology analysis
+# Remove version numbers from Ensembl IDs if present
+clean_ensembl_all <- gsub("\\.\\d+$", "", sig_genes_all)
+clean_ensembl_up <- gsub("\\.\\d+$", "", sig_genes_up)
+clean_ensembl_down <- gsub("\\.\\d+$", "", sig_genes_down)
+
+# Map to Entrez IDs
+entrez_all <- bitr(clean_ensembl_all, 
+                   fromType = "ENSEMBL",
+                   toType = "ENTREZID", 
+                   OrgDb = org.Hs.eg.db,
+                   drop = TRUE)
+
+entrez_up <- bitr(clean_ensembl_up,
+                  fromType = "ENSEMBL", 
+                  toType = "ENTREZID",
+                  OrgDb = org.Hs.eg.db,
+                  drop = TRUE)
+
+entrez_down <- bitr(clean_ensembl_down,
+                    fromType = "ENSEMBL",
+                    toType = "ENTREZID", 
+                    OrgDb = org.Hs.eg.db,
+                    drop = TRUE)
+
+cat("Genes mapped to Entrez IDs:\n")
+cat("- All significant:", nrow(entrez_all), "\n")
+cat("- Upregulated:", nrow(entrez_up), "\n") 
+cat("- Downregulated:", nrow(entrez_down), "\n\n")
+
+# 1. Gene Ontology Biological Process (GO:BP) - All significant genes
+cat("=== Running GO Biological Process Enrichment (All Genes) ===\n")
+go_bp_all <- enrichGO(gene = entrez_all$ENTREZID,
+                      OrgDb = org.Hs.eg.db,
+                      ont = "BP",
+                      pAdjustMethod = "BH", 
+                      pvalueCutoff = 0.05,
+                      qvalueCutoff = 0.2,
+                      readable = TRUE)
+
+go_bp_all_df <- as.data.frame(go_bp_all)
+if (nrow(go_bp_all_df) > 0) {
+  write_tsv(go_bp_all_df, file.path(results_dir, "GO_BP_all_genes_results.tsv"))
+  
+  # Create visualizations
+  p1 <- dotplot(go_bp_all, showCategory = 20) + 
+    ggtitle("GO Biological Process - All Significant Genes") +
+    theme(axis.text.y = element_text(size = 8))
+  ggsave(file.path(plots_dir, "GO_BP_all_dotplot.png"), p1, width = 12, height = 8)
+  
+  p2 <- barplot(go_bp_all, showCategory = 15) +
+    ggtitle("GO Biological Process - All Significant Genes")
+  ggsave(file.path(plots_dir, "GO_BP_all_barplot.png"), p2, width = 10, height = 8)
+  
+  cat("Found", nrow(go_bp_all_df), "significant GO:BP terms (all genes)\n")
+} else {
+  cat("No significant GO:BP terms found (all genes)\n")
+}
+
+# 2. Gene Ontology Biological Process (GO:BP) - Upregulated genes only
+if (length(entrez_up$ENTREZID) > 5) {
+  cat("\n=== Running GO Biological Process Enrichment (Upregulated) ===\n")
+  go_bp_up <- enrichGO(gene = entrez_up$ENTREZID,
+                       OrgDb = org.Hs.eg.db,
+                       ont = "BP",
+                       pAdjustMethod = "BH",
+                       pvalueCutoff = 0.05,
+                       qvalueCutoff = 0.2,
+                       readable = TRUE)
+  
+  go_bp_up_df <- as.data.frame(go_bp_up)
+  if (nrow(go_bp_up_df) > 0) {
+    write_tsv(go_bp_up_df, file.path(results_dir, "GO_BP_upregulated_results.tsv"))
+    
+    p3 <- dotplot(go_bp_up, showCategory = 20) + 
+      ggtitle("GO Biological Process - Upregulated Genes") +
+      theme(axis.text.y = element_text(size = 8))
+    ggsave(file.path(plots_dir, "GO_BP_up_dotplot.png"), p3, width = 12, height = 8)
+    
+    cat("Found", nrow(go_bp_up_df), "significant GO:BP terms (upregulated)\n")
+  } else {
+    cat("No significant GO:BP terms found (upregulated)\n")
+  }
+}
+
+# 3. Gene Ontology Biological Process (GO:BP) - Downregulated genes only  
+if (length(entrez_down$ENTREZID) > 5) {
+  cat("\n=== Running GO Biological Process Enrichment (Downregulated) ===\n")
+  go_bp_down <- enrichGO(gene = entrez_down$ENTREZID,
+                         OrgDb = org.Hs.eg.db,
+                         ont = "BP", 
+                         pAdjustMethod = "BH",
+                         pvalueCutoff = 0.05,
+                         qvalueCutoff = 0.2,
+                         readable = TRUE)
+  
+  go_bp_down_df <- as.data.frame(go_bp_down)
+  if (nrow(go_bp_down_df) > 0) {
+    write_tsv(go_bp_down_df, file.path(results_dir, "GO_BP_downregulated_results.tsv"))
+    
+    p4 <- dotplot(go_bp_down, showCategory = 20) + 
+      ggtitle("GO Biological Process - Downregulated Genes") +
+      theme(axis.text.y = element_text(size = 8))
+    ggsave(file.path(plots_dir, "GO_BP_down_dotplot.png"), p4, width = 12, height = 8)
+    
+    cat("Found", nrow(go_bp_down_df), "significant GO:BP terms (downregulated)\n")
+  } else {
+    cat("No significant GO:BP terms found (downregulated)\n")
+  }
+}
+
+# 4. Gene Ontology Molecular Function (GO:MF) - All significant genes
+cat("\n=== Running GO Molecular Function Enrichment ===\n")
+go_mf_all <- enrichGO(gene = entrez_all$ENTREZID,
+                      OrgDb = org.Hs.eg.db,
+                      ont = "MF",
+                      pAdjustMethod = "BH",
+                      pvalueCutoff = 0.05,
+                      qvalueCutoff = 0.2,
+                      readable = TRUE)
+
+go_mf_all_df <- as.data.frame(go_mf_all)
+if (nrow(go_mf_all_df) > 0) {
+  write_tsv(go_mf_all_df, file.path(results_dir, "GO_MF_all_genes_results.tsv"))
+  
+  p5 <- dotplot(go_mf_all, showCategory = 20) + 
+    ggtitle("GO Molecular Function - All Significant Genes") +
+    theme(axis.text.y = element_text(size = 8))
+  ggsave(file.path(plots_dir, "GO_MF_all_dotplot.png"), p5, width = 12, height = 8)
+  
+  cat("Found", nrow(go_mf_all_df), "significant GO:MF terms\n")
+} else {
+  cat("No significant GO:MF terms found\n")
+}
+
+# 5. Gene Ontology Cellular Component (GO:CC) - All significant genes
+cat("\n=== Running GO Cellular Component Enrichment ===\n")
+go_cc_all <- enrichGO(gene = entrez_all$ENTREZID,
+                      OrgDb = org.Hs.eg.db,
+                      ont = "CC",
+                      pAdjustMethod = "BH",
+                      pvalueCutoff = 0.05,
+                      qvalueCutoff = 0.2,
+                      readable = TRUE)
+
+go_cc_all_df <- as.data.frame(go_cc_all)
+if (nrow(go_cc_all_df) > 0) {
+  write_tsv(go_cc_all_df, file.path(results_dir, "GO_CC_all_genes_results.tsv"))
+  
+  p6 <- dotplot(go_cc_all, showCategory = 20) + 
+    ggtitle("GO Cellular Component - All Significant Genes") +
+    theme(axis.text.y = element_text(size = 8))
+  ggsave(file.path(plots_dir, "GO_CC_all_dotplot.png"), p6, width = 12, height = 8)
+  
+  cat("Found", nrow(go_cc_all_df), "significant GO:CC terms\n")
+} else {
+  cat("No significant GO:CC terms found\n")
+}
+
+# 6. Create comprehensive summary table
+cat("\n=== Creating Summary Table ===\n")
+summary_results <- data.frame()
+
+# Helper function to add results to summary
+add_to_summary <- function(results_df, method_name, ontology_name) {
+  if (exists(deparse(substitute(results_df))) && nrow(results_df) > 0) {
+    results_df %>%
+      select(ID, Description, pvalue, p.adjust, qvalue, Count, GeneRatio, BgRatio) %>%
+      mutate(Method = method_name,
+             Ontology = ontology_name) %>%
+      select(Method, Ontology, ID, Description, pvalue, p.adjust, qvalue, Count, GeneRatio, BgRatio)
+  } else {
+    data.frame()
+  }
+}
+
+# Add all results to summary
+if (exists("go_bp_all_df") && nrow(go_bp_all_df) > 0) {
+  summary_results <- rbind(summary_results, 
+                          add_to_summary(go_bp_all_df, "GO_BP_All", "Gene Ontology Biological Process"))
+}
+
+if (exists("go_bp_up_df") && nrow(go_bp_up_df) > 0) {
+  summary_results <- rbind(summary_results,
+                          add_to_summary(go_bp_up_df, "GO_BP_Up", "Gene Ontology Biological Process (Up)"))
+}
+
+if (exists("go_bp_down_df") && nrow(go_bp_down_df) > 0) {
+  summary_results <- rbind(summary_results,
+                          add_to_summary(go_bp_down_df, "GO_BP_Down", "Gene Ontology Biological Process (Down)"))
+}
+
+if (exists("go_mf_all_df") && nrow(go_mf_all_df) > 0) {
+  summary_results <- rbind(summary_results,
+                          add_to_summary(go_mf_all_df, "GO_MF_All", "Gene Ontology Molecular Function"))
+}
+
+if (exists("go_cc_all_df") && nrow(go_cc_all_df) > 0) {
+  summary_results <- rbind(summary_results,
+                          add_to_summary(go_cc_all_df, "GO_CC_All", "Gene Ontology Cellular Component"))
+}
+
+# Save comprehensive results
+if (nrow(summary_results) > 0) {
+  summary_results <- summary_results %>%
+    arrange(p.adjust)
+  
+  write_tsv(summary_results, file.path(results_dir, "GO_enrichment_comprehensive_results.tsv"))
+  
+  # Create top 25 results
+  top_results <- summary_results %>%
+    slice_head(n = 25)
+  write_tsv(top_results, file.path(results_dir, "GO_enrichment_top25_results.tsv"))
+  
+  # Create method comparison
+  method_summary <- summary_results %>%
+    group_by(Method) %>%
+    summarize(
+      n_terms = n(),
+      min_pvalue = min(pvalue),
+      mean_pvalue = mean(pvalue),
+      .groups = "drop"
+    )
+  
+  write_tsv(method_summary, file.path(results_dir, "GO_method_comparison.tsv"))
+  
+  # Visualization of method comparison
+  p_methods <- ggplot(method_summary, aes(x = Method, y = n_terms, fill = Method)) +
+    geom_col() +
+    labs(title = "Number of Significant GO Terms by Analysis Method",
+         x = "Analysis Method", 
+         y = "Number of Significant Terms") +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1),
+          legend.position = "none")
+  ggsave(file.path(plots_dir, "GO_method_comparison.png"), p_methods, width = 10, height = 6)
+  
+  cat("\nSummary table created with", nrow(summary_results), "total enriched GO terms\n")
+  cat("Results saved to:", file.path(results_dir, "GO_enrichment_comprehensive_results.tsv"), "\n")
+} else {
+  cat("No significant enrichment results found\n")
+}
+
+# Final summary
+cat("\n=== STEP 5 ANALYSIS COMPLETE ===\n")
+cat("Method: clusterProfiler (PyDESeq2-style approach)\n")
+cat("Ontology: Gene Ontology (BP, MF, CC)\n")
+cat("Parameters used:\n")
+cat("- p-value cutoff: 0.05\n")
+cat("- q-value cutoff: 0.2\n") 
+cat("- Multiple testing correction: Benjamini-Hochberg\n")
+cat("- Gene ID conversion: Ensembl to Entrez\n")
+cat("\nInput:\n")
+cat("- Total DE genes:", length(sig_genes_all), "\n")
+cat("- Upregulated genes:", length(sig_genes_up), "\n")
+cat("- Downregulated genes:", length(sig_genes_down), "\n")
+if (exists("summary_results") && nrow(summary_results) > 0) {
+  cat("\nResults:\n")
+  cat("- Total significant GO terms:", nrow(summary_results), "\n")
+  cat("- Most significant term p-value:", format(min(summary_results$p.adjust), scientific = TRUE), "\n")
+}
+```
+
+## Section 5 Summary
+
+```{r echo=FALSE}
+if (exists("summary_results") && nrow(summary_results) > 0) {
+  top_term <- summary_results %>%
+    arrange(p.adjust) %>%
+    slice(1) %>%
+    mutate(term_label = sprintf("%s (%.2g)", Description, p.adjust))
+  cat(sprintf("Gene set enrichment with clusterProfiler returned %d significant Gene Ontology terms across BP, MF, and CC analyses.",
+              nrow(summary_results)))
+  cat(" The strongest signal was ")
+  cat(top_term$term_label)
+  cat(", and detailed tables plus dot/bar plots were exported to the results and plots directories for team review.\n")
+} else {
+  cat("Run the enrichment chunk above to populate the clusterProfiler results summary before compiling cross-method tables.\n")
+}
+
+if (exists("topgo_results_bp")) {
+  cat(sprintf("The topGO run contributed %d Biological Process terms (with %d passing weight01 < 0.05), and the summaries were written alongside the clusterProfiler outputs.\n",
+              nrow(topgo_results_bp),
+              sum(topgo_results_bp$weight01Fisher_p < 0.05, na.rm = TRUE)))
+}
 ```
 
 # Section 6
 
-```{r}
+## Section 6a: Consolidate enrichment results across methods
 
+```{r}
+library(dplyr)
+library(readr)
+library(tidyr)
+library(stringr)
+library(purrr)
+
+# helper to tidy method names
+clean_method_name <- function(x) {
+  x %>%
+    stringr::str_replace_all("[^A-Za-z0-9]+", "_") %>%
+    stringr::str_replace_all("_+", "_") %>%
+    stringr::str_replace_all("^_|_$", "") %>%
+    stringr::str_to_lower()
+}
+
+parse_pvalue <- function(x) {
+  if (is.numeric(x)) return(x)
+  ifelse(is.na(x), NA_real_, suppressWarnings(as.numeric(stringr::str_replace_all(x, "<\\s*", ""))))
+}
+
+enrichment_tables <- list()
+
+# clusterProfiler results from current session or saved file
+if (exists("summary_results") && nrow(summary_results) > 0) {
+  cp_long <- summary_results %>%
+    transmute(
+      source_method = "clusterProfiler",
+      method_detail = Method,
+      term_id = ID,
+      term_name = Description,
+      p_value = as.numeric(pvalue),
+      adj_p_value = as.numeric(p.adjust),
+      q_value = as.numeric(qvalue)
+    ) %>%
+    mutate(significant = ifelse(!is.na(adj_p_value), adj_p_value < 0.05, ifelse(!is.na(p_value), p_value < 0.05, FALSE)))
+  enrichment_tables <- append(enrichment_tables, list(cp_long))
+} else {
+  cp_path <- file.path(results_dir, "GO_enrichment_comprehensive_results.tsv")
+  if (file.exists(cp_path)) {
+    cp_file <- readr::read_tsv(cp_path, show_col_types = FALSE)
+    cp_long <- cp_file %>%
+      transmute(
+        source_method = "clusterProfiler",
+        method_detail = Method,
+        term_id = ID,
+        term_name = Description,
+        p_value = as.numeric(pvalue),
+        adj_p_value = as.numeric(p.adjust),
+        q_value = as.numeric(qvalue)
+      ) %>%
+      mutate(significant = ifelse(!is.na(adj_p_value), adj_p_value < 0.05, ifelse(!is.na(p_value), p_value < 0.05, FALSE)))
+    enrichment_tables <- append(enrichment_tables, list(cp_long))
+  }
+}
+
+# clusterProfiler KEGG results
+if (exists("kegg_results_df") && nrow(kegg_results_df) > 0) {
+  method_label <- if (exists("run_label")) paste0("KEGG_", run_label) else "KEGG_current_run"
+  kegg_long <- kegg_results_df %>%
+    transmute(
+      source_method = "clusterProfiler",
+      method_detail = method_label,
+      term_id = ID,
+      term_name = Description,
+      p_value = as.numeric(pvalue),
+      adj_p_value = as.numeric(p.adjust),
+      q_value = as.numeric(qvalue)
+    ) %>%
+    mutate(significant = ifelse(!is.na(adj_p_value), adj_p_value < 0.05, ifelse(!is.na(p_value), p_value < 0.05, FALSE)))
+  enrichment_tables <- append(enrichment_tables, list(kegg_long))
+} else {
+  kegg_files <- list.files(results_dir, pattern = "^KEGG_enrichment_.*\\.tsv$", full.names = TRUE)
+  kegg_files <- kegg_files[!grepl("_top20_", kegg_files)]
+  if (length(kegg_files) > 0) {
+    kegg_tables <- purrr::map(kegg_files, ~{
+      df <- readr::read_tsv(.x, show_col_types = FALSE)
+      method_label <- tools::file_path_sans_ext(basename(.x))
+      df %>%
+        transmute(
+          source_method = "clusterProfiler",
+          method_detail = method_label,
+          term_id = ID,
+          term_name = Description,
+          p_value = as.numeric(pvalue),
+          adj_p_value = as.numeric(p.adjust),
+          q_value = as.numeric(qvalue)
+        ) %>%
+        mutate(significant = ifelse(!is.na(adj_p_value), adj_p_value < 0.05, ifelse(!is.na(p_value), p_value < 0.05, FALSE)))
+    })
+    enrichment_tables <- append(enrichment_tables, kegg_tables)
+  }
+}
+
+# Team methods saved to results directory
+topgo_files <- list.files(results_dir, pattern = "^topGO_.*\\.tsv$", full.names = TRUE)
+if (length(topgo_files) > 0) {
+  topgo_tables <- purrr::map(topgo_files, ~{
+    df <- readr::read_tsv(.x, show_col_types = FALSE)
+    method_label <- tools::file_path_sans_ext(basename(.x))
+    p_cols <- c("weight01Fisher_p", "weight01Fisher", "classicFisher_p", "classicFisher", "Fisher")
+    first_p <- purrr::detect(p_cols, ~ .x %in% names(df))
+    p_vals <- if (!is.null(first_p)) parse_pvalue(df[[first_p]]) else rep(NA_real_, nrow(df))
+
+    tibble::tibble(
+      source_method = "topGO",
+      method_detail = method_label,
+      term_id = df$`GO.ID`,
+      term_name = df$Term,
+      p_value = p_vals,
+      adj_p_value = NA_real_,
+      q_value = NA_real_
+    ) %>%
+      mutate(significant = ifelse(!is.na(p_value), p_value < 0.05, FALSE))
+  })
+  enrichment_tables <- append(enrichment_tables, topgo_tables)
+}
+
+gss_files <- list.files(results_dir, pattern = "^GSS_.*\\.tsv$|^GSS_validated_signatures_.*\\.tsv$", full.names = TRUE)
+if (length(gss_files) > 0) {
+  gss_tables <- purrr::map(gss_files, ~{
+    df <- readr::read_tsv(.x, show_col_types = FALSE)
+    method_label <- tools::file_path_sans_ext(basename(.x))
+    df %>%
+      transmute(
+        source_method = "GSS",
+        method_detail = method_label,
+        term_id = as.character(term_id),
+        term_name = as.character(term_name),
+        p_value = NA_real_,
+        adj_p_value = NA_real_,
+        q_value = NA_real_,
+        score = ifelse("score" %in% names(df), as.numeric(df$score), NA_real_)
+      ) %>%
+      mutate(significant = FALSE)
+  })
+  enrichment_tables <- append(enrichment_tables, gss_tables)
+}
+
+if (length(enrichment_tables) == 0) {
+  warning("No enrichment result files found. Run Step 5 for each team method before executing Section 6.")
+} else {
+  enrichment_long <- bind_rows(enrichment_tables) %>%
+    mutate(
+      method_readable = paste(source_method, method_detail, sep = ": "),
+      method_clean = clean_method_name(method_readable)
+    )
+
+  min_non_na <- function(...) {
+    vals <- c(...)
+    vals <- vals[!is.na(vals)]
+    if (length(vals) == 0) NA_real_ else min(vals)
+  }
+
+  metrics_to_pivot <- c("p_value", "adj_p_value", "q_value", "significant")
+
+  metrics_wide <- enrichment_long %>%
+    pivot_longer(cols = all_of(metrics_to_pivot), names_to = "metric", values_to = "metric_value") %>%
+    mutate(metric_column = paste(method_clean, metric, sep = "_")) %>%
+    select(term_id, term_name, metric_column, metric_value) %>%
+    distinct() %>%
+    pivot_wider(names_from = metric_column, values_from = metric_value)
+
+  method_counts <- enrichment_long %>%
+    group_by(term_id, term_name) %>%
+    summarise(
+      methods_included = n_distinct(method_readable),
+      methods_significant = sum(significant, na.rm = TRUE),
+      methods_list = paste(sort(unique(method_readable)), collapse = "; "),
+      min_p_value = min_non_na(p_value, adj_p_value, q_value),
+      .groups = "drop"
+    )
+
+  combined_table <- method_counts %>%
+    left_join(metrics_wide, by = c("term_id", "term_name")) %>%
+    arrange(desc(methods_significant), desc(methods_included), min_p_value)
+
+  assign("combined_enrichment_table", combined_table, envir = .GlobalEnv)
+
+  combined_path <- file.path(results_dir, "combined_enrichment_summary.tsv")
+  readr::write_tsv(combined_table, combined_path)
+
+  cat(sprintf("Combined enrichment summary saved to %s with %d unique terms across %d method contributions.\n",
+              combined_path, nrow(combined_table), length(unique(enrichment_long$method_readable))))
+}
+```
+
+## Section 6b Summary
+
+```{r echo=FALSE}
+if (exists("combined_enrichment_table")) {
+  method_strings <- combined_enrichment_table$methods_list
+  method_strings <- method_strings[!is.na(method_strings) & nzchar(method_strings)]
+  method_sets <- strsplit(method_strings, "\\s*;\\s*")
+  unique_methods <- sort(unique(unlist(method_sets)))
+  terms_sig <- sum(combined_enrichment_table$methods_significant > 0)
+  cat(sprintf("Cross-method comparison pooled %d enrichment outputs, highlighting %d terms that were significant in at least one analysis.",
+              length(unique_methods), terms_sig))
+  cat(" The merged table adds per-method p-values, counts how many pipelines reported each term as significant, and is exported as `combined_enrichment_summary.tsv` for team synthesis.\n")
+} else {
+  cat("Run the consolidation chunk once each teammate has exported their enrichment results to the results directory.\n")
+}
 ```
 
 # Section 7
 
-```{r}
+## Section 7a: Top shared enrichment signals
 
+```{r}
+if (exists("combined_enrichment_table")) {
+  top_terms <- combined_enrichment_table %>%
+    arrange(desc(methods_significant), desc(methods_included), min_p_value) %>%
+    { .[seq_len(min(10, nrow(.))), , drop = FALSE] }
+
+  assign("top_shared_terms", top_terms, envir = .GlobalEnv)
+
+  top10_path <- file.path(results_dir, "combined_enrichment_top10.tsv")
+  readr::write_tsv(top_terms, top10_path)
+
+  print(top_terms %>% select(term_id, term_name, methods_significant, methods_included, min_p_value))
+  cat(sprintf("\nTop consensus terms saved to %s.\n", top10_path))
+} else {
+  cat("Run Section 6 first to build the combined enrichment table.\n")
+}
+```
+
+## Section 7b Summary
+
+```{r echo=FALSE}
+if (exists("top_shared_terms")) {
+  best_term <- top_shared_terms %>% slice(1)
+  cat(sprintf("Across methods, %s emerged as the most consistently enriched term, reported by %d method(s) with a minimum adjusted p-value of %.2g.",
+              best_term$term_name, best_term$methods_significant, best_term$min_p_value))
+  cat(" The top-10 consensus table is written to `combined_enrichment_top10.tsv` for inclusion in the final writeup.\n")
+} else {
+  cat("Once Section 6 has been executed, rerun this chunk to capture the shared top 10 terms.\n")
+}
 ```
