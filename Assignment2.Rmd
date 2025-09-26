@@ -1,19 +1,36 @@
 # Package Downloads
 
 ```{r message=FALSE, eval = FALSE}
-if (!require("BiocManager", quietly = TRUE))
-  install.packages("BiocManager", repos = "https://cloud.r-project.org")
-BiocManager::install(version = "3.21")
-if (!requireNamespace("DESeq2", quietly = TRUE)) {
-  BiocManager::install("DESeq2")
+# Run this chunk top-to-bottom in a fresh R session to ensure all required
+# packages are available. It safely skips anything already installed.
+
+cran_repo <- "https://cloud.r-project.org"
+options(repos = c(CRAN = cran_repo))
+
+if (!requireNamespace("BiocManager", quietly = TRUE)) {
+  install.packages("BiocManager", repos = cran_repo)
 }
-install.packages("devtools", repos = "https://cloud.r-project.org")
-install.packages("GenomeInfoDb", repos = "https://cloud.r-project.org")
-install.packages("tidyverse", repos = "https://cloud.r-project.org")
-# Install the Homo Sapiens package
-if (!("org.Hs.eg.db" %in% installed.packages())) {
-  BiocManager::install("org.Hs.eg.db", update = FALSE)
+
+BiocManager::install(version = "3.21", ask = FALSE, update = FALSE)
+
+install_if_missing <- function(pkgs, installer) {
+  missing_pkgs <- pkgs[!vapply(pkgs, requireNamespace,
+                               FUN.VALUE = logical(1), quietly = TRUE)]
+  if (length(missing_pkgs) > 0) {
+    installer(missing_pkgs)
+  }
+  invisible(NULL)
 }
+
+install_if_missing(
+  pkgs = c("devtools", "GenomeInfoDb", "tidyverse"),
+  installer = function(pkgs) install.packages(pkgs, repos = cran_repo)
+)
+
+install_if_missing(
+  pkgs = c("DESeq2", "org.Hs.eg.db"),
+  installer = function(pkgs) BiocManager::install(pkgs, ask = FALSE, update = FALSE)
+)
 ```
 
 # Section 1
@@ -167,7 +184,49 @@ plot_obj
 The dataset contains `r format(matrix_dim[1], big.mark = ",")` genes measured across `r matrix_dim[2]` samples. The summary statistics show that most genes have low median expression (median ≈ `r round(median(gene_medians), 2)` on the log2 scale), with a long tail of higher expression values (max ≈ `r round(max(gene_medians), 2)`). From our research, this is typical for transcriptome data, where a small number of genes are highly expressed while the majority have low expression. The density plot visualizes this distribution, showing a peak at lower expression values and a gradual decline towards higher values. Log transformation helps to reduce the impact of extreme values and makes the distribution more interpretable. \# Section 2 \## Section 2a-c
 
 ```{r}
-library(DESeq2)
+suppressPackageStartupMessages({
+  library(DESeq2)
+  library(dplyr)
+  library(magrittr)
+  library(readr)
+  library(tibble)
+  library(stringr)
+})
+
+if (!exists("results_dir")) {
+  results_dir <- "results"
+  if (!dir.exists(results_dir)) dir.create(results_dir, recursive = TRUE)
+}
+if (!exists("plots_dir")) {
+  plots_dir <- "plots"
+  if (!dir.exists(plots_dir)) dir.create(plots_dir, recursive = TRUE)
+}
+if (!exists("data_dir")) {
+  data_dir <- file.path("data", "SRP192714")
+}
+
+if (!exists("expression_df") || !exists("merged_meta")) {
+  sample_limit_local <- if (exists("sample_limit")) sample_limit else Inf
+  expression_df <- readr::read_tsv(file.path(data_dir, "SRP192714.tsv"), show_col_types = FALSE) %>%
+    tibble::column_to_rownames("Gene")
+
+  refinebio_meta <- readr::read_tsv(file.path(data_dir, "metadata_SRP192714.tsv"), show_col_types = FALSE)
+  rownames(refinebio_meta) <- refinebio_meta$refinebio_accession_code
+
+  all_samples <- colnames(expression_df)
+  selected_samples <- all_samples
+  if (is.finite(sample_limit_local)) {
+    selected_samples <- all_samples[seq_len(min(sample_limit_local, length(all_samples)))]
+  }
+
+  expression_df <- expression_df[, selected_samples, drop = FALSE]
+  merged_meta <- refinebio_meta %>%
+    dplyr::filter(refinebio_accession_code %in% selected_samples)
+  rownames(merged_meta) <- merged_meta$refinebio_accession_code
+
+  is_trimmed_run <- length(selected_samples) < length(all_samples)
+  run_label <- if (is_trimmed_run) paste0("trimmed_", length(selected_samples)) else "full"
+}
 
 expr_mat <- expression_df %>% dplyr::select(where(is.numeric))
 meta <- merged_meta
@@ -628,11 +687,14 @@ if (exists("res_df")) {
   sig_n <- sum(res_df$padj < 0.05, na.rm = TRUE)
   up_n <- sum(res_df$padj < 0.05 & res_df$log2FoldChange > 0, na.rm = TRUE)
   down_n <- sum(res_df$padj < 0.05 & res_df$log2FoldChange < 0, na.rm = TRUE)
-  top_hits <- res_annot %>%
-    arrange(padj) %>%
-    slice_head(n = min(3, n())) %>%
-    mutate(label = ifelse(!is.na(Symbol) & Symbol != "", Symbol, GeneID)) %>%
-    mutate(summary = sprintf("%s (log2FC = %.2f, padj = %.2g)", label, log2FoldChange, padj))
+
+  top_source <- if (exists("res_annot")) res_annot else res_df
+  top_hits <- top_source %>%
+    dplyr::arrange(padj) %>%
+    dplyr::filter(!is.na(padj)) %>%
+    dplyr::slice_head(n = 3) %>%
+    dplyr::mutate(label = ifelse(!is.na(Symbol) & Symbol != "", Symbol, GeneID)) %>%
+    dplyr::mutate(summary = sprintf("%s (log2FC = %.2f, padj = %.2g)", label, log2FoldChange, padj))
 
   cat(sprintf("Differential testing identified %d genes with padj < 0.05, including %d higher in DENV and %d lower in DENV relative to Naive samples.",
               sig_n, up_n, down_n))
@@ -657,10 +719,10 @@ if (exists("res_df")) {
 
 # Load required libraries
 if (!requireNamespace("ComplexHeatmap", quietly = TRUE)) {
-  BiocManager::install("ComplexHeatmap")
+  BiocManager::install("ComplexHeatmap", ask = FALSE, update = FALSE)
 }
 if (!requireNamespace("circlize", quietly = TRUE)) {
-  BiocManager::install("circlize")
+  BiocManager::install("circlize", ask = FALSE, update = FALSE)
 }
 if (!requireNamespace("grid", quietly = TRUE)) {
   install.packages("grid")
@@ -930,8 +992,8 @@ GenomicSuperSignature\
 ```{r Package Install, message = FALSE}
 if (!require("BiocManager"))
     install.packages("BiocManager")
-BiocManager::install("GenomicSuperSignature")
-BiocManager::install("bcellViper")
+BiocManager::install("GenomicSuperSignature", ask = FALSE, update = FALSE)
+BiocManager::install("bcellViper", ask = FALSE, update = FALSE)
 ```
 
 ## Libraries
@@ -1065,10 +1127,10 @@ As seen in the above graphs, the annotated_RAV and meshTables are key words and 
 
 ```{r}
 if (!requireNamespace("topGO", quietly = TRUE)) {
-  BiocManager::install("topGO")
+  BiocManager::install("topGO", ask = FALSE, update = FALSE)
 }
 if (!requireNamespace("GO.db", quietly = TRUE)) {
-  BiocManager::install("GO.db")
+  BiocManager::install("GO.db", ask = FALSE, update = FALSE)
 }
 
 suppressPackageStartupMessages({
@@ -1095,12 +1157,12 @@ names(gene_scores) <- gene_table$base_id
 
 selection_fun <- function(x) x < 0.05
 
-go_data_bp <- topGO::new(
+go_data_bp <- methods::new(
   "topGOdata",
   description = "topGO GO BP",
   ontology = "BP",
   allGenes = gene_scores,
-  geneSelectionFunc = selection_fun,
+  geneSel = selection_fun,
   nodeSize = 10,
   annot = annFUN.org,
   mapping = "org.Hs.eg.db",
@@ -1190,13 +1252,13 @@ if (exists("topgo_results_bp")) {
 
 # Load required libraries
 if (!requireNamespace("clusterProfiler", quietly = TRUE)) {
-  BiocManager::install("clusterProfiler")
+  BiocManager::install("clusterProfiler", ask = FALSE, update = FALSE)
 }
 if (!requireNamespace("org.Hs.eg.db", quietly = TRUE)) {
-  BiocManager::install("org.Hs.eg.db")
+  BiocManager::install("org.Hs.eg.db", ask = FALSE, update = FALSE)
 }
 if (!requireNamespace("enrichplot", quietly = TRUE)) {
-  BiocManager::install("enrichplot")
+  BiocManager::install("enrichplot", ask = FALSE, update = FALSE)
 }
 if (!requireNamespace("ggplot2", quietly = TRUE)) {
   install.packages("ggplot2")
@@ -1599,17 +1661,20 @@ if (length(topgo_files) > 0) {
   topgo_tables <- purrr::map(topgo_files, ~{
     df <- readr::read_tsv(.x, show_col_types = FALSE)
     method_label <- tools::file_path_sans_ext(basename(.x))
-    df %>%
-      transmute(
-        source_method = "topGO",
-        method_detail = method_label,
-        term_id = `GO.ID`,
-        term_name = Term,
-        p_value = parse_pvalue(Fisher),
-        adj_p_value = NA_real_,
-        q_value = NA_real_
-      ) %>%
-      mutate(significant = p_value < 0.05)
+    p_cols <- c("weight01Fisher_p", "weight01Fisher", "classicFisher_p", "classicFisher", "Fisher")
+    first_p <- purrr::detect(p_cols, ~ .x %in% names(df))
+    p_vals <- if (!is.null(first_p)) parse_pvalue(df[[first_p]]) else rep(NA_real_, nrow(df))
+
+    tibble::tibble(
+      source_method = "topGO",
+      method_detail = method_label,
+      term_id = df$`GO.ID`,
+      term_name = df$Term,
+      p_value = p_vals,
+      adj_p_value = NA_real_,
+      q_value = NA_real_
+    ) %>%
+      mutate(significant = ifelse(!is.na(p_value), p_value < 0.05, FALSE))
   })
   enrichment_tables <- append(enrichment_tables, topgo_tables)
 }
@@ -1708,7 +1773,7 @@ if (exists("combined_enrichment_table")) {
 if (exists("combined_enrichment_table")) {
   top_terms <- combined_enrichment_table %>%
     arrange(desc(methods_significant), desc(methods_included), min_p_value) %>%
-    slice_head(n = min(10, n()))
+    { .[seq_len(min(10, nrow(.))), , drop = FALSE] }
 
   assign("top_shared_terms", top_terms, envir = .GlobalEnv)
 
