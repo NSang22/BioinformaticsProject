@@ -1,0 +1,108 @@
+# Assignmennt 3
+
+# Section 1
+```{r}
+suppressPackageStartupMessages(library(readr))
+suppressPackageStartupMessages(library(dplyr))
+suppressPackageStartupMessages(library(tibble))
+
+data_dir <- file.path("data", "SRP192714")
+counts_path <- file.path(data_dir, "SRP192714.tsv")
+metadata_path <- file.path(data_dir, "metadata_SRP192714_merged.tsv")
+
+stopifnot(file.exists(counts_path))
+
+if (!file.exists(metadata_path)) {
+	message("Rebuilding merged metadata from Assignment2 inputs...")
+	refinebio_path <- file.path(data_dir, "metadata_SRP192714.tsv")
+	geo_path <- file.path("data", "GSE129882_PhenoData.transcript.csv")
+	stopifnot(file.exists(refinebio_path), file.exists(geo_path))
+
+	refinebio_meta <- readr::read_tsv(refinebio_path, show_col_types = FALSE)
+	geo_meta <- readr::read_csv(geo_path, show_col_types = FALSE)
+
+	if ("Sample" %in% names(geo_meta) && "refinebio_title" %in% names(refinebio_meta)) {
+		merged_meta <- dplyr::left_join(
+			refinebio_meta,
+			geo_meta,
+			by = c("refinebio_title" = "Sample")
+		)
+	} else {
+		merged_meta <- refinebio_meta
+	}
+
+	readr::write_tsv(merged_meta, metadata_path)
+}
+
+counts_df <- readr::read_tsv(counts_path, show_col_types = FALSE)
+stopifnot("Gene" %in% names(counts_df))
+
+expression_mat <- counts_df %>%
+	column_to_rownames("Gene") %>%
+	as.matrix()
+mode(expression_mat) <- "numeric"
+
+metadata <- readr::read_tsv(metadata_path, show_col_types = FALSE)
+stopifnot(all(c("refinebio_accession_code", "Exposure") %in% names(metadata)))
+
+common_samples <- intersect(colnames(expression_mat), metadata$refinebio_accession_code)
+stopifnot(length(common_samples) > 0)
+
+common_samples <- sort(common_samples)
+expression_mat <- expression_mat[, common_samples, drop = FALSE]
+
+metadata <- metadata %>%
+	filter(refinebio_accession_code %in% common_samples) %>%
+	mutate(refinebio_accession_code = factor(refinebio_accession_code, levels = common_samples)) %>%
+	arrange(refinebio_accession_code)
+
+metadata$Exposure <- droplevels(factor(metadata$Exposure))
+
+stopifnot(identical(colnames(expression_mat), as.character(metadata$refinebio_accession_code)))
+
+cat("Genes loaded:", nrow(expression_mat), "\n")
+cat("Samples aligned:", ncol(expression_mat), "\n")
+```
+
+# Section 2a
+```{r}
+suppressPackageStartupMessages({
+	library(matrixStats)
+})
+
+stopifnot(exists("expression_mat"))
+
+gene_vars <- matrixStats::rowVars(expression_mat)
+
+target_genes <- min(5000, length(gene_vars))
+top_idx <- head(order(gene_vars, decreasing = TRUE), target_genes)
+
+expression_top5000 <- expression_mat[top_idx, , drop = FALSE]
+
+cat("Genes retained for clustering:", nrow(expression_top5000), "of", length(gene_vars), "\n")
+cat("Variance range:", sprintf("%.2f", min(gene_vars[top_idx])), "-", sprintf("%.2f", max(gene_vars[top_idx])), "\n")
+```
+
+# Section 2b-5
+## William Le: Hierarchical Clustering
+```{r}
+
+```
+
+## Nikhil Sangamkar: PAM Clustering
+
+```{r}
+
+```
+
+## Taylor Tillander: K-means Clustering
+
+```{r}
+
+```
+
+## Ibrahim Zbib:  Clustering
+
+```{r}
+
+```
