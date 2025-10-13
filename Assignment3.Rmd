@@ -1,11 +1,21 @@
-# Assignmennt 3
+# Assignment 3
 
-# Section 1
+# Package Installation
 ```{r}
 suppressPackageStartupMessages(library(readr))
 suppressPackageStartupMessages(library(dplyr))
 suppressPackageStartupMessages(library(tibble))
+cran_pkgs <- c("tidyr","purrr","janitor","glue","mclust",
+               "matrixStats","cluster","forcats","RColorBrewer","scales")
+to_install <- setdiff(cran_pkgs, rownames(installed.packages()))
+if (length(to_install)) install.packages(to_install)
 
+if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")
+BiocManager::install(c("ComplexHeatmap","circlize"), update = FALSE, ask = FALSE)
+```
+
+# Section 1
+```{r}
 data_dir <- file.path("data", "SRP192714")
 counts_path <- file.path(data_dir, "SRP192714.tsv")
 metadata_path <- file.path(data_dir, "metadata_SRP192714_merged.tsv")
@@ -66,10 +76,6 @@ cat("Samples aligned:", ncol(expression_mat), "\n")
 
 # Section 2a
 ```{r}
-suppressPackageStartupMessages({
-	library(matrixStats)
-})
-
 stopifnot(exists("expression_mat"))
 
 gene_vars <- matrixStats::rowVars(expression_mat)
@@ -98,10 +104,334 @@ cat("Variance range:", sprintf("%.2f", min(gene_vars[top_idx])), "-", sprintf("%
 ## Taylor Tillander: K-means Clustering
 
 ```{r}
+suppressPackageStartupMessages({
+	library(dplyr)
+	library(tidyr)
+	library(purrr)
+	library(tibble)
+	library(matrixStats)
+	library(cluster)
+	library(forcats)
+	library(mclust)
+	library(glue)
+})
 
+stopifnot(exists("expression_mat"), exists("metadata"))
+
+metadata_exposure <- metadata %>%
+	mutate(
+		refinebio_accession_code = as.character(refinebio_accession_code),
+		Exposure = forcats::fct_na_value_to_level(Exposure, level = "Unknown")
+	)
+
+exposure_lookup <- metadata_exposure %>%
+	select(refinebio_accession_code, Exposure) %>%
+	mutate(Exposure = as.character(Exposure)) %>%
+	deframe()
+
+exposure_table <- metadata_exposure %>%
+	transmute(
+		sample_id = refinebio_accession_code,
+		exposure = as.character(Exposure)
+	)
+
+k_grid <- 2:8
+kmeans_seed <- 0L
+
+select_top_genes <- function(mat, n) {
+	n <- min(n, nrow(mat))
+	variances <- matrixStats::rowVars(mat)
+	ordered <- order(variances, decreasing = TRUE)
+	idx <- head(ordered, n)
+	list(idx = idx, genes = rownames(mat)[idx], variances = variances[idx])
+}
+
+compute_pca_scores <- function(mat, idx, max_components = 50) {
+	X <- t(mat[idx, , drop = FALSE])
+	X_scaled <- scale(X)
+	X_scaled[is.na(X_scaled)] <- 0
+	pc <- prcomp(X_scaled, center = FALSE, scale. = FALSE)
+	if (ncol(pc$x) == 0) {
+		stop("PCA returned zero components; check the input variance.")
+	}
+	ncomp <- min(max_components, ncol(pc$x))
+	pc$x[, seq_len(ncomp), drop = FALSE]
+}
+
+run_kmeans_models <- function(scores, k_values, seed = kmeans_seed) {
+	dist_mat <- dist(scores)
+	sample_ids <- rownames(scores)
+	purrr::map_dfr(k_values, function(k) {
+		set.seed(seed + k)
+		fit <- stats::kmeans(scores, centers = k, nstart = 50)
+		clusters <- factor(fit$cluster, levels = seq_len(k))
+		names(clusters) <- sample_ids
+		sil <- cluster::silhouette(as.integer(clusters), dist_mat)
+		tibble(
+			k = k,
+			tot_withinss = fit$tot.withinss,
+			scaled_tot_withinss = fit$tot.withinss / k,
+			avg_silhouette = mean(sil[, 3]),
+			model = list(fit),
+			clusters = list(clusters),
+			silhouette = list(sil)
+		)
+	})
+}
+
+extract_assignments <- function(models_tbl) {
+	models_tbl %>%
+		mutate(assignment = purrr::map(clusters, ~ tibble(
+			sample_id = names(.x),
+			cluster = as.character(.x)
+		))) %>%
+		select(k, assignment) %>%
+		unnest(assignment)
+}
+
+cluster_summary <- function(assignments, exposure_df) {
+	assignments %>%
+		mutate(cluster = as.character(cluster)) %>%
+		left_join(exposure_df, by = "sample_id") %>%
+		mutate(exposure = ifelse(is.na(exposure), "Unknown", exposure)) %>%
+		group_by(k, cluster, exposure) %>%
+		summarise(n = dplyr::n(), .groups = "drop_last") %>%
+		mutate(cluster_total = sum(n)) %>%
+		arrange(desc(n), .by_group = TRUE) %>%
+		slice(1L) %>%
+		ungroup() %>%
+		transmute(
+			k,
+			cluster = factor(cluster),
+			samples_in_cluster = cluster_total,
+			majority_exposure = exposure,
+			majority_fraction = round(n / cluster_total, 3)
+		)
+}
+
+pairwise_ari <- function(assignments) {
+	k_vals <- sort(unique(assignments$k))
+	if (length(k_vals) < 2) {
+		return(tibble())
+	}
+	combn(k_vals, 2, simplify = FALSE) %>%
+		map_dfr(function(pair) {
+			first <- assignments %>% filter(k == pair[1]) %>% arrange(sample_id)
+			second <- assignments %>% filter(k == pair[2]) %>% arrange(sample_id)
+			stopifnot(identical(first$sample_id, second$sample_id))
+			tibble(
+				k1 = pair[1],
+				k2 = pair[2],
+				adjusted_rand = mclust::adjustedRandIndex(first$cluster, second$cluster)
+			)
+		})
+}
 ```
 
-## Ibrahim Zbib:  Clustering
+```{r}
+gene_counts <- c(10, 100, 1000, 5000, 10000)
+
+kmeans_runs <- purrr::map(gene_counts, function(gene_n) {
+	top <- select_top_genes(expression_mat, gene_n)
+	scores <- compute_pca_scores(expression_mat, top$idx)
+	models <- run_kmeans_models(scores, k_grid)
+	assignments <- extract_assignments(models)
+	metrics <- models %>%
+		select(k, tot_withinss, scaled_tot_withinss, avg_silhouette) %>%
+		mutate(gene_count = gene_n)
+	best_row <- metrics %>% arrange(desc(avg_silhouette), k) %>% slice(1)
+	best_k <- best_row$k
+	best_assign <- assignments %>% filter(k == best_k) %>% select(sample_id, cluster)
+	list(
+		gene_count = gene_n,
+		metrics = metrics,
+		assignments = assignments,
+		best_k = best_k,
+		best_clusters = best_assign,
+		ari = pairwise_ari(assignments)
+	)
+}) %>%
+	purrr::set_names(paste0("genes_", gene_counts))
+
+kmeans_metrics_table <- purrr::map_dfr(kmeans_runs, "metrics")
+
+kmeans_best_table <- purrr::map_dfr(kmeans_runs, function(x) {
+	best_metric <- x$metrics %>% filter(k == x$best_k)
+	tibble(
+		gene_count = x$gene_count,
+		best_k = x$best_k,
+		avg_silhouette = best_metric$avg_silhouette,
+		scaled_tot_withinss = best_metric$scaled_tot_withinss
+	)
+}) %>% arrange(gene_count)
+
+kmeans_assignments_best <- purrr::map(kmeans_runs, "best_clusters")
+
+kmeans_assignments_5000 <- kmeans_assignments_best[["genes_5000"]]
+stopifnot(!is.null(kmeans_assignments_5000))
+
+assign("kmeans_clusters_5000", kmeans_assignments_5000, envir = .GlobalEnv)
+assign("kmeans_best_k", kmeans_runs[["genes_5000"]]$best_k, envir = .GlobalEnv)
+
+kmeans_metrics_table %>%
+	filter(gene_count == 5000)
+
+kmeans_best_table
+```
+
+```{r}
+cluster_summary_5000 <- cluster_summary(
+	kmeans_runs[["genes_5000"]]$assignments %>% filter(k == kmeans_runs[["genes_5000"]]$best_k),
+	exposure_table
+)
+
+ari_table_5000 <- kmeans_runs[["genes_5000"]]$ari
+
+cluster_summary_5000
+
+ari_table_5000
+```
+
+```{r}
+suppressPackageStartupMessages(library(broom))
+
+chi_exposure <- purrr::imap_dfr(kmeans_assignments_best, function(assign_tbl, name) {
+	gene_n <- as.integer(gsub("genes_", "", name))
+	clusters <- assign_tbl %>% arrange(sample_id)
+	exposures <- exposure_lookup[clusters$sample_id]
+	tab <- table(
+		exposure = factor(exposures),
+		cluster = clusters$cluster
+	)
+	test <- suppressWarnings(chisq.test(tab))
+	tibble(
+		comparison = "clusters_vs_exposure",
+		gene_count_a = gene_n,
+		gene_count_b = gene_n,
+		k_a = kmeans_runs[[name]]$best_k,
+		k_b = kmeans_runs[[name]]$best_k,
+		statistic = unname(test$statistic),
+		df = unname(test$parameter),
+		p_value = test$p.value
+	)
+})
+
+pair_labels <- combn(names(kmeans_assignments_best), 2, simplify = FALSE)
+
+chi_pairwise <- purrr::map_dfr(pair_labels, function(pair) {
+	label_a <- pair[1]
+	label_b <- pair[2]
+	gene_a <- as.integer(gsub("genes_", "", label_a))
+	gene_b <- as.integer(gsub("genes_", "", label_b))
+	assign_a <- kmeans_assignments_best[[label_a]] %>% arrange(sample_id)
+	assign_b <- kmeans_assignments_best[[label_b]] %>% arrange(sample_id)
+	stopifnot(identical(assign_a$sample_id, assign_b$sample_id))
+	tab <- table(
+		cluster_a = assign_a$cluster,
+		cluster_b = assign_b$cluster
+	)
+	test <- suppressWarnings(chisq.test(tab))
+	tibble(
+		comparison = "clusters_vs_clusters",
+		gene_count_a = gene_a,
+		gene_count_b = gene_b,
+		k_a = kmeans_runs[[label_a]]$best_k,
+		k_b = kmeans_runs[[label_b]]$best_k,
+		statistic = unname(test$statistic),
+		df = unname(test$parameter),
+		p_value = test$p.value
+	)
+})
+
+chi_tests <- bind_rows(chi_exposure, chi_pairwise) %>%
+	mutate(p_adj = p.adjust(p_value, method = "BH")) %>%
+	arrange(comparison, gene_count_a, gene_count_b)
+
+if (!exists("results_dir")) {
+	results_dir <- "results"
+}
+if (!dir.exists(results_dir)) dir.create(results_dir, recursive = TRUE)
+
+readr::write_tsv(kmeans_metrics_table, file.path(results_dir, "kmeans_metrics_by_k.tsv"))
+readr::write_tsv(kmeans_best_table, file.path(results_dir, "kmeans_best_models.tsv"))
+readr::write_tsv(chi_tests, file.path(results_dir, "kmeans_chisq_tests.tsv"))
+
+chi_tests
+```
+
+```{r}
+suppressPackageStartupMessages({
+	library(ComplexHeatmap)
+	library(circlize)
+	library(RColorBrewer)
+	library(scales)
+})
+
+heatmap_matrix <- log2(expression_top5000 + 1)
+heatmap_matrix <- t(scale(t(heatmap_matrix)))
+heatmap_matrix[!is.finite(heatmap_matrix)] <- 0
+
+heatmap_samples <- colnames(heatmap_matrix)
+kmeans_col <- kmeans_assignments_5000$cluster[match(heatmap_samples, kmeans_assignments_5000$sample_id)]
+
+exposure_col <- exposure_lookup[heatmap_samples]
+exposure_col[is.na(exposure_col)] <- "Unknown"
+exposure_factor <- factor(exposure_col)
+
+cluster_factor <- factor(kmeans_col, levels = sort(unique(kmeans_col)))
+
+exposure_colors <- setNames(hue_pal()(length(levels(exposure_factor))), levels(exposure_factor))
+cluster_palette <- colorRampPalette(brewer.pal(8, "Set2"))(length(levels(cluster_factor)))
+cluster_colors <- setNames(cluster_palette, levels(cluster_factor))
+
+column_annotation <- HeatmapAnnotation(
+	Exposure = exposure_factor,
+	KMeans_5000 = cluster_factor,
+	col = list(
+		Exposure = exposure_colors,
+		KMeans_5000 = cluster_colors
+	),
+	annotation_name_side = "left"
+)
+
+heatmap_plot <- Heatmap(
+	name = "Z-score",
+	matrix = heatmap_matrix,
+	cluster_rows = TRUE,
+	cluster_columns = TRUE,
+	show_row_names = FALSE,
+	show_column_names = FALSE,
+	top_annotation = column_annotation,
+	column_title = glue("Top 5000 genes (k = {kmeans_runs[[\"genes_5000\"]]$best_k})"),
+	row_title = "Genes",
+	column_title_side = "top",
+	heatmap_legend_param = list(direction = "horizontal")
+)
+
+if (!exists("plots_dir")) {
+	plots_dir <- "plots"
+}
+if (!dir.exists(plots_dir)) dir.create(plots_dir, recursive = TRUE)
+
+png(file.path(plots_dir, "kmeans_heatmap_top5000.png"), width = 2000, height = 1600, res = 250)
+draw(heatmap_plot, merge_legend = TRUE)
+dev.off()
+
+pdf(file.path(plots_dir, "kmeans_heatmap_top5000.pdf"), width = 11, height = 8.5)
+draw(heatmap_plot, merge_legend = TRUE)
+dev.off()
+
+heatmap_plot
+```
+
+**Metrics Table** I compared k-means fits for k = 2-8 across five gene sets and recorded the average silhouette plus within-cluster variation for each run. Every subset selected k = 2 with the highest silhouette, reinforcing that a two-cluster solution best separates the samples in a way consistent with the dengue-versus-naïve hypothesis.
+
+**Chi-squared Table** I cross-tabulated each clustering (including the k = 2 model on 5,000 genes) against exposure labels and against the other gene-set clusterings, applying Benjamini-Hochberg correction. The modest p-value for the 5,000-gene comparison shows partial alignment with exposure status, while the extremely small p-values across gene-set pairs confirm that different feature counts still yield highly concordant cluster assignments.
+
+**Heatmap** I visualized the scaled expression of the 5,000 genes alongside exposure and k-means (k = 2) annotations. The two cluster bars align with the heatmap's column dendrogram, letting us see how the major expression split corresponds to the exposure groups reported in the metadata.
+
+
+## Ibrahim Zbib: Gaussian Clustering
 
 ```{r}
 
