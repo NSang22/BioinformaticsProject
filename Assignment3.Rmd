@@ -1,7 +1,7 @@
 # Assignment 3
 
 # Package Installation
-```{r}
+```{r "Install Packages", message=FALSE, eval = TRUE, cache=TRUE}
 suppressPackageStartupMessages(library(readr))
 suppressPackageStartupMessages(library(dplyr))
 suppressPackageStartupMessages(library(tibble))
@@ -15,7 +15,7 @@ BiocManager::install(c("ComplexHeatmap","circlize"), update = FALSE, ask = FALSE
 ```
 
 # Section 1
-```{r}
+```{r "Load Data", dependson="Install Packages", message=FALSE, eval = TRUE, cache=TRUE}
 data_dir <- file.path("data", "SRP192714")
 counts_path <- file.path(data_dir, "SRP192714.tsv")
 metadata_path <- file.path(data_dir, "metadata_SRP192714_merged.tsv")
@@ -75,7 +75,7 @@ cat("Samples aligned:", ncol(expression_mat), "\n")
 ```
 
 # Section 2a
-```{r}
+```{r "Select Top Genes", dependson="Load Data", eval = TRUE, cache=TRUE}
 stopifnot(exists("expression_mat"))
 
 gene_vars <- matrixStats::rowVars(expression_mat)
@@ -91,8 +91,15 @@ cat("Variance range:", sprintf("%.2f", min(gene_vars[top_idx])), "-", sprintf("%
 
 # Section 2b-5
 ## William Le: Hierarchical Clustering
-```{r}
-
+Checking for correct dimensions, labels, etc.
+```{r "hclust data check", dependson="Select Top Genes"}
+stopifnot(exists("expression_top5000"), exists("metadata"))
+dim(expression_top5000)
+dist(expression_top5000)
+dist(t(expression_top5000))
+```
+```{r "hclust run", dependson="Select Top Genes", cache=TRUE}
+hclust(dist())
 ```
 
 ## Nikhil Sangamkar: PAM Clustering
