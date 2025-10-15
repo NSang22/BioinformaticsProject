@@ -1,12 +1,16 @@
-# Assignment 3
-
+---
+title: "Assignment 3"
+author: "Will, Taylor, Nikhil, Abe"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
 # Package Installation
-```{r}
+```{r "Install Packages", message=FALSE, eval = TRUE, cache=TRUE}
 suppressPackageStartupMessages(library(readr))
 suppressPackageStartupMessages(library(dplyr))
 suppressPackageStartupMessages(library(tibble))
 cran_pkgs <- c("tidyr","purrr","janitor","glue","mclust",
-               "matrixStats","cluster","forcats","RColorBrewer","scales")
+               "matrixStats","cluster","forcats","RColorBrewer","scales", "magick", "Cairo", "factoextra")
 to_install <- setdiff(cran_pkgs, rownames(installed.packages()))
 if (length(to_install)) install.packages(to_install)
 
@@ -15,7 +19,7 @@ BiocManager::install(c("ComplexHeatmap","circlize"), update = FALSE, ask = FALSE
 ```
 
 # Section 1
-```{r}
+```{r "Load Data", dependson="Install Packages", message=FALSE, eval = TRUE, cache=TRUE}
 data_dir <- file.path("data", "SRP192714")
 counts_path <- file.path(data_dir, "SRP192714.tsv")
 metadata_path <- file.path(data_dir, "metadata_SRP192714_merged.tsv")
@@ -75,15 +79,30 @@ cat("Samples aligned:", ncol(expression_mat), "\n")
 ```
 
 # Section 2a
-```{r}
+```{r "Select Top Genes", dependson="Load Data", eval = TRUE}
 stopifnot(exists("expression_mat"))
-
+# calculate variability among rows (genes)
 gene_vars <- matrixStats::rowVars(expression_mat)
-
+?min
 target_genes <- min(5000, length(gene_vars))
 top_idx <- head(order(gene_vars, decreasing = TRUE), target_genes)
 
 expression_top5000 <- expression_mat[top_idx, , drop = FALSE]
+# map to symbol
+BiocManager::install("org.Hs.eg.db", update = FALSE)
+library(org.Hs.eg.db)
+
+gene_symbols <- mapIds(
+  org.Hs.eg.db, # Annotation package for humans
+  keys = rownames(expression_top5000),
+  keytype = "ENSEMBL",
+  column = "SYMBOL"
+  )
+
+na_indices <- is.na(gene_symbols)
+gene_symbols[na_indices] <- names(gene_symbols)[na_indices]
+unique_symbols <- make.unique(gene_symbols)
+rownames(expression_top5000) <- unique_symbols
 
 cat("Genes retained for clustering:", nrow(expression_top5000), "of", length(gene_vars), "\n")
 cat("Variance range:", sprintf("%.2f", min(gene_vars[top_idx])), "-", sprintf("%.2f", max(gene_vars[top_idx])), "\n")
@@ -91,8 +110,85 @@ cat("Variance range:", sprintf("%.2f", min(gene_vars[top_idx])), "-", sprintf("%
 
 # Section 2b-5
 ## William Le: Hierarchical Clustering
-```{r}
+Checking for correct dimensions, labels, etc.
+```{r "hclust data check", dependson="Select Top Genes"}
+stopifnot(exists("expression_top5000"), exists("metadata"))
+dim(expression_top5000)
+```
+```{r "hclust run", dependson="Select Top Genes", cache=TRUE}
 
+dist_genes = dist(expression_top5000, method="euclidean")
+hclust_genes = hclust(dist_genes, method="ward.D2")
+dist_samples = dist(t(expression_top5000), method="euclidean")
+hclust_samples = hclust(dist_samples, method="ward.D2")
+
+hc <- as.dendrogram(hclust_samples)
+plot(hc)
+```
+Above is the plotted dendrogram using Ward hierarchical clustering. This data is not much use to us as a dendrogram due to the sheer number of genes. Ideally, we'll represent this data as a heat map. What is useful, is that we can take the information from the hclust object we created to determine an optimal number of clusters using the silhouette method, elbow plot, or gap statatistic.\
+
+### Numebr of Clusters
+Here we will use information from the `hclust` object to determine optimal cluster number using the elbow plot method.\
+```{r "Cluster Determination", cache = TRUE}
+library(cluster)
+library(ggplot2)
+
+# create hclust_genes dataframe
+hclust_genes_df = hclust_genes$height %>%
+            as.tibble() %>%
+            add_column(groups = length(hclust_genes$height):1)
+# create hclust_samples dataframe
+hclust_samples_df = hclust_samples$height %>%
+            as.tibble() %>%
+            add_column(groups = length(hclust_samples$height):1)
+
+hg_df_plot = ggplot(hclust_genes_df,
+        aes(x=groups, y=value)) +
+     geom_point(shape=".") +
+     geom_line()
+hs_df_plot = ggplot(hclust_samples_df,
+        aes(x=groups, y=value)) +
+     geom_point(shape=".") +
+     geom_line()
+hg_df_plot
+hs_df_plot
+```
+These elbow plots do not seem very useful. We have too many groups. We really need to zoom in on the actual elbow to determine the number of groups we actually need.\
+```{r "Cluster Determination pt2"}
+hg_df_plot +
+  coord_cartesian(xlim = c(0, 2000), ylim = c(0, 1000)) + 
+  geom_abline(intercept = 680, slope = -1, color = "blue")
+hs_df_plot + 
+  coord_cartesian(xlim = c(0, 250), ylim = c(0, 2000)) + 
+  geom_abline(intercept = 1760, slope = -20, color = "red")
+```
+
+
+### Heat Map
+```{r "hclust heatmap", dependson="hclust run", cache=TRUE}
+library(ComplexHeatmap)
+library(magick)
+library(Cairo)
+gc()
+heatmap <- Heatmap(
+    expression_top5000,
+    use_raster = TRUE,
+    raster_by_magick = TRUE,
+    raster_quality = 1,
+    cluster_rows = TRUE,
+    cluster_columns = TRUE,
+    top_annotation = HeatmapAnnotation(
+        Dengue_Status = metadata$Exposure 
+    ),
+    show_row_names = FALSE,
+    show_column_names = FALSE,
+    column_title = "Hierarchical Clustering of Patients (N=1000+)",
+    row_title = "5000 Genes (Unreadable Density)",
+    row_title_rot = 90
+)
+CairoPDF("plots/hclust_heatmap.pdf", width = 18, height = 25)
+draw(heatmap)
+dev.off()
 ```
 
 ## Nikhil Sangamkar: PAM Clustering
