@@ -114,11 +114,11 @@ Checking for correct dimensions, labels, etc.
 ```{r "hclust data check", dependson="Select Top Genes"}
 stopifnot(exists("expression_top5000"), exists("metadata"))
 dim(expression_top5000)
+rownames(metadata) = metadata$refinebio_accession_code
 ```
+
 ```{r "hclust run", dependson="Select Top Genes", cache=TRUE}
 
-dist_genes = dist(expression_top5000, method="euclidean")
-hclust_genes = hclust(dist_genes, method="ward.D2")
 dist_samples = dist(t(expression_top5000), method="euclidean")
 hclust_samples = hclust(dist_samples, method="ward.D2")
 
@@ -127,40 +127,46 @@ plot(hc)
 ```
 Above is the plotted dendrogram using Ward hierarchical clustering. This data is not much use to us as a dendrogram due to the sheer number of genes. Ideally, we'll represent this data as a heat map. What is useful, is that we can take the information from the hclust object we created to determine an optimal number of clusters using the silhouette method, elbow plot, or gap statatistic.\
 
-### Numebr of Clusters
+### Number of Clusters
 Here we will use information from the `hclust` object to determine optimal cluster number using the elbow plot method.\
 ```{r "Cluster Determination", cache = TRUE}
 library(cluster)
 library(ggplot2)
-
-# create hclust_genes dataframe
-hclust_genes_df = hclust_genes$height %>%
-            as.tibble() %>%
-            add_column(groups = length(hclust_genes$height):1)
+library(tidyverse)
 # create hclust_samples dataframe
 hclust_samples_df = hclust_samples$height %>%
             as.tibble() %>%
             add_column(groups = length(hclust_samples$height):1)
 
-hg_df_plot = ggplot(hclust_genes_df,
-        aes(x=groups, y=value)) +
-     geom_point(shape=".") +
-     geom_line()
+
 hs_df_plot = ggplot(hclust_samples_df,
         aes(x=groups, y=value)) +
      geom_point(shape=".") +
      geom_line()
-hg_df_plot
 hs_df_plot
 ```
 These elbow plots do not seem very useful. We have too many groups. We really need to zoom in on the actual elbow to determine the number of groups we actually need.\
 ```{r "Cluster Determination pt2"}
-hg_df_plot +
-  coord_cartesian(xlim = c(0, 2000), ylim = c(0, 1000)) + 
-  geom_abline(intercept = 680, slope = -1, color = "blue")
 hs_df_plot + 
   coord_cartesian(xlim = c(0, 250), ylim = c(0, 2000)) + 
   geom_abline(intercept = 1760, slope = -20, color = "red")
+```
+Our results showed us that there are around 35 different groups that reacted differently to zika virus infection. This suggests that our two clinical groups, dengue-prior vs dengue-naive, do not behave statistically differently to zika infection. However, let's perform a chi-square test to be sure.\
+
+### Chi-Square Test
+```{r "Chi-Square Test"}
+clusters = cutree(hclust_samples, k = 35)
+# check if samples match
+all(sort(names(clusters)) == sort(rownames(metadata)))
+# check if sample order match
+all(names(clusters) == rownames(metadata))
+contingency_table = table(
+  Patient_Groups = clusters,
+  Patient_Exposure = metadata$Exposure
+)
+
+hs_cs_results = chisq.test(contingency_table)
+hs_cs_results
 ```
 
 
