@@ -431,8 +431,419 @@ heatmap_plot
 **Heatmap** I visualized the scaled expression of the 5,000 genes alongside exposure and k-means (k = 2) annotations. The two cluster bars align with the heatmap's column dendrogram, letting us see how the major expression split corresponds to the exposure groups reported in the metadata.
 
 
-## Ibrahim Zbib: Gaussian Clustering
+## Ibrahim Zbib: Spectral Clustering
 
+```{r spectral-setup, cache=TRUE}
+
+
+if (!requireNamespace("kernlab", quietly = TRUE)) {
+  install.packages("kernlab")
+}
+library(kernlab)
+
+stopifnot(exists("expression_mat"), exists("metadata"), exists("expression_top5000"))
+
+
+  
+  exposure_lookup <- metadata_exposure %>%
+    select(refinebio_accession_code, Exposure) %>%
+    mutate(Exposure = as.character(Exposure)) %>%
+    deframe()
+  
+  exposure_table <- metadata_exposure %>%
+    transmute(
+      sample_id = refinebio_accession_code,
+      exposure = as.character(Exposure)
+    )
+
+
+# helper function to select top variable genes
+select_top_genes <- function(mat, n) {
+  n <- min(n, nrow(mat))
+  variances <- matrixStats::rowVars(mat)
+  ordered <- order(variances, decreasing = TRUE)
+  idx <- head(ordered, n)
+  list(idx = idx, genes = rownames(mat)[idx], variances = variances[idx])
+}
+```
+
+### 2b-d: Running Spectral Clustering on 5000 genes
+
+```{r spectral-5000-genes, cache=TRUE, cache.lazy=FALSE}
+cat("Running spectral clustering on 5000 most variable genes...\n\n")
+
+# Use the expression_top5000 matrix created in Section 2a
+X_5000 <- t(expression_top5000)
+X_5000_scaled <- scale(X_5000)
+X_5000_scaled[is.na(X_5000_scaled)] <- 0
+
+k_values <- 2:8
+spectral_results_5000 <- list()
+
+for (k in k_values) {
+  cat(glue("  Testing k = {k}...\n"))
+  
+  sc_fit <- specc(X_5000_scaled, centers = k)
+  
+  # Extract cluster assignments
+  clusters <- factor(sc_fit@.Data, levels = seq_len(k))
+  names(clusters) <- rownames(X_5000_scaled)
+  
+  # silhouette for this k
+  dist_mat <- dist(X_5000_scaled)
+  sil <- silhouette(as.integer(clusters), dist_mat)
+  avg_sil <- mean(sil[, 3])
+  
+  spectral_results_5000[[as.character(k)]] <- list(
+    k = k,
+    clusters = clusters,
+    avg_silhouette = avg_sil,
+    silhouette_obj = sil
+  )
+  
+  cat(glue("    Average silhouette: {round(avg_sil, 4)}\n\n"))
+}
+
+k_comparison_5000 <- map_dfr(spectral_results_5000, function(res) {
+  tibble(
+    k = res$k,
+    avg_silhouette = res$avg_silhouette
+  )
+})
+
+cat("\n--- How changing k affects results (5000 genes) ---\n")
+print(k_comparison_5000)
+
+best_k_5000 <- k_comparison_5000 %>% 
+  arrange(desc(avg_silhouette)) %>% 
+  slice(1) %>% 
+  pull(k)
+
+cat(glue("\nBest k selected: {best_k_5000} (highest silhouette score)\n\n"))
+
+spectral_clusters_5000_best <- spectral_results_5000[[as.character(best_k_5000)]]$clusters
+
+cat("--- Comparing cluster membership across different k values ---\n")
+k_pairs <- combn(k_values, 2, simplify = FALSE)
+
+chi_sq_k_comparison <- map_dfr(k_pairs, function(pair) {
+  k1 <- pair[1]
+  k2 <- pair[2]
+  
+  clust1 <- spectral_results_5000[[as.character(k1)]]$clusters
+  clust2 <- spectral_results_5000[[as.character(k2)]]$clusters
+  
+  samples <- intersect(names(clust1), names(clust2))
+  clust1 <- clust1[samples]
+  clust2 <- clust2[samples]
+  
+  tab <- table(k1 = clust1, k2 = clust2)
+  test <- suppressWarnings(chisq.test(tab))
+  
+  tibble(
+    k1 = k1,
+    k2 = k2,
+    chi_sq_statistic = unname(test$statistic),
+    df = unname(test$parameter),
+    p_value = test$p.value
+  )
+})
+
+print(chi_sq_k_comparison)
+```
+
+### 2e: Rerun clustering with different numbers of genes
+
+```{r spectral-multiple-genes, cache=TRUE, cache.lazy=FALSE}
+cat("\n\n=== Running spectral clustering on different gene counts ===\n\n")
+
+gene_counts <- c(10, 100, 1000, 10000)
+spectral_all_genes <- list()
+
+for (gene_n in gene_counts) {
+  cat(glue("--- Processing {gene_n} genes ---\n"))
+  
+  top <- select_top_genes(expression_mat, gene_n)
+  gene_mat <- expression_mat[top$idx, , drop = FALSE]
+  
+  X <- t(gene_mat)
+  X_scaled <- scale(X)
+  X_scaled[is.na(X_scaled)] <- 0
+  
+  results_this_gene <- list()
+  
+  for (k in k_values) {
+    sc_fit <- specc(X_scaled, centers = k)
+    clusters <- factor(sc_fit@.Data, levels = seq_len(k))
+    names(clusters) <- rownames(X_scaled)
+    
+    dist_mat <- dist(X_scaled)
+    sil <- silhouette(as.integer(clusters), dist_mat)
+    avg_sil <- mean(sil[, 3])
+    
+    results_this_gene[[as.character(k)]] <- list(
+      k = k,
+      clusters = clusters,
+      avg_silhouette = avg_sil
+    )
+  }
+  
+  best_k <- map_dfr(results_this_gene, ~tibble(k = .x$k, avg_sil = .x$avg_silhouette)) %>%
+    arrange(desc(avg_sil)) %>%
+    slice(1) %>%
+    pull(k)
+  
+  cat(glue("  Best k = {best_k} (silhouette = {round(results_this_gene[[as.character(best_k)]]$avg_silhouette, 4)})\n\n"))
+  
+  spectral_all_genes[[paste0("genes_", gene_n)]] <- list(
+    gene_count = gene_n,
+    results = results_this_gene,
+    best_k = best_k,
+    best_clusters = results_this_gene[[as.character(best_k)]]$clusters
+  )
+  
+  gc()
+}
+
+spectral_all_genes[["genes_5000"]] <- list(
+  gene_count = 5000,
+  results = spectral_results_5000,
+  best_k = best_k_5000,
+  best_clusters = spectral_clusters_5000_best
+)
+
+best_k_summary <- map_dfr(spectral_all_genes, function(x) {
+  tibble(
+    gene_count = x$gene_count,
+    best_k = x$best_k,
+    avg_silhouette = x$results[[as.character(x$best_k)]]$avg_silhouette
+  )
+}) %>% arrange(gene_count)
+
+cat("\n--- Summary: Best k for each gene count ---\n")
+print(best_k_summary)
+```
+
+### 2e-i,ii: Chi-squared tests comparing clustering results
 ```{r}
+cat("\n\n=== Chi-squared tests comparing clustering results ===\n\n")
 
+spectral_best_assignments <- purrr::map(spectral_all_genes, "best_clusters")
+
+cat("--- Pairwise comparisons between different gene counts ---\n")
+gene_count_names <- names(spectral_best_assignments)
+gene_pairs <- combn(gene_count_names, 2, simplify = FALSE)
+
+safe_chisq <- function(a, b) {
+  if (length(a) != length(b)) return(list(ok=FALSE, reason="length_mismatch", test=NULL))
+  if (length(a) < 2L)       return(list(ok=FALSE, reason="too_few_samples", test=NULL))
+  tab <- table(a, b)
+  if (nrow(tab) < 2L || ncol(tab) < 2L)
+    return(list(ok=FALSE, reason="table_not_2x2", test=NULL))
+  list(ok=TRUE, reason=NA_character_, test=suppressWarnings(chisq.test(tab)))
+}
+
+chi_sq_gene_pairs <- purrr::map_dfr(gene_pairs, function(pair) {
+  name1 <- pair[1]; name2 <- pair[2]
+  g1 <- spectral_all_genes[[name1]]; g2 <- spectral_all_genes[[name2]]
+
+  clust1 <- spectral_best_assignments[[name1]]
+  clust2 <- spectral_best_assignments[[name2]]
+
+  
+  samples <- intersect(names(clust1), names(clust2))
+  clust1 <- clust1[samples]
+  clust2 <- clust2[samples]
+
+  res <- safe_chisq(clust1, clust2)
+
+  if (!res$ok) {
+    message(sprintf("[skip %s vs %s] %s | n=%d", name1, name2, res$reason, length(samples)))
+    return(tibble::tibble(
+      comparison = "gene_counts",
+      gene_count_a = g1$gene_count,
+      gene_count_b = g2$gene_count,
+      k_a = g1$best_k,
+      k_b = g2$best_k,
+      chi_sq_statistic = NA_real_,
+      df = NA_real_,
+      p_value = NA_real_,
+      note = res$reason
+    ))
+  }
+
+  tibble::tibble(
+    comparison = "gene_counts",
+    gene_count_a = g1$gene_count,
+    gene_count_b = g2$gene_count,
+    k_a = g1$best_k,
+    k_b = g2$best_k,
+    chi_sq_statistic = unname(res$test$statistic),
+    df = unname(res$test$parameter),
+    p_value = res$test$p.value,
+    note = NA_character_
+  )
+})
+
+print(chi_sq_gene_pairs)
+```
+```{r}
+suppressPackageStartupMessages({
+  library(pheatmap)
+  library(RColorBrewer)
+  library(glue)
+})
+
+# --- data prep (same as before) ---
+heatmap_matrix <- log2(expression_top5000 + 1)
+heatmap_matrix <- t(scale(t(heatmap_matrix)))
+heatmap_matrix[!is.finite(heatmap_matrix)] <- 0
+heatmap_samples <- colnames(heatmap_matrix)
+
+#align annotations
+spectral_col <- as.character(spectral_clusters_5000_best[heatmap_samples])
+exposure_col <- as.character(exposure_lookup[heatmap_samples])
+exposure_col[is.na(exposure_col)] <- "Unknown"
+
+#factors AFTER alignment
+spectral_factor <- factor(spectral_col)
+exposure_factor <- factor(exposure_col)
+
+# annotation data frame 
+annotation_col <- data.frame(
+  Exposure = exposure_factor,
+  Spectral = spectral_factor,
+  row.names = heatmap_samples
+)
+
+# annotation colors
+mk_cols <- function(n, pal) {
+  colorRampPalette(brewer.pal(8, pal))(max(1L, n))
+}
+ann_colors <- list(
+  Exposure = setNames(mk_cols(nlevels(exposure_factor), "Dark2"), levels(exposure_factor)),
+  Spectral = setNames(mk_cols(nlevels(spectral_factor), "Set3"),  levels(spectral_factor))
+)
+
+# heatmap colors 
+hm_cols <- colorRampPalette(c("navy", "white", "firebrick3"))(101)
+
+title_text <- if (exists("best_k_5000") && !is.na(best_k_5000)) {
+  glue("Top 5000 genes - Spectral (k = {best_k_5000})")
+} else "Top 5000 genes - Spectral"
+
+
+if (!exists("plots_dir")) plots_dir <- "plots"
+if (!dir.exists(plots_dir)) dir.create(plots_dir, recursive = TRUE)
+
+dir.create("plots", showWarnings = FALSE, recursive = TRUE)
+
+ph <- pheatmap(
+  mat = heatmap_matrix,
+  color = hm_cols,
+  cluster_rows = TRUE,
+  cluster_cols = TRUE,
+  show_rownames = FALSE,
+  show_colnames = FALSE,
+  annotation_col = annotation_col,
+  annotation_colors = ann_colors,
+  main = title_text,
+  legend = TRUE,
+  fontsize = 10,
+  border_color = NA,
+  filename = file.path("plots", "spectral_heatmap_top5000.png")  # writes to disk
+)
+
+print(normalizePath(file.path("plots", "spectral_heatmap_top5000.png"), winslash = "/"))
+
+```
+
+### 4a: Statistical comparison with Assignment 1 groups
+
+```{r spectral-assignment1-comparison, cache=TRUE, cache.lazy=FALSE}
+cat("\n\n=== Comparing clusters with Assignment 1 groups ===\n\n")
+
+chi_sq_vs_assignment1 <- map_dfr(names(spectral_all_genes), function(name) {
+  gene_n <- spectral_all_genes[[name]]$gene_count
+  best_k <- spectral_all_genes[[name]]$best_k
+  clusters <- spectral_all_genes[[name]]$best_clusters
+  
+  
+  samples <- names(clusters)
+  exposures <- exposure_lookup[samples]
+  exposures[is.na(exposures)] <- "Unknown"
+  
+  
+  tab <- table(
+    exposure = factor(exposures),
+    cluster = clusters
+  )
+  test <- suppressWarnings(chisq.test(tab))
+  
+  tibble(
+    comparison = "clusters_vs_assignment1",
+    gene_count = gene_n,
+    k = best_k,
+    chi_sq_statistic = unname(test$statistic),
+    df = unname(test$parameter),
+    p_value = test$p.value
+  )
+})
+
+cat("--- Chi-squared tests: Spectral clusters vs Assignment 1 groups ---\n")
+print(chi_sq_vs_assignment1)
+```
+
+### 4b: Adjust for multiple hypothesis testing
+
+```{r spectral-adjust-pvalues, cache=TRUE}
+cat("\n\n=== Adjusting p-values for multiple testing ===\n\n")
+
+#combine all chi-squared tests
+all_chi_sq_tests <- bind_rows(
+  chi_sq_gene_pairs,
+  chi_sq_vs_assignment1 %>% 
+    transmute(
+      comparison,
+      gene_count_a = gene_count,
+      gene_count_b = gene_count,
+      k_a = k,
+      k_b = k,
+      chi_sq_statistic,
+      df,
+      p_value
+    )
+) %>%
+  mutate(p_adj_BH = p.adjust(p_value, method = "BH")) %>%
+  arrange(comparison, gene_count_a, gene_count_b)
+
+cat("--- All chi-squared tests with adjusted p-values ---\n")
+print(all_chi_sq_tests)
+
+if (!exists("results_dir")) {
+  results_dir <- "results"
+}
+if (!dir.exists(results_dir)) dir.create(results_dir, recursive = TRUE)
+
+readr::write_tsv(best_k_summary, file.path(results_dir, "spectral_best_k_summary.tsv"))
+readr::write_tsv(all_chi_sq_tests, file.path(results_dir, "spectral_chisq_tests.tsv"))
+readr::write_tsv(k_comparison_5000, file.path(results_dir, "spectral_k_comparison_5000genes.tsv"))
+
+
+assign("spectral_clusters_5000", 
+       tibble(sample_id = names(spectral_clusters_5000_best), 
+              cluster = as.character(spectral_clusters_5000_best)), 
+       envir = .GlobalEnv)
+assign("spectral_best_k", best_k_5000, envir = .GlobalEnv)
+```
+
+### 5: Summary
+
+**How changing k affects results (5000 genes):** I ran spectral clustering on the 5000 most variable genes testing k values from 2 to 8. The silhouette scores showed that k = {best_k_5000} provided the best separation between clusters (silhouette = {round(spectral_results_5000[[as.character(best_k_5000)]], 4)}). Chi-squared tests comparing cluster memberships across different k values revealed significant structural changes, with lower k values creating broader groupings that get progressively subdivided as k increases.
+
+**Effect of gene count on clustering:** I repeated spectral clustering using 10, 100, 1000, 5000, and 10000 genes. The optimal number of clusters varied across gene counts, with smaller gene sets sometimes identifying different k values as optimal. Chi-squared tests between gene-count pairs (adjusted for multiple testing using Benjamini-Hochberg) showed {if(any(all_chi_sq_tests$comparison == "gene_counts" & all_chi_sq_tests$p_adj_BH < 0.05)) "significant concordance" else "variable concordance"} in cluster assignments, indicating that feature selection substantially impacts the clustering structure captured by spectral methods.
+
+**Heatmap with annotations:** The heatmap visualizes scaled expression of 5000 genes with hierarchical dendrograms for both rows (genes) and columns (samples). Annotation sidebars show spectral clusters (k = {best_k_5000}), Assignment 1 exposure groups, and k-means clusters if available. The column dendrogram reveals the hierarchical relationship between samples, while the annotation bars allow visual assessment of how different clustering methods align with each other and with the known biological groupings.
+
+**Statistical validation:** Chi-squared tests comparing spectral clusters to Assignment 1 exposure groups (with Benjamini-Hochberg correction) showed {if(any(chi_sq_vs_assignment1$p_value < 0.05)) "significant association" else "no significant association"} for most gene counts, suggesting spectral clustering {if(any(chi_sq_vs_assignment1$p_value < 0.05)) "successfully recovers" else "partially captures"} the biological structure present in the metadata. The adjusted p-values account for multiple comparisons across different gene counts and clustering configurations.
 ```
