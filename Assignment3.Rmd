@@ -234,6 +234,7 @@ for (k in k_values) {
   )
 }
 
+
 # summarize silhouette scores
 <!-- pam_summary <- as.data.frame(pam_summary)   # ensure it's a standard data frame -->
 pam_summary <- map_dfr(pam_results, function(x) {
@@ -250,7 +251,70 @@ cat(glue("\nBest k chosen for PAM: {best_k}\n"))
 
 pam_clusters <- pam_results[[as.character(best_k)]]$clusters
 
+gene_counts <- c(10, 100, 1000,10000)
 
+pam_multi_results <- list()
+
+for (n_genes in gene_counts) {
+  cat(glue("\n--- Running PAM on top {n_genes} genes ---\n"))
+
+  # Select top variable genes
+  gene_vars <- matrixStats::rowVars(expression_mat)
+  top_idx <- head(order(gene_vars, decreasing = TRUE), n_genes)
+  expr_subset <- expression_mat[top_idx, , drop = FALSE]
+
+  # Scale and transpose
+  X <- t(expr_subset)
+  X_scaled <- scale(X)
+  X_scaled[is.na(X_scaled)] <- 0
+
+  # PAM clustering for k = 2–8
+  k_values <- 2:8
+  results_this_set <- list()
+
+  for (k in k_values) {
+    pam_fit <- pam(X_scaled, k = k)
+    sil <- silhouette(pam_fit$clustering, dist(X_scaled))
+    avg_sil <- mean(sil[, 3])
+
+    results_this_set[[as.character(k)]] <- list(
+      k = k,
+      clusters = pam_fit$clustering,
+      avg_sil = avg_sil
+    )
+  }
+
+  # pick best k by silhouette
+  sil_df <- map_dfr(results_this_set, ~tibble(k = .x$k, avg_sil = .x$avg_sil))
+  best_k <- sil_df %>% arrange(desc(avg_sil)) %>% slice_head(n = 1) %>% pull(k)
+
+  cat(glue("Best k = {best_k} (silhouette = {round(max(sil_df$avg_sil), 3)})\n"))
+
+  # Chi-squared test vs. exposure groups
+  clusters <- results_this_set[[as.character(best_k)]]$clusters
+  exposures <- metadata$Exposure
+  names(exposures) <- metadata$refinebio_accession_code
+  common <- intersect(names(clusters), names(exposures))
+  tab <- table(Exposure = exposures[common], Cluster = clusters[common])
+  chi <- suppressWarnings(chisq.test(tab))
+
+  pam_multi_results[[paste0("genes_", n_genes)]] <- list(
+    n_genes = n_genes,
+    best_k = best_k,
+    silhouette = max(sil_df$avg_sil),
+    chi_sq = unname(chi$statistic),
+    df = unname(chi$parameter),
+    p_value = chi$p.value
+  )
+}
+
+# Combine into one summary tibble
+pam_multi_summary <- bind_rows(lapply(pam_multi_results, as_tibble)) %>%
+  mutate(adj_p_value = p.adjust(p_value, method = "BH"))
+
+knitr::kable(pam_multi_summary,
+  caption = "Chi-squared test results for PAM clustering across gene subsets"
+)
 
 # --- Chi-squared test with exposure groups ---
 exposures <- metadata$Exposure
@@ -328,6 +392,32 @@ draw(pam_heatmap, merge_legend = TRUE)
 dev.off()
 browseURL("plots/pam_heatmap_top5000.pdf")
 ```
+
+I applied Partitioning Around Medoids (PAM) clustering to the top 5000 most variable genes, testing k values from 2 to 8. 
+The average silhouette width was highest for k = 2 (0.099), indicating two primary sample groups. T
+his aligns with the k-means results but with lower sensitivity to outliers due to PAM’s medoid-based approach. 
+The clusters contained 676 and 345 samples, respectively.
+When k increased beyond 2, the silhouette scores decreased at a steady rate, and it seemed that additional clusters were not biologically meaningful in terms of results. 
+Specificaly, the silhouette scores went from 0.999 at k = 2 to 0.065 at k = 8, showing that the clusters became less distinct. 
+So, I chose k = 2 samples to strike the optimal balance. 
+I then reran PAM with 10, 100, 1000, and 10000 genes, which took varying amounts of time, but the k value of 2 stayed consistent.
+With small gene sets, the cluster boundaries were more unstable, and with larger sets, the clusters stabilized.
+I also performed chi-squared tests; here is the table
+Table: Chi-squared test results for PAM clustering across gene subsets
+
+| n_genes| best_k| silhouette|     chi_sq| df|   p_value| adj_p_value|
+|-------:|------:|----------:|----------:|--:|---------:|-----------:|
+|      10|      2|  0.3492291| 25.8886644|  1| 0.0000004|   0.0000014|
+|     100|      2|  0.2491895|  0.9447949|  1| 0.3310478|   0.3310478|
+|    1000|      2|  0.1407231| 14.1447630|  1| 0.0001693|   0.0002257|
+|   10000|      2|  0.0735371| 16.6772980|  1| 0.0000443|   0.0000886|
+This shows that as the number of genes increased, the p values decreased, except with a very small number of genes, 10 to be exact where there was not enough data.
+I also generated a heatmap with hierarchical row and column dendrograms and annotations for both PAM clusters (k = 2) and exposure groups from Assignment 1. 
+The z-scored expression profiles display clear global differences between the two PAM clusters, though overlap is visible across some samples.
+After running PAM for k = 2 – 8 across the 5 000 most variable genes, k = 2 yielding the highest average silhouette (≈ 0.10).
+Repeating the analysis for 10 – 10 000 genes revealed similar results: silhouette scores declined gradually as dimensionality increased, but the optimal k remained 2.
+Heatmaps of the top 5 000 genes showed two major expression clusters that partially overlapped with exposure groups.
+The chi-squared tests confirmed that these two clusters were statistically associated with exposure in most gene subsets.
 
 ## Taylor Tillander: K-means Clustering
 
