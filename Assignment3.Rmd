@@ -251,25 +251,36 @@ heatmap <- Heatmap(
     use_raster = TRUE,
     raster_by_magick = TRUE,
     raster_quality = 1,
-    cluster_rows = TRUE,
+    cluster_rows = FALSE,
     cluster_columns = TRUE,
     top_annotation = HeatmapAnnotation(
         Dengue_Status = metadata$Exposure 
     ),
+    
+    column_title = paste0("Patient Clustering Axis: Molecular Subtypes (k=2) by Prior Dengue Status (N=", ncol(expression_top5000), ")"),
+    column_title_gp = gpar(fontsize = 18, fontface = "bold"), # Enhanced Title
+    
+    row_title = paste0("Gene Clustering Axis: 5000 Most Variable Genes"),
+    row_title_rot = 90,
+    row_title_gp = gpar(fontsize = 18, fontface = "bold"), # Enhanced Title
+    
     show_row_names = FALSE,
     show_column_names = FALSE,
-    column_title = "Hierarchical Clustering of Patients (N=1000+)",
-    row_title = "5000 Genes (Unreadable Density)",
-    row_title_rot = 90
+    
+    heatmap_legend_param = list(
+        title = "Log2 Expression (Z-score)",
+        title_position = "topcenter",
+        title_gp = gpar(fontsize = 14, fontface = "bold"),
+        legend_direction = "horizontal"
+    )
 )
-CairoPDF("plots/hclust_heatmap.pdf", width = 18, height = 25)
+CairoPDF("plots/hclust_patient_heatmap.pdf", width = 18, height = 25)
 draw(heatmap)
 dev.off()
 ```
 
 ## Nikhil Sangamkar: PAM Clustering
 
-```{r}
 ```{r pam-clustering, cache=TRUE, cache.lazy=FALSE}
 suppressPackageStartupMessages({
   library(cluster)
