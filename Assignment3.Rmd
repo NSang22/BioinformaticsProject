@@ -200,7 +200,133 @@ dev.off()
 ## Nikhil Sangamkar: PAM Clustering
 
 ```{r}
+```{r pam-clustering, cache=TRUE, cache.lazy=FALSE}
+suppressPackageStartupMessages({
+  library(cluster)
+  library(glue)
+  library(dplyr)
+  library(purrr)
+  library(tibble)
+})
 
+stopifnot(exists("expression_top5000"), exists("metadata"))
+
+# --- Data prep ---
+X_5000 <- t(expression_top5000)        # samples as rows
+X_scaled <- scale(X_5000)
+X_scaled[is.na(X_scaled)] <- 0
+
+# range of k values
+k_values <- 2:8
+pam_results <- list()
+
+for (k in k_values) {
+  cat(glue("Running PAM with k = {k}\n"))
+  pam_fit <- pam(X_scaled, k = k)
+  sil <- silhouette(pam_fit$clustering, dist(X_scaled))
+  avg_sil <- mean(sil[, 3])
+  
+  pam_results[[as.character(k)]] <- list(
+    k = k,
+    pam_fit = pam_fit,
+    clusters = pam_fit$clustering,
+    avg_silhouette = avg_sil
+  )
+}
+
+# summarize silhouette scores
+<!-- pam_summary <- as.data.frame(pam_summary)   # ensure it's a standard data frame -->
+pam_summary <- map_dfr(pam_results, function(x) {
+  tibble(k = as.numeric(x$k), avg_silhouette = as.numeric(x$avg_silhouette))
+})
+print(pam_summary)
+
+best_k <- pam_summary %>%
+  arrange(desc(avg_silhouette)) %>%
+  slice_head(n = 1) %>%
+  pull(k)
+
+cat(glue("\nBest k chosen for PAM: {best_k}\n"))
+
+pam_clusters <- pam_results[[as.character(best_k)]]$clusters
+
+
+
+# --- Chi-squared test with exposure groups ---
+exposures <- metadata$Exposure
+names(exposures) <- metadata$refinebio_accession_code
+
+common_samples <- intersect(names(pam_clusters), names(exposures))
+tab <- table(Exposure = exposures[common_samples],
+             Cluster = pam_clusters[common_samples])
+
+pam_chi <- suppressWarnings(chisq.test(tab))
+pam_chi
+
+pam_clusters_5000 <- tibble(
+  sample_id = names(pam_clusters),
+  cluster = as.character(pam_clusters)
+)
+assign("pam_clusters_5000", pam_clusters_5000, envir = .GlobalEnv)
+assign("pam_best_k", best_k, envir = .GlobalEnv)
+
+table(pam_clusters)
+
+# --- Heatmap of 5000 genes with PAM clusters ---
+suppressPackageStartupMessages({
+  library(ComplexHeatmap)
+  library(circlize)
+  library(RColorBrewer)
+  library(scales)
+})
+
+heatmap_matrix <- log2(expression_top5000 + 1)
+heatmap_matrix <- t(scale(t(heatmap_matrix)))
+heatmap_matrix[!is.finite(heatmap_matrix)] <- 0
+heatmap_samples <- colnames(heatmap_matrix)
+
+pam_col <- pam_clusters[match(heatmap_samples, names(pam_clusters))]
+exposure_col <- as.character(metadata$Exposure[match(heatmap_samples, metadata$refinebio_accession_code)])
+
+pam_factor <- factor(pam_col)
+exposure_factor <- factor(exposure_col)
+
+ann_col <- HeatmapAnnotation(
+  Exposure = exposure_factor,
+  PAM = pam_factor,
+  col = list(
+    Exposure = setNames(hue_pal()(length(levels(exposure_factor))), levels(exposure_factor)),
+    PAM = setNames(brewer.pal(max(3, length(levels(pam_factor))), "Set2")[seq_along(levels(pam_factor))],
+                   levels(pam_factor))
+  )
+)
+
+pam_heatmap <- Heatmap(
+  name = "Z-score",
+  matrix = heatmap_matrix,
+  cluster_rows = TRUE,
+  cluster_columns = TRUE,
+  show_row_names = FALSE,
+  show_column_names = FALSE,
+  top_annotation = ann_col,
+  column_title = glue("Top 5000 genes - PAM (k = {best_k})"),
+  row_title = "Genes"
+)
+
+dir.create("plots", showWarnings = FALSE)
+<!-- pdf(file.path("plots", "pam_heatmap_top5000.pdf"), width = 11, height = 8.5) -->
+draw(pam_heatmap, merge_legend = TRUE)
+<!-- dev.off() -->
+
+# Export cluster assignments for comparison with other methods
+pam_clusters_5000 <- tibble(sample_id = names(pam_clusters), cluster = as.character(pam_clusters))
+assign("pam_clusters_5000", pam_clusters_5000, envir = .GlobalEnv)
+assign("pam_best_k", best_k, envir = .GlobalEnv)
+
+png("plots/pam_heatmap_top5000.png", width = 2000, height = 1600, res = 250)
+draw(pam_heatmap, merge_legend = TRUE)
+dev.off()
+browseURL("plots/pam_heatmap_top5000.pdf")
 ```
 
 ## Taylor Tillander: K-means Clustering
