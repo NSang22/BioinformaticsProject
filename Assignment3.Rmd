@@ -16,6 +16,8 @@ if (length(to_install)) install.packages(to_install)
 
 if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")
 BiocManager::install(c("ComplexHeatmap","circlize"), update = FALSE, ask = FALSE)
+library(ggplot2)
+
 ```
 
 # Section 1
@@ -281,7 +283,7 @@ dev.off()
 
 ## Nikhil Sangamkar: PAM Clustering
 
-```{r pam-clustering, cache=TRUE, cache.lazy=FALSE}
+```{r pam-clustering, eval=FALSE}
 suppressPackageStartupMessages({
   library(cluster)
   library(glue)
@@ -297,27 +299,26 @@ X_5000 <- t(expression_top5000)        # samples as rows
 X_scaled <- scale(X_5000)
 X_scaled[is.na(X_scaled)] <- 0
 
-# range of k values
-k_values <- 2:8
-pam_results <- list()
+# # range of k values
+# k_values <- 2:8
+# pam_results <- list()
 
-for (k in k_values) {
-  cat(glue("Running PAM with k = {k}\n"))
-  pam_fit <- pam(X_scaled, k = k)
-  sil <- silhouette(pam_fit$clustering, dist(X_scaled))
-  avg_sil <- mean(sil[, 3])
+# for (k in k_values) {
+#   cat(glue("Running PAM with k = {k}\n"))
+#   pam_fit <- pam(X_scaled, k = k)
+#   sil <- silhouette(pam_fit$clustering, dist(X_scaled))
+#   avg_sil <- mean(sil[, 3])
   
-  pam_results[[as.character(k)]] <- list(
-    k = k,
-    pam_fit = pam_fit,
-    clusters = pam_fit$clustering,
-    avg_silhouette = avg_sil
-  )
-}
+#   pam_results[[as.character(k)]] <- list(
+#     k = k,
+#     pam_fit = pam_fit,
+#     clusters = pam_fit$clustering,
+#     avg_silhouette = avg_sil
+#   )
+# }
 
 
 # summarize silhouette scores
-pam_summary <- as.data.frame(pam_summary)   # ensure it's a standard data frame
 pam_summary <- map_dfr(pam_results, function(x) {
   tibble(k = as.numeric(x$k), avg_silhouette = as.numeric(x$avg_silhouette))
 })
@@ -332,7 +333,9 @@ cat(glue("\nBest k chosen for PAM: {best_k}\n"))
 
 pam_clusters <- pam_results[[as.character(best_k)]]$clusters
 
-gene_counts <- c(10, 100, 1000,10000)
+gene_counts <- c(10, 100, 1000)
+cat("Running gene_counts =", paste(gene_counts, collapse = ", "), "\n")
+
 
 pam_multi_results <- list()
 
