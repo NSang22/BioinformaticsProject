@@ -270,7 +270,133 @@ dev.off()
 ## Nikhil Sangamkar: PAM Clustering
 
 ```{r}
+```{r pam-clustering, cache=TRUE, cache.lazy=FALSE}
+suppressPackageStartupMessages({
+  library(cluster)
+  library(glue)
+  library(dplyr)
+  library(purrr)
+  library(tibble)
+})
 
+stopifnot(exists("expression_top5000"), exists("metadata"))
+
+# --- Data prep ---
+X_5000 <- t(expression_top5000)        # samples as rows
+X_scaled <- scale(X_5000)
+X_scaled[is.na(X_scaled)] <- 0
+
+# range of k values
+k_values <- 2:8
+pam_results <- list()
+
+for (k in k_values) {
+  cat(glue("Running PAM with k = {k}\n"))
+  pam_fit <- pam(X_scaled, k = k)
+  sil <- silhouette(pam_fit$clustering, dist(X_scaled))
+  avg_sil <- mean(sil[, 3])
+  
+  pam_results[[as.character(k)]] <- list(
+    k = k,
+    pam_fit = pam_fit,
+    clusters = pam_fit$clustering,
+    avg_silhouette = avg_sil
+  )
+}
+
+# summarize silhouette scores
+<!-- pam_summary <- as.data.frame(pam_summary)   # ensure it's a standard data frame -->
+pam_summary <- map_dfr(pam_results, function(x) {
+  tibble(k = as.numeric(x$k), avg_silhouette = as.numeric(x$avg_silhouette))
+})
+print(pam_summary)
+
+best_k <- pam_summary %>%
+  arrange(desc(avg_silhouette)) %>%
+  slice_head(n = 1) %>%
+  pull(k)
+
+cat(glue("\nBest k chosen for PAM: {best_k}\n"))
+
+pam_clusters <- pam_results[[as.character(best_k)]]$clusters
+
+
+
+# --- Chi-squared test with exposure groups ---
+exposures <- metadata$Exposure
+names(exposures) <- metadata$refinebio_accession_code
+
+common_samples <- intersect(names(pam_clusters), names(exposures))
+tab <- table(Exposure = exposures[common_samples],
+             Cluster = pam_clusters[common_samples])
+
+pam_chi <- suppressWarnings(chisq.test(tab))
+pam_chi
+
+pam_clusters_5000 <- tibble(
+  sample_id = names(pam_clusters),
+  cluster = as.character(pam_clusters)
+)
+assign("pam_clusters_5000", pam_clusters_5000, envir = .GlobalEnv)
+assign("pam_best_k", best_k, envir = .GlobalEnv)
+
+table(pam_clusters)
+
+# --- Heatmap of 5000 genes with PAM clusters ---
+suppressPackageStartupMessages({
+  library(ComplexHeatmap)
+  library(circlize)
+  library(RColorBrewer)
+  library(scales)
+})
+
+heatmap_matrix <- log2(expression_top5000 + 1)
+heatmap_matrix <- t(scale(t(heatmap_matrix)))
+heatmap_matrix[!is.finite(heatmap_matrix)] <- 0
+heatmap_samples <- colnames(heatmap_matrix)
+
+pam_col <- pam_clusters[match(heatmap_samples, names(pam_clusters))]
+exposure_col <- as.character(metadata$Exposure[match(heatmap_samples, metadata$refinebio_accession_code)])
+
+pam_factor <- factor(pam_col)
+exposure_factor <- factor(exposure_col)
+
+ann_col <- HeatmapAnnotation(
+  Exposure = exposure_factor,
+  PAM = pam_factor,
+  col = list(
+    Exposure = setNames(hue_pal()(length(levels(exposure_factor))), levels(exposure_factor)),
+    PAM = setNames(brewer.pal(max(3, length(levels(pam_factor))), "Set2")[seq_along(levels(pam_factor))],
+                   levels(pam_factor))
+  )
+)
+
+pam_heatmap <- Heatmap(
+  name = "Z-score",
+  matrix = heatmap_matrix,
+  cluster_rows = TRUE,
+  cluster_columns = TRUE,
+  show_row_names = FALSE,
+  show_column_names = FALSE,
+  top_annotation = ann_col,
+  column_title = glue("Top 5000 genes - PAM (k = {best_k})"),
+  row_title = "Genes"
+)
+
+dir.create("plots", showWarnings = FALSE)
+<!-- pdf(file.path("plots", "pam_heatmap_top5000.pdf"), width = 11, height = 8.5) -->
+draw(pam_heatmap, merge_legend = TRUE)
+<!-- dev.off() -->
+
+# Export cluster assignments for comparison with other methods
+pam_clusters_5000 <- tibble(sample_id = names(pam_clusters), cluster = as.character(pam_clusters))
+assign("pam_clusters_5000", pam_clusters_5000, envir = .GlobalEnv)
+assign("pam_best_k", best_k, envir = .GlobalEnv)
+
+png("plots/pam_heatmap_top5000.png", width = 2000, height = 1600, res = 250)
+draw(pam_heatmap, merge_legend = TRUE)
+dev.off()
+browseURL("plots/pam_heatmap_top5000.pdf")
 ```
 
 ## Taylor Tillander: K-means Clustering
@@ -605,6 +731,39 @@ heatmap_plot
 
 ## Ibrahim Zbib: Spectral Clustering
 
+```{r}
+suppressPackageStartupMessages({
+  library(ggplot2)
+  library(grid)
+  library(glue)
+})
+suppressPackageStartupMessages({
+  library(purrr)
+  library(dplyr)
+  library(tibble)
+})
+
+plots_dir <- "plots"
+results_dir <- "results"
+dir.create(plots_dir, showWarnings = FALSE, recursive = TRUE)
+dir.create(results_dir, showWarnings = FALSE, recursive = TRUE)
+
+save_table_png <- function(df, path, base_height = 400, row_px = 28, min_width = 1200){
+  h <- max(base_height, nrow(df) * row_px + 120)
+  w <- min_width
+  g <- gridExtra::tableGrob(df)
+  png(path, width = w, height = h, res = 150)
+  grid::grid.newpage()
+  grid::grid.draw(g)
+  dev.off()
+}
+
+save_gg_png <- function(plot, path, width = 10, height = 7, dpi = 300){
+  ggplot2::ggsave(filename = path, plot = plot, width = width, height = height, dpi = dpi, limitsize = FALSE)
+}
+```
+
+
 ```{r spectral-setup, cache=TRUE}
 
 
@@ -617,16 +776,16 @@ stopifnot(exists("expression_mat"), exists("metadata"), exists("expression_top50
 
 
   
-  exposure_lookup <- metadata_exposure %>%
-    select(refinebio_accession_code, Exposure) %>%
-    mutate(Exposure = as.character(Exposure)) %>%
-    deframe()
+  #exposure_lookup <- metadata_exposure %>%
+   # select(refinebio_accession_code, Exposure) %>%
+    #mutate(Exposure = as.character(Exposure)) %>%
+    #deframe()
   
-  exposure_table <- metadata_exposure %>%
-    transmute(
-      sample_id = refinebio_accession_code,
-      exposure = as.character(Exposure)
-    )
+#  exposure_table <- metadata_exposure %>%
+ #   transmute(
+  #    sample_id = refinebio_accession_code,
+   #   exposure = as.character(Exposure)
+    #)
 
 
 # helper function to select top variable genes
@@ -683,13 +842,13 @@ k_comparison_5000 <- map_dfr(spectral_results_5000, function(res) {
   )
 })
 
+```
+```{r}
 cat("\n--- How changing k affects results (5000 genes) ---\n")
 print(k_comparison_5000)
 
-best_k_5000 <- k_comparison_5000 %>% 
-  arrange(desc(avg_silhouette)) %>% 
-  slice(1) %>% 
-  pull(k)
+# robust: base indexing; no dplyr::slice
+best_k_5000 <- k_comparison_5000$k[which.max(k_comparison_5000$avg_silhouette)]
 
 cat(glue("\nBest k selected: {best_k_5000} (highest silhouette score)\n\n"))
 
@@ -720,8 +879,6 @@ chi_sq_k_comparison <- map_dfr(k_pairs, function(pair) {
     p_value = test$p.value
   )
 })
-
-print(chi_sq_k_comparison)
 ```
 
 ### 2e: Rerun clustering with different numbers of genes
@@ -760,10 +917,8 @@ for (gene_n in gene_counts) {
     )
   }
   
-  best_k <- map_dfr(results_this_gene, ~tibble(k = .x$k, avg_sil = .x$avg_silhouette)) %>%
-    arrange(desc(avg_sil)) %>%
-    slice(1) %>%
-    pull(k)
+ best_df <- map_dfr(results_this_gene, ~tibble(k = .x$k, avg_sil = .x$avg_silhouette))
+best_k  <- best_df$k[which.max(best_df$avg_sil)]
   
   cat(glue("  Best k = {best_k} (silhouette = {round(results_this_gene[[as.character(best_k)]]$avg_silhouette, 4)})\n\n"))
   
@@ -964,13 +1119,43 @@ chi_sq_vs_assignment1 <- map_dfr(names(spectral_all_genes), function(name) {
 
 cat("--- Chi-squared tests: Spectral clusters vs Assignment 1 groups ---\n")
 print(chi_sq_vs_assignment1)
+
+readr::write_tsv(k_comparison_5000, file.path(results_dir, "spectral_k_comparison_5000.tsv"))
+save_table_png(k_comparison_5000, file.path(plots_dir, "spectral_k_comparison_5000.png"))
+
+
+save_table_png(chi_sq_k_comparison, file.path(plots_dir, "spectral_chi_sq_k_comparison_5000.png"))
+
+
+install.packages("gridExtra")
+library(gridExtra); library(grid)
+
+save_table_png <- function(df, path, base_size = 10, dpi = 200, min_w = 8, min_h = 4){
+  tb <- tableGrob(df, rows = NULL, theme = ttheme_minimal(base_size = base_size))
+  png(tempfile(fileext = ".png"), width = 10, height = 10, units = "in", res = dpi)
+  grid.newpage(); grid.draw(tb)
+  w_in <- convertWidth(sum(tb$widths), "in", valueOnly = TRUE)
+  h_in <- convertHeight(sum(tb$heights), "in", valueOnly = TRUE)
+  dev.off()
+  w <- max(min_w, w_in); h <- max(min_h, h_in)
+  png(path, width = w, height = h, units = "in", res = dpi)
+  grid.newpage(); grid.draw(tb)
+  dev.off()
+}
+
+save_table_png(k_comparison_5000, file.path("plots","spectral_k_comparison_5000.png"))
+save_table_png(chi_sq_k_comparison, file.path("plots","spectral_chi_sq_k_comparison_5000.png"))
+save_table_png(best_k_summary, file.path("plots","spectral_best_k_summary.png"))
+save_table_png(chi_sq_gene_pairs, file.path("plots","spectral_chi_sq_gene_pairs.png"))
+save_table_png(chi_sq_vs_assignment1, file.path("plots","spectral_chi_sq_vs_assignment1.png"))
+save_table_png(all_chi_sq_tests, file.path("plots","spectral_all_chi_sq_tests.png"))
 ```
 
 ### 4b: Adjust for multiple hypothesis testing
 
 ```{r spectral-adjust-pvalues, cache=TRUE}
 cat("\n\n=== Adjusting p-values for multiple testing ===\n\n")
-
+library(dplyr)
 #combine all chi-squared tests
 all_chi_sq_tests <- bind_rows(
   chi_sq_gene_pairs,
@@ -1011,11 +1196,17 @@ assign("spectral_best_k", best_k_5000, envir = .GlobalEnv)
 
 ### 5: Summary
 
-**How changing k affects results (5000 genes):** I ran spectral clustering on the 5000 most variable genes testing k values from 2 to 8. The silhouette scores showed that k = {best_k_5000} provided the best separation between clusters (silhouette = {round(spectral_results_5000[[as.character(best_k_5000)]], 4)}). Chi-squared tests comparing cluster memberships across different k values revealed significant structural changes, with lower k values creating broader groupings that get progressively subdivided as k increases.
+**How changing k affects results (5000 genes):** I applied spectral clustering using the top 5000 most variable genes from the normalized expression matrix. The algorithm was run for k values ranging from 2 to 8, and I computed the average silhouette score for each k to assess clustering quality. The highest silhouette score occurred at k = 2, indicating that a two-cluster solution best separates the samples in this dataset. Increasing k consistently lowered the silhouette, suggesting that additional clusters do not represent meaningful substructure. 
 
-**Effect of gene count on clustering:** I repeated spectral clustering using 10, 100, 1000, 5000, and 10000 genes. The optimal number of clusters varied across gene counts, with smaller gene sets sometimes identifying different k values as optimal. Chi-squared tests between gene-count pairs (adjusted for multiple testing using Benjamini-Hochberg) showed {if(any(all_chi_sq_tests$comparison == "gene_counts" & all_chi_sq_tests$p_adj_BH < 0.05)) "significant concordance" else "variable concordance"} in cluster assignments, indicating that feature selection substantially impacts the clustering structure captured by spectral methods.
+**Effect of gene count on clustering:** I statistically compared cluster memberships between all pairs of k values (2–8) using chi-squared tests of independence. This tested whether the partitions at different k values produce consistent group assignments. All pairwise chi-squared tests between k values were highly significant (p < 0.001 for most), with large chi-squared statistics. The strong significance indicates that changing k meaningfully changes the cluster composition, not just by random variation. In other words, each increment of k subdivides the two primary groups rather than revealing new distinct patterns — confirming that k = 2 captures the major biological separation.
 
-**Heatmap with annotations:** The heatmap visualizes scaled expression of 5000 genes with hierarchical dendrograms for both rows (genes) and columns (samples). Annotation sidebars show spectral clusters (k = {best_k_5000}), Assignment 1 exposure groups, and k-means clusters if available. The column dendrogram reveals the hierarchical relationship between samples, while the annotation bars allow visual assessment of how different clustering methods align with each other and with the known biological groupings.
 
-**Statistical validation:** Chi-squared tests comparing spectral clusters to Assignment 1 exposure groups (with Benjamini-Hochberg correction) showed {if(any(chi_sq_vs_assignment1$p_value < 0.05)) "significant association" else "no significant association"} for most gene counts, suggesting spectral clustering {if(any(chi_sq_vs_assignment1$p_value < 0.05)) "successfully recovers" else "partially captures"} the biological structure present in the metadata. The adjusted p-values account for multiple comparisons across different gene counts and clustering configurations.
+
+**Heatmap with annotations:** I created a heatmap using pheatmap() of the top 5,000 scaled genes, annotated by spectral clusters (k = 2 ) and exposure group. The heatmap clearly shows two broad expression patterns across samples that align with the two spectral clusters. Visual comparison of the annotation bars reveals a partial overlap between Spectral clusters and exposure status: Cluster 1 contains many DENV samples. Cluster 2 includes a higher proportion of naive samples. This visual concordance supports the idea that the spectral algorithm partially recovered the biological grouping structure encoded in exposure metadata.
+
+**Statistical validation:** I repeated spectral clustering for 10, 100, 1,000, 5,000, and 10,000 most variable genes. For each, the best k (max silhouette) was selected, and results were compared via chi-squared tests.
+cross most gene subsets, k = 2 remained optimal, showing that the global two-group structure is stable. At 100 genes, the algorithm briefly favored k = 6, suggesting overfitting or noise sensitivity at very small gene subsets.
+ Silhouette scores decreased with extremely small (10) or very large (10,000) gene sets — consistent with too little or too much noise diluting signal.
+This implies that using an intermediate set (1,000–5,000 genes) best balances stability and biological signal for spectral clustering.
 ```
+
