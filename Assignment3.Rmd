@@ -136,7 +136,8 @@ library(tidyverse)
 # create hclust_samples dataframe
 hclust_samples_df = hclust_samples$height %>%
             as.tibble() %>%
-            add_column(groups = length(hclust_samples$height):1)
+            add_column(groups = length(hclust_samples$height):1) %>%
+            filter(groups <= 250)
 
 
 hs_df_plot = ggplot(hclust_samples_df,
@@ -146,16 +147,28 @@ hs_df_plot = ggplot(hclust_samples_df,
 hs_df_plot
 ```
 These elbow plots do not seem very useful. We have too many groups. We really need to zoom in on the actual elbow to determine the number of groups we actually need.\
+
 ```{r "Cluster Determination pt2"}
 hs_df_plot + 
-  coord_cartesian(xlim = c(0, 250), ylim = c(0, 2000)) + 
-  geom_abline(intercept = 1760, slope = -20, color = "red")
+  coord_cartesian(xlim = c(0, 10), ylim = c(0, 8000)) + 
+  # Add titles and labels
+  labs(
+    title = "Elbow Plot of",
+    x = "Number of Clusters (k)",
+    y = "Cluster Merge Height (Distance)"
+  ) +
+  scale_color_brewer(palette = "Dark2") +
+  theme_minimal(base_size = 14) +
+  
+  # Draw a vertical line where k=30 (your hypothesized elbow)
+  geom_vline(xintercept = 2, linetype = "dotted", color = "gray")
+
 ```
-Our results showed us that there are around 35 different groups that reacted differently to zika virus infection. This suggests that our two clinical groups, dengue-prior vs dengue-naive, do not behave statistically differently to zika infection. However, let's perform a chi-square test to be sure.\
+Our results showed us that there are roughly 30 different groups that reacted differently to zika virus infection. This suggests that our two clinical groups, dengue-prior vs dengue-naive, do not behave statistically differently to zika infection. However, let's perform a chi-square test to be sure.\
 
 ### Chi-Square Test
 ```{r "Chi-Square Test"}
-clusters = cutree(hclust_samples, k = 35)
+clusters = cutree(hclust_samples, k = 2)
 # check if samples match
 all(sort(names(clusters)) == sort(rownames(metadata)))
 # check if sample order match
@@ -167,9 +180,66 @@ contingency_table = table(
 
 hs_cs_results = chisq.test(contingency_table)
 hs_cs_results
+contingency_table
 ```
+The chi-square with 2 different clusters suggests that we reject the null hypothesis that the relationship between dengue virus infection and subsequent zika infection is independent. Group 1 is higher in naive patients.
 
+```{r "Cluster Determination pt3"}
+library(tidyverse)
+library(cluster) # for hclust
+library(matrixStats) # for fast variance calculation
 
+gene_counts_to_test <- c(10, 100, 1000, 5000)
+total_genes <- length(gene_vars) # from earlier top 5000 filter
+gene_counts_to_test <- gene_counts_to_test[gene_counts_to_test <= total_genes]
+all_elbow_data <- list()
+
+for (n_genes in gene_counts_to_test) {
+ 
+  top_idx <- head(order(gene_vars, decreasing = TRUE), n_genes)
+  expression_filtered <- expression_mat[top_idx, , drop = FALSE]
+ 
+  dist_samples <- dist(t(expression_filtered), method = "euclidean")
+  hclust_samples <- hclust(dist_samples, method = "ward.D2")
+ 
+  elbow_data_df <- data.frame(
+    height = hclust_samples$height,
+    groups = (length(hclust_samples$height) + 1):2,
+    Gene_Count = factor(paste0("Top ", n_genes, " Genes"))
+  )
+  # ignore k values that are too large (helps with computation)
+  elbow_data_df <- elbow_data_df %>% filter(groups <= 250)
+  
+  all_elbow_data[[as.character(n_genes)]] <- elbow_data_df
+}
+
+final_elbow_df <- bind_rows(all_elbow_data)
+
+# Generate the comparison ggplot
+p_comparison <- ggplot(final_elbow_df, aes(x = groups, y = height, color = Gene_Count)) +
+  geom_line(linewidth = 0.8) +
+  geom_point(size = 0.5) +
+  
+  # Zoom in to the relevant elbow area
+  coord_cartesian(xlim = c(1, 10), ylim = c(0, 8000)) + 
+  
+  # Add titles and labels
+  labs(
+    title = "Comparison of Elbow Plots by Gene Feature Count",
+    subtitle = "Assessing the impact of feature selection on patient cluster number (k)",
+    x = "Number of Clusters (k)",
+    y = "Cluster Merge Height (Distance)",
+    color = "Genes Included"
+  ) +
+  scale_color_brewer(palette = "Dark2") +
+  theme_minimal(base_size = 14) +
+  
+  # Draw a vertical line where k=30 (your hypothesized elbow)
+  geom_vline(xintercept = 2, linetype = "dotted", color = "gray")
+
+print(p_comparison)
+```
+As we can see here, changing the number of top variable genes does not change the number of resulting clusters very significantly. This suggests that the patients relatively set in 2 clusters.\
 ### Heat Map
 ```{r "hclust heatmap", dependson="hclust run", cache=TRUE}
 library(ComplexHeatmap)
