@@ -7509,12 +7509,12 @@ a.anchor-link {
 </style>
 <!-- End of mermaid configuration --></head>
 <body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
-<main><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=9da1baef">
+<main><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=263c6161-784e-429c-95ed-22389d84e362">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [1]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># --- Assignment 4: Random Forest Supervised Learning ---</span>
@@ -7646,7 +7646,7 @@ a.anchor-link {
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">plots_dir</span> <span class="o">/</span> <span class="s2">"rf_exposure_roc.png"</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="c1"># plt.close()</span>
 
 <span class="c1"># ==============================</span>
 <span class="c1"># 6. Random Forest: Cluster Prediction (1-vs-all)</span>
@@ -7703,7 +7703,7 @@ a.anchor-link {
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">"Effect of Gene Count on Random Forest Performance"</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">plots_dir</span> <span class="o">/</span> <span class="s2">"rf_gene_subset_performance.png"</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="c1"># plt.close()</span>
 
 <span class="c1"># ==============================</span>
 <span class="c1"># 8. Final Summary</span>
@@ -7719,49 +7719,47 @@ a.anchor-link {
 </div>
 </div>
 </div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=ec506ece-9553-46c2-ab85-74deb62663ee">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h1 id="Table:-Exposure-and-Cluster-AUCs">Table: Exposure and Cluster AUCs<a class="anchor-link" href="#Table:-Exposure-and-Cluster-AUCs">¶</a></h1><h1 id="The-Random-Forest-model-achieved-an-AUC-of-0.948-for-distinguishing-Naive-vs.-DENV-exposures,-indicating-strong-classification-performance.">The Random Forest model achieved an AUC of 0.948 for distinguishing Naive vs. DENV exposures, indicating strong classification performance.<a class="anchor-link" href="#The-Random-Forest-model-achieved-an-AUC-of-0.948-for-distinguishing-Naive-vs.-DENV-exposures,-indicating-strong-classification-performance.">¶</a></h1><h1 id="Cluster-level-prediction-was-also-highly-accurate,-with-AUC-values-of-0.959,-0.999,-and-0.990-across-the-three-clusters.">Cluster-level prediction was also highly accurate, with AUC values of 0.959, 0.999, and 0.990 across the three clusters.<a class="anchor-link" href="#Cluster-level-prediction-was-also-highly-accurate,-with-AUC-values-of-0.959,-0.999,-and-0.990-across-the-three-clusters.">¶</a></h1><h1 id="These-results-show-that-both-biological-exposure-status-and-unsupervised-clusters-derived-from-gene-expression-data-are-well-separated-by-the-model.">These results show that both biological exposure status and unsupervised clusters derived from gene expression data are well-separated by the model.<a class="anchor-link" href="#These-results-show-that-both-biological-exposure-status-and-unsupervised-clusters-derived-from-gene-expression-data-are-well-separated-by-the-model.">¶</a></h1><h1 id="Such-high-AUCs-suggest-that-gene-expression-patterns-contain-distinct-signatures-for-each-condition.">Such high AUCs suggest that gene expression patterns contain distinct signatures for each condition.<a class="anchor-link" href="#Such-high-AUCs-suggest-that-gene-expression-patterns-contain-distinct-signatures-for-each-condition.">¶</a></h1><h1 id="Table:-AUC-by-Gene-Subset">Table: AUC by Gene Subset<a class="anchor-link" href="#Table:-AUC-by-Gene-Subset">¶</a></h1><h1 id="The-model%E2%80%99s-performance-increased-as-more-variable-genes-were-included,-peaking-around-1000-genes-with-an-AUC-of-0.990.">The model’s performance increased as more variable genes were included, peaking around 1000 genes with an AUC of 0.990.<a class="anchor-link" href="#The-model%E2%80%99s-performance-increased-as-more-variable-genes-were-included,-peaking-around-1000-genes-with-an-AUC-of-0.990.">¶</a></h1><h1 id="Performance-was-already-strong-with-as-few-as-10-genes-(AUC-=-0.964),-suggesting-that-a-small-subset-of-features-carries-substantial-biological-signal.">Performance was already strong with as few as 10 genes (AUC = 0.964), suggesting that a small subset of features carries substantial biological signal.<a class="anchor-link" href="#Performance-was-already-strong-with-as-few-as-10-genes-(AUC-=-0.964),-suggesting-that-a-small-subset-of-features-carries-substantial-biological-signal.">¶</a></h1><h1 id="However,-including-too-many-genes-(5000)-slightly-reduced-AUC,-possibly-due-to-noise-and-overfitting.">However, including too many genes (5000) slightly reduced AUC, possibly due to noise and overfitting.<a class="anchor-link" href="#However,-including-too-many-genes-(5000)-slightly-reduced-AUC,-possibly-due-to-noise-and-overfitting.">¶</a></h1><h1 id="This-trend-highlights-the-importance-of-selecting-an-optimal-number-of-informative-genes-rather-than-using-all-available-features.">This trend highlights the importance of selecting an optimal number of informative genes rather than using all available features.<a class="anchor-link" href="#This-trend-highlights-the-importance-of-selecting-an-optimal-number-of-informative-genes-rather-than-using-all-available-features.">¶</a></h1><h1 id="Figure-1:-ROC-Curve-%E2%80%93-Exposure-Classification">Figure 1: ROC Curve – Exposure Classification<a class="anchor-link" href="#Figure-1:-ROC-Curve-%E2%80%93-Exposure-Classification">¶</a></h1><h1 id="The-ROC-curve-shows-the-Random-Forest-model%E2%80%99s-ability-to-distinguish-between-Naive-and-DENV-samples.">The ROC curve shows the Random Forest model’s ability to distinguish between Naive and DENV samples.<a class="anchor-link" href="#The-ROC-curve-shows-the-Random-Forest-model%E2%80%99s-ability-to-distinguish-between-Naive-and-DENV-samples.">¶</a></h1><h1 id="The-curve-rises-steeply-toward-the-top-left-corner,-corresponding-to-an-AUC-=-0.948,-which-indicates-excellent-classification-accuracy.">The curve rises steeply toward the top-left corner, corresponding to an AUC = 0.948, which indicates excellent classification accuracy.<a class="anchor-link" href="#The-curve-rises-steeply-toward-the-top-left-corner,-corresponding-to-an-AUC-=-0.948,-which-indicates-excellent-classification-accuracy.">¶</a></h1><h1 id="The-near-perfect-shape-suggests-that-gene-expression-differences-between-the-two-exposure-groups-are-robust-and-biologically-meaningful.">The near-perfect shape suggests that gene expression differences between the two exposure groups are robust and biologically meaningful.<a class="anchor-link" href="#The-near-perfect-shape-suggests-that-gene-expression-differences-between-the-two-exposure-groups-are-robust-and-biologically-meaningful.">¶</a></h1><h1 id="This-confirms-that-the-model-effectively-captures-key-transcriptional-patterns-linked-to-dengue-virus-exposure.">This confirms that the model effectively captures key transcriptional patterns linked to dengue virus exposure.<a class="anchor-link" href="#This-confirms-that-the-model-effectively-captures-key-transcriptional-patterns-linked-to-dengue-virus-exposure.">¶</a></h1><h1 id="Figure-2:-Effect-of-Gene-Count-on-Random-Forest-Performance">Figure 2: Effect of Gene Count on Random Forest Performance<a class="anchor-link" href="#Figure-2:-Effect-of-Gene-Count-on-Random-Forest-Performance">¶</a></h1><h1 id="This-plot-illustrates-how-model-AUC-varies-with-the-number-of-top-variable-genes-used-as-features.">This plot illustrates how model AUC varies with the number of top variable genes used as features.<a class="anchor-link" href="#This-plot-illustrates-how-model-AUC-varies-with-the-number-of-top-variable-genes-used-as-features.">¶</a></h1><h1 id="Performance-improved-sharply-up-to-around-1000-genes,-after-which-the-AUC-slightly-declined,-showing-diminishing-returns-with-excessive-features.">Performance improved sharply up to around 1000 genes, after which the AUC slightly declined, showing diminishing returns with excessive features.<a class="anchor-link" href="#Performance-improved-sharply-up-to-around-1000-genes,-after-which-the-AUC-slightly-declined,-showing-diminishing-returns-with-excessive-features.">¶</a></h1><h1 id="The-results-suggest-that-100%E2%80%931000-top-genes-provide-the-best-balance-between-signal-and-noise.">The results suggest that 100–1000 top genes provide the best balance between signal and noise.<a class="anchor-link" href="#The-results-suggest-that-100%E2%80%931000-top-genes-provide-the-best-balance-between-signal-and-noise.">¶</a></h1><h1 id="Overall,-this-experiment-highlights-the-importance-of-dimensionality-reduction-in-improving-model-efficiency-and-interpretability.">Overall, this experiment highlights the importance of dimensionality reduction in improving model efficiency and interpretability.<a class="anchor-link" href="#Overall,-this-experiment-highlights-the-importance-of-dimensionality-reduction-in-improving-model-efficiency-and-interpretability.">¶</a></h1>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=66abe7c1">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [10]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="o">!</span>jupyter<span class="w"> </span>nbconvert<span class="w"> </span>--to<span class="w"> </span>html<span class="w"> </span>Nikhil_Assignment4.ipynb
+</pre></div>
+</div>
+</div>
+</div>
+</div>
 <div class="jp-Cell-outputWrapper">
 <div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>Loaded expression and metadata
-(43363, 1021) (1021, 45)
-After filtering: 1021 samples, 43363 genes
-🔹 Applied log1p transform (raw counts detected)
-Selected top 5000 variable genes: (5000, 1021)
-
-AUC for Exposure classification (Naive vs DENV): 0.948
-Cluster 0: AUC = 0.959
-Cluster 1: AUC = 0.999
-Cluster 2: AUC = 0.990
-Top 10 genes → AUC = 0.964
-Top 100 genes → AUC = 0.986
-Top 1000 genes → AUC = 0.990
-Top 5000 genes → AUC = 0.948
-
-Random Forest analysis complete.
-Exposure AUC: 0.948
-
-Cluster prediction AUCs:
-  Cluster       AUC
-0       0  0.959082
-1       1  0.998897
-2       2  0.990006
-
-AUC by gene subset:
-   NumGenes       AUC
-0        10  0.964443
-1       100  0.985768
-2      1000  0.989745
-3      5000  0.948294
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
+<pre>[NbConvertApp] Converting notebook Nikhil_Assignment4.ipynb to html
+[NbConvertApp] WARNING | Alternative text is missing on 2 image(s).
+[NbConvertApp] Writing 387172 bytes to Nikhil_Assignment4.html
 </pre>
 </div>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=66abe7c1">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c34f4cb6-7d5e-4c45-a98a-69cb76426559">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7769,7 +7767,7 @@ AUC by gene subset:
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="o">!</span>jupyter<span class="w"> </span>nbconvert<span class="w"> </span>--to<span class="w"> </span>html<span class="w"> </span>Nikhil_Assignment4.ipynb
+<div class="highlight hl-ipython3"><pre><span></span> 
 </pre></div>
 </div>
 </div>
