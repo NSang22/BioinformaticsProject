@@ -1,0 +1,3 @@
+k_genes	mean_cv_auc	cv_reassembled_auc	best_params
+200	0.9722070628320628	0.9708022287136212	{'knn__n_neighbors': 5, 'knn__p': 2, 'knn__weights': 'distance'}
+1000	0.9675428040917171	0.9665036089086724	{'knn__n_neighbors': 5, 'knn__p': 2, 'knn__weights': 'distance'}
