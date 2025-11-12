@@ -5,12 +5,16 @@ date: "`r Sys.Date()`"
 output: pdf_document
 ---
 # Package Installation
-```{r "Install Packages", message=FALSE, eval = TRUE, cache=TRUE}
+```{r "Install Packages", message=FALSE, eval = TRUE, cache=FALSE}
+options(repos = c(CRAN = "https://cloud.r-project.org"))
 suppressPackageStartupMessages(library(readr))
 suppressPackageStartupMessages(library(dplyr))
 suppressPackageStartupMessages(library(tibble))
-cran_pkgs <- c("tidyr","purrr","janitor","glue","mclust",
-               "matrixStats","cluster","forcats","RColorBrewer","scales", "magick", "Cairo", "factoextra")
+cran_pkgs <- c(
+  "tidyr","purrr","janitor","glue","mclust",
+  "matrixStats","cluster","forcats","RColorBrewer","scales",
+  "magick","Cairo","factoextra","pheatmap"
+)
 to_install <- setdiff(cran_pkgs, rownames(installed.packages()))
 if (length(to_install)) install.packages(to_install)
 
@@ -21,7 +25,7 @@ library(ggplot2)
 ```
 
 # Section 1
-```{r "Load Data", dependson="Install Packages", message=FALSE, eval = TRUE, cache=TRUE}
+```{r "Load Data", dependson="Install Packages", message=FALSE, eval = TRUE, cache=FALSE}
 data_dir <- file.path("data", "SRP192714")
 counts_path <- file.path(data_dir, "SRP192714.tsv")
 metadata_path <- file.path(data_dir, "metadata_SRP192714_merged.tsv")
@@ -81,11 +85,10 @@ cat("Samples aligned:", ncol(expression_mat), "\n")
 ```
 
 # Section 2a
-```{r "Select Top Genes", dependson="Load Data", eval = TRUE, cache=TRUE}
+```{r "Select Top Genes", dependson="Load Data", eval = TRUE, cache=FALSE}
 stopifnot(exists("expression_mat"))
 # calculate variability among rows (genes)
 gene_vars <- matrixStats::rowVars(expression_mat)
-?min
 target_genes <- min(5000, length(gene_vars))
 top_idx <- head(order(gene_vars, decreasing = TRUE), target_genes)
 
@@ -119,7 +122,7 @@ dim(expression_top5000)
 rownames(metadata) = metadata$refinebio_accession_code
 ```
 
-```{r "hclust run", dependson="Select Top Genes", cache=TRUE}
+```{r "hclust run", dependson="Select Top Genes", cache=FALSE}
 
 dist_samples = dist(t(expression_top5000), method="euclidean")
 hclust_samples = hclust(dist_samples, method="ward.D2")
@@ -186,7 +189,7 @@ contingency_table
 ```
 The chi-square with 2 different clusters suggests that we reject the null hypothesis that the relationship between dengue virus infection and subsequent zika infection is independent. At a glance, it may seem that the proportions are relatively similar, however it should be noted that there are 553 (~54%) naive patients out of the 1021 patient samples. This means that there should roughly be a 54% proportion of prior dengue infection to naive patients between groups, however we can see that is not the case with group 2. Here, there is a higher proportion of DENV patients. A logical follow-up would be to return to the differential gene expression analysis and investigate the actual gene pathways involved with this statistical difference with a new perspective.\
 
-```{r "Cluster Determination pt3", cache=TRUE}
+```{r "Cluster Determination pt3", cache=FALSE}
 library(tidyverse)
 library(cluster) # for hclust
 library(matrixStats) # for fast variance calculation
@@ -243,7 +246,7 @@ print(p_comparison)
 ```
 As we can see here, changing the number of top variable genes does not change the number of resulting clusters very significantly. This suggests that the patients relatively set in 2 clusters.\
 ### Heat Map
-```{r "hclust heatmap", dependson="hclust run", cache=TRUE}
+```{r "hclust heatmap", dependson="hclust run", cache=FALSE}
 library(ComplexHeatmap)
 library(magick)
 library(Cairo)
@@ -527,12 +530,13 @@ metadata_exposure <- metadata %>%
 	)
 
 exposure_lookup <- metadata_exposure %>%
-	select(refinebio_accession_code, Exposure) %>%
-	mutate(Exposure = as.character(Exposure)) %>%
-	deframe()
+  dplyr::select(refinebio_accession_code, Exposure) %>%
+  mutate(Exposure = as.character(Exposure)) %>%
+  deframe()
+
 
 exposure_table <- metadata_exposure %>%
-	transmute(
+  dplyr::transmute(
 		sample_id = refinebio_accession_code,
 		exposure = as.character(Exposure)
 	)
@@ -587,7 +591,7 @@ extract_assignments <- function(models_tbl) {
 			sample_id = names(.x),
 			cluster = as.character(.x)
 		))) %>%
-		select(k, assignment) %>%
+    dplyr::select(k, assignment) %>%
 		unnest(assignment)
 }
 
@@ -600,9 +604,9 @@ cluster_summary <- function(assignments, exposure_df) {
 		summarise(n = dplyr::n(), .groups = "drop_last") %>%
 		mutate(cluster_total = sum(n)) %>%
 		arrange(desc(n), .by_group = TRUE) %>%
-		slice(1L) %>%
+    dplyr::slice(1L) %>%
 		ungroup() %>%
-		transmute(
+    dplyr::transmute(
 			k,
 			cluster = factor(cluster),
 			samples_in_cluster = cluster_total,
@@ -638,12 +642,12 @@ kmeans_runs <- purrr::map(gene_counts, function(gene_n) {
 	scores <- compute_pca_scores(expression_mat, top$idx)
 	models <- run_kmeans_models(scores, k_grid)
 	assignments <- extract_assignments(models)
-	metrics <- models %>%
-		select(k, tot_withinss, scaled_tot_withinss, avg_silhouette) %>%
+  metrics <- models %>%
+    dplyr::select(k, tot_withinss, scaled_tot_withinss, avg_silhouette) %>%
 		mutate(gene_count = gene_n)
-	best_row <- metrics %>% arrange(desc(avg_silhouette), k) %>% slice(1)
+  best_row <- metrics %>% arrange(desc(avg_silhouette), k) %>% dplyr::slice(1)
 	best_k <- best_row$k
-	best_assign <- assignments %>% filter(k == best_k) %>% select(sample_id, cluster)
+  best_assign <- assignments %>% filter(k == best_k) %>% dplyr::select(sample_id, cluster)
 	list(
 		gene_count = gene_n,
 		metrics = metrics,
@@ -868,8 +872,7 @@ save_gg_png <- function(plot, path, width = 10, height = 7, dpi = 300){
 ```
 
 
-```{r spectral-setup, cache=TRUE}
-
+```{r spectral-setup, cache=FALSE}
 
 if (!requireNamespace("kernlab", quietly = TRUE)) {
   install.packages("kernlab")
@@ -904,7 +907,7 @@ select_top_genes <- function(mat, n) {
 
 ### 2b-d: Running Spectral Clustering on 5000 genes
 
-```{r spectral-5000-genes, cache=TRUE, cache.lazy=FALSE}
+```{r spectral-5000-genes, cache=FALSE, cache.lazy=FALSE}
 cat("Running spectral clustering on 5000 most variable genes...\n\n")
 
 # Use the expression_top5000 matrix created in Section 2a
@@ -987,7 +990,7 @@ chi_sq_k_comparison <- map_dfr(k_pairs, function(pair) {
 
 ### 2e: Rerun clustering with different numbers of genes
 
-```{r spectral-multiple-genes, cache=TRUE, cache.lazy=FALSE}
+```{r spectral-multiple-genes, cache=FALSE, cache.lazy=FALSE}
 cat("\n\n=== Running spectral clustering on different gene counts ===\n\n")
 
 gene_counts <- c(10, 100, 1000, 10000)
@@ -1191,7 +1194,7 @@ print(normalizePath(file.path("plots", "spectral_heatmap_top5000.png"), winslash
 
 ### 4a: Statistical comparison with Assignment 1 groups
 
-```{r spectral-assignment1-comparison, cache=TRUE, cache.lazy=FALSE}
+```{r spectral-assignment1-comparison, cache=FALSE, cache.lazy=FALSE}
 cat("\n\n=== Comparing clusters with Assignment 1 groups ===\n\n")
 
 chi_sq_vs_assignment1 <- map_dfr(names(spectral_all_genes), function(name) {
@@ -1257,7 +1260,7 @@ save_table_png(all_chi_sq_tests, file.path("plots","spectral_all_chi_sq_tests.pn
 
 ### 4b: Adjust for multiple hypothesis testing
 
-```{r spectral-adjust-pvalues, cache=TRUE}
+```{r spectral-adjust-pvalues, cache=FALSE}
 cat("\n\n=== Adjusting p-values for multiple testing ===\n\n")
 library(dplyr)
 #combine all chi-squared tests
@@ -1311,6 +1314,6 @@ assign("spectral_best_k", best_k_5000, envir = .GlobalEnv)
 **Statistical validation:** I repeated spectral clustering for 10, 100, 1,000, 5,000, and 10,000 most variable genes. For each, the best k (max silhouette) was selected, and results were compared via chi-squared tests.
 cross most gene subsets, k = 2 remained optimal, showing that the global two-group structure is stable. At 100 genes, the algorithm briefly favored k = 6, suggesting overfitting or noise sensitivity at very small gene subsets.
  Silhouette scores decreased with extremely small (10) or very large (10,000) gene sets — consistent with too little or too much noise diluting signal.
-This implies that using an intermediate set (1,000–5,000 genes) best balances stability and biological signal for spectral clustering.
+This implies that using an intermediate set (1,000-5,000 genes) best balances stability and biological signal for spectral clustering.
 ```
 
