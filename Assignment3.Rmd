@@ -25,7 +25,7 @@ library(ggplot2)
 ```
 
 # Section 1
-```{r "Load Data", dependson="Install Packages", message=FALSE, eval = TRUE, cache=FALSE}
+```{r "Load Data", message=FALSE, eval = TRUE, cache=FALSE}
 data_dir <- file.path("data", "SRP192714")
 counts_path <- file.path(data_dir, "SRP192714.tsv")
 metadata_path <- file.path(data_dir, "metadata_SRP192714_merged.tsv")
@@ -85,7 +85,7 @@ cat("Samples aligned:", ncol(expression_mat), "\n")
 ```
 
 # Section 2a
-```{r "Select Top Genes", dependson="Load Data", eval = TRUE, cache=FALSE}
+```{r "Select Top Genes", eval = TRUE, cache=FALSE}
 stopifnot(exists("expression_mat"))
 # calculate variability among rows (genes)
 gene_vars <- matrixStats::rowVars(expression_mat)
@@ -116,13 +116,13 @@ cat("Variance range:", sprintf("%.2f", min(gene_vars[top_idx])), "-", sprintf("%
 # Section 2b-5
 ## William Le: Hierarchical Clustering
 Checking for correct dimensions, labels, etc.
-```{r "hclust data check", dependson="Select Top Genes"}
+```{r "hclust data check"}
 stopifnot(exists("expression_top5000"), exists("metadata"))
 dim(expression_top5000)
 rownames(metadata) = metadata$refinebio_accession_code
 ```
 
-```{r "hclust run", dependson="Select Top Genes", cache=FALSE}
+```{r "hclust run", cache=FALSE}
 
 dist_samples = dist(t(expression_top5000), method="euclidean")
 hclust_samples = hclust(dist_samples, method="ward.D2")
@@ -246,7 +246,7 @@ print(p_comparison)
 ```
 As we can see here, changing the number of top variable genes does not change the number of resulting clusters very significantly. This suggests that the patients relatively set in 2 clusters.\
 ### Heat Map
-```{r "hclust heatmap", dependson="hclust run", cache=FALSE}
+```{r "hclust heatmap", cache=FALSE}
 library(ComplexHeatmap)
 library(magick)
 library(Cairo)
@@ -1255,7 +1255,6 @@ save_table_png(chi_sq_k_comparison, file.path("plots","spectral_chi_sq_k_compari
 save_table_png(best_k_summary, file.path("plots","spectral_best_k_summary.png"))
 save_table_png(chi_sq_gene_pairs, file.path("plots","spectral_chi_sq_gene_pairs.png"))
 save_table_png(chi_sq_vs_assignment1, file.path("plots","spectral_chi_sq_vs_assignment1.png"))
-save_table_png(all_chi_sq_tests, file.path("plots","spectral_all_chi_sq_tests.png"))
 ```
 
 ### 4b: Adjust for multiple hypothesis testing
@@ -1292,6 +1291,8 @@ if (!dir.exists(results_dir)) dir.create(results_dir, recursive = TRUE)
 readr::write_tsv(best_k_summary, file.path(results_dir, "spectral_best_k_summary.tsv"))
 readr::write_tsv(all_chi_sq_tests, file.path(results_dir, "spectral_chisq_tests.tsv"))
 readr::write_tsv(k_comparison_5000, file.path(results_dir, "spectral_k_comparison_5000genes.tsv"))
+
+save_table_png(all_chi_sq_tests, file.path("plots","spectral_all_chi_sq_tests.png"))
 
 
 assign("spectral_clusters_5000", 
