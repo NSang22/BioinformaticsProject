@@ -1317,6 +1317,10 @@ sample_order <- colnames(expression_top5000)
 log_mat <- log2(expression_top5000 + 1)
 scaled_mat <- t(scale(t(log_mat)))
 scaled_mat[!is.finite(scaled_mat)] <- 0
+scaled_mat <- pmax(pmin(scaled_mat, 4), -4)
+
+hm_colors <- colorRampPalette(c("navy", "white", "firebrick3"))(101)
+heatmap_breaks <- seq(-4, 4, length.out = length(hm_colors) + 1)
 
 if (!exists("hclust_samples")) {
   dist_mat <- dist(t(expression_top5000), method = "euclidean")
@@ -1403,6 +1407,8 @@ combined_heatmap <- pheatmap(
   scaled_mat,
   annotation_col = annotation_col,
   annotation_colors = ann_colors,
+  color = hm_colors,
+  breaks = heatmap_breaks,
   show_rownames = FALSE,
   show_colnames = FALSE,
   clustering_distance_cols = "euclidean",
@@ -1414,6 +1420,8 @@ pheatmap(
   scaled_mat,
   annotation_col = annotation_col,
   annotation_colors = ann_colors,
+  color = hm_colors,
+  breaks = heatmap_breaks,
   show_rownames = FALSE,
   show_colnames = FALSE,
   clustering_distance_cols = "euclidean",
