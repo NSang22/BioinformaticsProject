@@ -1302,6 +1302,129 @@ assign("spectral_clusters_5000",
 assign("spectral_best_k", best_k_5000, envir = .GlobalEnv)
 ```
 
+```{r combined-cluster-heatmap, cache=FALSE}
+suppressPackageStartupMessages({
+  library(pheatmap)
+  library(cluster)
+  library(kernlab)
+  library(scales)
+})
+
+stopifnot(exists("expression_top5000"), exists("metadata"))
+
+sample_order <- colnames(expression_top5000)
+
+log_mat <- log2(expression_top5000 + 1)
+scaled_mat <- t(scale(t(log_mat)))
+scaled_mat[!is.finite(scaled_mat)] <- 0
+
+if (!exists("hclust_samples")) {
+  dist_mat <- dist(t(expression_top5000), method = "euclidean")
+  hclust_samples <- hclust(dist_mat, method = "ward.D2")
+}
+hier_clusters <- factor(cutree(hclust_samples, k = 2)[sample_order])
+
+kmeans_clusters_vec <- NULL
+if (exists("kmeans_assignments_5000")) {
+  kmeans_clusters_vec <- kmeans_assignments_5000$cluster[match(sample_order, kmeans_assignments_5000$sample_id)]
+}
+if (is.null(kmeans_clusters_vec) || any(is.na(kmeans_clusters_vec))) {
+  set.seed(0L)
+  km_fit <- kmeans(t(scaled_mat), centers = 2, nstart = 50)
+  kmeans_clusters_vec <- km_fit$cluster[sample_order]
+}
+kmeans_clusters <- factor(kmeans_clusters_vec)
+
+pam_input <- t(scaled_mat)
+rownames(pam_input) <- sample_order
+
+pam_clusters_vec <- NULL
+if (exists("pam_clusters") && all(sample_order %in% names(pam_clusters))) {
+  pam_clusters_vec <- pam_clusters[sample_order]
+} else if (exists("pam_clusters_5000")) {
+  if (is.data.frame(pam_clusters_5000) && all(sample_order %in% pam_clusters_5000$sample_id)) {
+    pam_clusters_vec <- pam_clusters_5000$cluster[match(sample_order, pam_clusters_5000$sample_id)]
+  } else if (is.vector(pam_clusters_5000) && all(sample_order %in% names(pam_clusters_5000))) {
+    pam_clusters_vec <- pam_clusters_5000[sample_order]
+  }
+}
+if (is.null(pam_clusters_vec) || any(is.na(pam_clusters_vec))) {
+  pam_fit <- pam(pam_input, k = 2)
+  pam_clusters_vec <- pam_fit$clustering[sample_order]
+}
+pam_clusters <- factor(pam_clusters_vec)
+
+if (exists("spectral_clusters_5000_best")) {
+  spectral_clusters_vec <- spectral_clusters_5000_best[sample_order]
+} else {
+  spectral_fit <- specc(pam_input, centers = 2)
+  spectral_clusters_vec <- spectral_fit@.Data
+  names(spectral_clusters_vec) <- rownames(pam_input)
+  spectral_clusters_vec <- spectral_clusters_vec[sample_order]
+}
+if (any(is.na(spectral_clusters_vec))) {
+  spectral_fit <- specc(pam_input, centers = 2)
+  spectral_clusters_vec <- spectral_fit@.Data
+  names(spectral_clusters_vec) <- rownames(pam_input)
+  spectral_clusters_vec <- spectral_clusters_vec[sample_order]
+}
+spectral_clusters <- factor(spectral_clusters_vec)
+
+metadata_ids <- as.character(metadata$refinebio_accession_code)
+exposure_vec <- as.character(metadata$Exposure)[match(sample_order, metadata_ids)]
+exposure_vec[is.na(exposure_vec)] <- "Unknown"
+exposure <- factor(exposure_vec)
+
+annotation_col <- data.frame(
+  KMeans = kmeans_clusters,
+  Spectral = spectral_clusters,
+  PAM = pam_clusters,
+  Hierarchical = hier_clusters,
+  Exposure = exposure,
+  row.names = sample_order
+)
+
+palette_for <- function(fct, palette_fun) {
+  lvl <- levels(fct)
+  setNames(palette_fun(length(lvl)), lvl)
+}
+
+ann_colors <- list(
+  KMeans = palette_for(kmeans_clusters, hue_pal()),
+  Spectral = palette_for(spectral_clusters, hue_pal(l = 65, c = 100)),
+  PAM = palette_for(pam_clusters, hue_pal(l = 60, c = 90)),
+  Hierarchical = palette_for(hier_clusters, hue_pal(l = 55, c = 85)),
+  Exposure = palette_for(exposure, hue_pal())
+)
+
+dir.create("plots", showWarnings = FALSE)
+
+combined_heatmap <- pheatmap(
+  scaled_mat,
+  annotation_col = annotation_col,
+  annotation_colors = ann_colors,
+  show_rownames = FALSE,
+  show_colnames = FALSE,
+  clustering_distance_cols = "euclidean",
+  clustering_method = "ward.D2",
+  main = "Top 5000 genes with multi-method cluster annotations"
+)
+
+pheatmap(
+  scaled_mat,
+  annotation_col = annotation_col,
+  annotation_colors = ann_colors,
+  show_rownames = FALSE,
+  show_colnames = FALSE,
+  clustering_distance_cols = "euclidean",
+  clustering_method = "ward.D2",
+  main = "Top 5000 genes with multi-method cluster annotations",
+  filename = file.path("plots", "combined_clustering_heatmap.png"),
+  width = 12,
+  height = 10
+)
+```
+
 ### 5: Summary
 
 **How changing k affects results (5000 genes):** I applied spectral clustering using the top 5000 most variable genes from the normalized expression matrix. The algorithm was run for k values ranging from 2 to 8, and I computed the average silhouette score for each k to assess clustering quality. The highest silhouette score occurred at k = 2, indicating that a two-cluster solution best separates the samples in this dataset. Increasing k consistently lowered the silhouette, suggesting that additional clusters do not represent meaningful substructure. 
