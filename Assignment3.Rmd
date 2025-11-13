@@ -187,7 +187,7 @@ hs_cs_results = chisq.test(contingency_table)
 hs_cs_results
 contingency_table
 ```
-The chi-square with 2 different clusters suggests that we reject the null hypothesis that the relationship between dengue virus infection and subsequent zika infection is independent. At a glance, it may seem that the proportions are relatively similar, however it should be noted that there are 553 (~54%) naive patients out of the 1021 patient samples. This means that there should roughly be a 54% proportion of prior dengue infection to naive patients between groups, however we can see that is not the case with group 2. Here, there is a higher proportion of DENV patients. A logical follow-up would be to return to the differential gene expression analysis and investigate the actual gene pathways involved with this statistical difference with a new perspective.\
+The chi-square with 2 different clusters suggests that we reject the null hypothesis that the relationship between dengue virus infection and subsequent zika infection is independent. At a glance, it may seem that the proportions are relatively similar, however it should be noted that there are 553 (about 54%) naive patients out of the 1021 patient samples. This means that there should roughly be a 54% proportion of prior dengue infection to naive patients between groups, however we can see that is not the case with group 2. Here, there is a higher proportion of DENV patients. A logical follow-up would be to return to the differential gene expression analysis and investigate the actual gene pathways involved with this statistical difference with a new perspective.\
 
 ```{r "Cluster Determination pt3", cache=FALSE}
 library(tidyverse)
@@ -355,7 +355,7 @@ for (n_genes in gene_counts) {
   X_scaled <- scale(X)
   X_scaled[is.na(X_scaled)] <- 0
 
-  # PAM clustering for k = 2–8
+  # PAM clustering for k = 2-8
   k_values <- 2:8
   results_this_set <- list()
 
@@ -372,7 +372,7 @@ for (n_genes in gene_counts) {
   }
 
   # pick best k by silhouette
-  sil_df <- map_dfr(results_this_set, ~tibble(k = .x$k, avg_sil = .x$avg_sil))
+  sil_df <- map_dfr(results_this_set, ~ tibble(k = .x$k, avg_sil = .x$avg_sil))
   best_k <- sil_df %>% arrange(desc(avg_sil)) %>% slice_head(n = 1) %>% pull(k)
 
   cat(glue("Best k = {best_k} (silhouette = {round(max(sil_df$avg_sil), 3)})\n"))
@@ -501,8 +501,8 @@ Table: Chi-squared test results for PAM clustering across gene subsets
 This shows that as the number of genes increased, the p values decreased, except with a very small number of genes, 10 to be exact where there was not enough data.
 I also generated a heatmap with hierarchical row and column dendrograms and annotations for both PAM clusters (k = 2) and exposure groups from Assignment 1. 
 The z-scored expression profiles display clear global differences between the two PAM clusters, though overlap is visible across some samples.
-After running PAM for k = 2 – 8 across the 5 000 most variable genes, k = 2 yielding the highest average silhouette (≈ 0.10).
-Repeating the analysis for 10 – 10 000 genes revealed similar results: silhouette scores declined gradually as dimensionality increased, but the optimal k remained 2.
+After running PAM for k = 2 - 8 across the 5 000 most variable genes, k = 2 yielding the highest average silhouette (about 0.10).
+Repeating the analysis for 10 - 10 000 genes revealed similar results: silhouette scores declined gradually as dimensionality increased, but the optimal k remained 2.
 Heatmaps of the top 5 000 genes showed two major expression clusters that partially overlapped with exposure groups.
 The chi-squared tests confirmed that these two clusters were statistically associated with exposure in most gene subsets.
 
@@ -587,7 +587,7 @@ run_kmeans_models <- function(scores, k_values, seed = kmeans_seed) {
 
 extract_assignments <- function(models_tbl) {
 	models_tbl %>%
-		mutate(assignment = purrr::map(clusters, ~ tibble(
+    mutate(assignment = purrr::map(clusters, ~ tibble(
 			sample_id = names(.x),
 			cluster = as.character(.x)
 		))) %>%
@@ -1024,7 +1024,7 @@ for (gene_n in gene_counts) {
     )
   }
   
- best_df <- map_dfr(results_this_gene, ~tibble(k = .x$k, avg_sil = .x$avg_silhouette))
+ best_df <- map_dfr(results_this_gene, ~ tibble(k = .x$k, avg_sil = .x$avg_silhouette))
 best_k  <- best_df$k[which.max(best_df$avg_sil)]
   
   cat(glue("  Best k = {best_k} (silhouette = {round(results_this_gene[[as.character(best_k)]]$avg_silhouette, 4)})\n\n"))
@@ -1306,7 +1306,7 @@ assign("spectral_best_k", best_k_5000, envir = .GlobalEnv)
 
 **How changing k affects results (5000 genes):** I applied spectral clustering using the top 5000 most variable genes from the normalized expression matrix. The algorithm was run for k values ranging from 2 to 8, and I computed the average silhouette score for each k to assess clustering quality. The highest silhouette score occurred at k = 2, indicating that a two-cluster solution best separates the samples in this dataset. Increasing k consistently lowered the silhouette, suggesting that additional clusters do not represent meaningful substructure. 
 
-**Effect of gene count on clustering:** I statistically compared cluster memberships between all pairs of k values (2–8) using chi-squared tests of independence. This tested whether the partitions at different k values produce consistent group assignments. All pairwise chi-squared tests between k values were highly significant (p < 0.001 for most), with large chi-squared statistics. The strong significance indicates that changing k meaningfully changes the cluster composition, not just by random variation. In other words, each increment of k subdivides the two primary groups rather than revealing new distinct patterns — confirming that k = 2 captures the major biological separation.
+**Effect of gene count on clustering:** I statistically compared cluster memberships between all pairs of k values (2-8) using chi-squared tests of independence. This tested whether the partitions at different k values produce consistent group assignments. All pairwise chi-squared tests between k values were highly significant (p < 0.001 for most), with large chi-squared statistics. The strong significance indicates that changing k meaningfully changes the cluster composition, not just by random variation. In other words, each increment of k subdivides the two primary groups rather than revealing new distinct patterns - confirming that k = 2 captures the major biological separation.
 
 
 
@@ -1314,7 +1314,7 @@ assign("spectral_best_k", best_k_5000, envir = .GlobalEnv)
 
 **Statistical validation:** I repeated spectral clustering for 10, 100, 1,000, 5,000, and 10,000 most variable genes. For each, the best k (max silhouette) was selected, and results were compared via chi-squared tests.
 cross most gene subsets, k = 2 remained optimal, showing that the global two-group structure is stable. At 100 genes, the algorithm briefly favored k = 6, suggesting overfitting or noise sensitivity at very small gene subsets.
- Silhouette scores decreased with extremely small (10) or very large (10,000) gene sets — consistent with too little or too much noise diluting signal.
+ Silhouette scores decreased with extremely small (10) or very large (10,000) gene sets - consistent with too little or too much noise diluting signal.
 This implies that using an intermediate set (1,000-5,000 genes) best balances stability and biological signal for spectral clustering.
 ```
 
